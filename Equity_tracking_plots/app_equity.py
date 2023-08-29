@@ -26,7 +26,7 @@ st.title("Brand Delta  Equity Tracking plots (V 0.1)")
 
 
 # getting the excel file first by user input
-data = r"C:\Users\BrunoMalta\OneDrive - Brand Delta\Desktop\Testes\Data_bases"
+data = r"Equity_tracking_plots/Equity_tracking_plots"
 
 # equity file
 @st.cache_data() 
