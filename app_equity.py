@@ -271,13 +271,13 @@ def main():
         st.warning("Choose your market")
         
         if market == "germany":
-            slang = "_DE_"
-        if market == "uk":
-            slang ="_UK_"
+            slang = "MMM_DE_"
+        if market == "UK":
+            slang ="MMM_UK_"
 
         # getting the information and the respective equity and mmm 
         for x in os.listdir(data):
-            if market in x:
+            if market in x and slang not in x:
                 filepath_equity = os.path.join(data,x)
                 info_number = [x for x in x.split("_") if x >= "0" and x <="9"]
                 year_equity,month_equity,day_equity,hour_equity,minute_equity = info_number[:5]
