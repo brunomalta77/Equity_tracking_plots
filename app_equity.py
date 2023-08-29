@@ -39,7 +39,7 @@ def processing_mmm(filepath):
     df_vol = df_vol[df_vol["Metric"]== "SalesVol"]
     df_vol["Price_change"] = res
     df_vol.rename(columns={"Value":"Volume_share"},inplace=True)
-    df_vol=df_vol.groupby(['time','Y','H','QT','M','W','brand','Metric','Category'])['Volume_share','Price_change'].sum().reset_index()
+    df_vol=df_vol.groupby(['time','Y','H','QT','M','W','brand','Metric','Category'])[['Volume_share','Price_change']].sum().reset_index()
 
     return df_vol
 
