@@ -19,11 +19,9 @@ import numpy as np
 import plotly.graph_objects as go
 import os 
 
-
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
 st.title("Brand Delta  Equity Tracking plots (V 0.1)")
-
 
 # getting the excel file first by user input
 data = r"Equity_tracking_plots"
