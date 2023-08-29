@@ -18,13 +18,14 @@ from plotly.subplots import make_subplots
 import numpy as np 
 import plotly.graph_objects as go
 import os 
+data/MMM_DE_25_08_2023_09_51_11_long.xlsx
 
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
 st.title("Brand Delta  Equity Tracking plots (V 0.1)")
 
 # getting the excel file first by user input
-data = r"Equity_tracking_plots"
+data = r"/data"
 
 # equity file
 @st.cache_data() 
