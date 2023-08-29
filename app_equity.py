@@ -1,4 +1,4 @@
-# building a stream lite application
+wd# building a stream lite application
 import pandas as pd
 import numpy as np
 import re
@@ -9,16 +9,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 import joblib
-import glob
 import requests
-import dash
 import pandas as pd
 import plotly.express as px 
 from plotly.subplots import make_subplots
 import numpy as np 
 import plotly.graph_objects as go
 import os 
-data/MMM_DE_25_08_2023_09_51_11_long.xlsx
 
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
