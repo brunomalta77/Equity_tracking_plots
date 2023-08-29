@@ -21,7 +21,7 @@ st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layou
 st.title("Brand Delta  Equity Tracking plots (V 0.1)")
 
 # getting the excel file first by user input
-data = r"/data"
+data = r"data"
 
 # equity file
 @st.cache_data() 
