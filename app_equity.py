@@ -49,9 +49,6 @@ def merged_file(df,df_vol):
     df_merged = pd.merge(df_vol,df,on=["time","brand","Category"],how="inner")
     return df_merged
 
-
-
-
 # Function to calculate confidence intervals
 def calculate_confidence_intervals(data, confidence=0.90):
     if confidence == 0.90:
