@@ -266,7 +266,7 @@ def main():
     with st.container():
     #None Global
         # user input for equity and mmm file. 
-        markets_available = ["germany","UK"]
+        markets_available = ["UK","germany"]
         market = st.selectbox('Markets currently available:', markets_available)
         st.warning("Choose your market")
         
