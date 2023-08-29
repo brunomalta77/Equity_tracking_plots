@@ -1,0 +1,9 @@
+pandas 
+numpy 
+seaborn 
+streamlit 
+joblib
+plotly.express
+plotly.subplots
+plotly.graph_objects
+os 
