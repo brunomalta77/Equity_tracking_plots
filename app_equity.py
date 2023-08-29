@@ -272,7 +272,7 @@ def main():
         
         if market == "germany":
             slang = "_DE_"
-        if market == "UK":
+        if market == "uk":
             slang ="_UK_"
 
         # getting the information and the respective equity and mmm 
