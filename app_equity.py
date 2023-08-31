@@ -68,7 +68,7 @@ def calculate_confidence_intervals(data, confidence=0.90):
 
 def equity_info(data,market_flag):
     if market_flag == "UK":
-        market_flag = "
+        market_flag = "UK_equity_"
     for x in os.listdir(data):
         if market_flag in x:
             filepath_equity = os.path.join(data,x)
