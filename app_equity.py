@@ -30,7 +30,7 @@ with col2:
 
 # Title on the right
 with col1:
-    st.title("Brand Delta Equity Tracking plots (V 0.1)")
+    st.title("Equity Tracking plots (V 0.1)")
 
 
 # getting the excel file first by user input
