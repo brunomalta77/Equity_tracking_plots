@@ -25,11 +25,11 @@ image = Image.open(logo_path)
 col1, col2 = st.columns([4, 1])  # Adjust the width ratios as needed
 
 # Logo on the left
-with col1:
-    st.image(image, width=150)  # Adjust the width as needed
+with col2:
+    st.image(image)  # Adjust the width as needed
 
 # Title on the right
-with col2:
+with col1:
     st.title("Brand Delta Equity Tracking plots (V 0.1)")
 
 
