@@ -392,7 +392,7 @@ def main():
             filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm = mmm_info(data,slang)
 
         if mmm == None:
-              st.write(f"""**Equity file version** {market} : {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity}***""")
+              st.write(f"""**Equity file version** {market} : {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity}""")
             
         else:
             if res_weighted == "Yes":
