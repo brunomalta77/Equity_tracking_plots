@@ -18,7 +18,7 @@ import os
 
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
-st.title("Brand Delta  Equity Tracking plots (V 0.1)")
+st.title("Equity Tracking plots (V 0.1)")
 
 # getting the excel file first by user input
 data = r"data"
@@ -329,8 +329,7 @@ def main():
 
         # user input for equity and mmm file. 
         markets_available = ["germany","UK","italy"]
-        market = st.selectbox('Markets currently available:', markets_available)
-        st.warning("Choose your market")
+        market = st.selectbox('', markets_available)
         
         if market == "germany":
             slang = "MMM_DE_"
@@ -356,13 +355,10 @@ def main():
         filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm = mmm_info(data,slang)
 
         if res_weighted == "Yes":
-            st.write(f"**Equity file version** {market} : {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity}")
-            st.write(f"**Age weighted equity file version** {market_weighted}: {day_equity_w}/{month_equity_w}/{year_equity_w} - {hour_equity_w}: {minute_equity_w}: {second_equity_w}")
-
-            st.write(f" **MMM data version** {market} : {day_mmm}/{month_mmm}/{year_mmm} - {hour_mmm}: {minute_mmm}: {second_mmm}")
+            st.write(f"**Equity file version** {market} : {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity}) **Age weighted equity file version** {market_weighted}: {day_equity_w}/{month_equity_w}/{year_equity_w} - {hour_equity_w}: {minute_equity_w}: {second_equity_w} 
+            **MMM data version** {market} : {day_mmm}/{month_mmm}/{year_mmm} - {hour_mmm}: {minute_mmm}: {second_mmm}")
         else:
-            st.write(f"**Equity file version** {market}: {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity}")
-            st.write(f"**MMM data version** {market} : {day_mmm}/{month_mmm}/{year_mmm}- {hour_mmm} - {minute_mmm}: {second_mmm}")
+            st.write(f"**Equity file version** {market}: {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity} **MMM data version** {market} : {day_mmm}/{month_mmm}/{year_mmm}- {hour_mmm} - {minute_mmm}: {second_mmm}")
 
 
         # reading the equity file
