@@ -66,6 +66,34 @@ def calculate_confidence_intervals(data, confidence=0.90):
     upper_bound = mean + margin_of_error
     return lower_bound, upper_bound
 
+def equity_info(data,market_flag):
+    for x in os.listdir(data):
+        if market_flag in x:
+            filepath_equity = os.path.join(data,x)
+            info_number = [x for x in x.split("_") if x >= "0" and x <="9"]
+            year_equity,month_equity,day_equity,hour_equity,minute_equity = info_number[:5]
+            second_equity = info_number[-1].split(".")[0]
+    
+    return filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity
+
+
+def mmm_info(data,slang_flag):
+    for x in os.listdir(data):
+        if slang_flag in x:
+            filepath_mmm = os.path.join(data,x)
+            info_number = [x for x in x.split("_") if x >= "0" and x <="9"]
+            day_mmm,month_mmm,year_mmm,hour_mmm,minute_mmm = info_number[:5]
+            second_mmm = info_number[-1].split(".")[0]
+    
+    return filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm
+
+
+
+
+
+
+
+
 
 def equity_options(df):
     category_options = df["Category"].unique()
