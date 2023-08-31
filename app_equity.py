@@ -261,52 +261,74 @@ def correlation_plot(df,brands):
 
 
 #------------------------------------------------------------------------app---------------------------------#
-
 def main():
     with st.container():
     #None Global
+
         # user input for equity and mmm file. 
-        markets_available = ["UK","germany"]
+        markets_available = ["germany","UK","italy"]
         market = st.selectbox('Markets currently available:', markets_available)
         st.warning("Choose your market")
         
         if market == "germany":
             slang = "MMM_DE_"
+            res_weighted = None
+
         if market == "UK":
             slang ="MMM_UK_"
+            res_weighted = st.radio(" Do you want to compare the weighted equity? ",["Yes","No"])
+            market_weighted = "uk_equity_age_weighted"
 
-        # getting the information and the respective equity and mmm 
-        for x in os.listdir(data):
-            if market in x and slang not in x:
-                filepath_equity = os.path.join(data,x)
-                info_number = [x for x in x.split("_") if x >= "0" and x <="9"]
-                year_equity,month_equity,day_equity,hour_equity,minute_equity = info_number[:5]
-                second_equity = info_number[-1].split(".")[0]
-                
 
-        for x in os.listdir(data):
-            if slang in x:
-                filepath_mmm = os.path.join(data,x)
-                info_number = [x for x in x.split("_") if x >= "0" and x <="9"]
-                day_mmm,month_mmm,year_mmm,hour_mmm,minute_mmm = info_number[:5]
-                second_mmm = info_number[-1].split(".")[0]
+        if market =="italy":
+            slang ="MMM_IT"
+            res_weighted = None
+    
+        # getting our equity    
+        if res_weighted == "Yes":
+            filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
+            filepath_equity_weighted,year_equity_w,month_equity_w,day_equity_w,hour_equity_w,minute_equity_w,second_equity_w = equity_info(data,market_weighted)
+        else:
+            filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
 
-        
+        #getting our mmm
+        filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm = mmm_info(data,slang)
 
-        st.header(f"From the {market} market - Equity date {day_equity}/{month_equity}/{year_equity},Hours:{hour_equity}:{minute_equity}:{second_equity}")
-        st.header(f"From the {market} market - MMM date {day_mmm}/{month_mmm}/{year_mmm},Hours:{hour_mmm}:{minute_mmm}:{second_mmm}")
+        if res_weighted == "Yes":
+            st.write(f"*From the {market} market - Equity date {day_equity}/{month_equity}/{year_equity}- Hours: {hour_equity}: {minute_equity}: {second_equity}*")
+            st.write(f"*From the {market_weighted} market - Equity date {day_equity_w}/{month_equity_w}/{year_equity_w}- Hours: {hour_equity_w}: {minute_equity_w}: {second_equity_w}*")
+
+            st.write(f"*From the {market} market - MMM date {day_mmm}/{month_mmm}/{year_mmm}- Hours: {hour_mmm}: {minute_mmm}: {second_mmm}*")
+        else:
+            st.write(f"*From the {market} market - Equity date {day_equity}/{month_equity}/{year_equity}- Hours: {hour_equity}: {minute_equity}: {second_equity}*")
+            st.write(f"*From the {market} market - MMM date {day_mmm}/{month_mmm}/{year_mmm}- Hours: {hour_mmm}: {minute_mmm}: {second_mmm}*")
+
+
 
         # reading the equity file
-        df = reading_df(filepath_equity)
-        
+        if res_weighted == "Yes":
+            df = reading_df(filepath_equity)
+            df_weighted = reading_df(filepath_equity_weighted)
+        else:
+            df = reading_df(filepath_equity)
+
         # reading and processing the mmm file
         df_vol = processing_mmm(filepath_mmm)
         
         #creating the merged df 
-        merged_df = merged_file(df,df_vol)
-        
+        if res_weighted == "Yes":
+            merged_df = merged_file(df,df_vol)
+            merged_df_weighted = merged_file(df_weighted,df_vol)
+        else:
+            merged_df = merged_file(df,df_vol)
+
         #Equity options
-        category_options,time_period_options,framework_options = equity_options(df)
+        if res_weighted == "Yes":
+            category_options,time_period_options,framework_options = equity_options(df)
+            category_options_w,time_period_options_w,framework_options_w = equity_options(df_weighted)
+        else:
+            category_options,time_period_options,framework_options = equity_options(df)
+
 
         # Volume share options
         category_options_vol_share = df_vol["Category"].unique()
@@ -323,36 +345,87 @@ def main():
         Brand_options = merged_df["brand"].unique()
         framework_options_corr = ["Volume_share","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
 
+
+        # Comparing the weighted vs the unweighted
+        if res_weighted == "Yes":
+            fig_weigheted_vs_un = sub_plots_w(df,df_weighted,category_options,time_period_options,framework_options)
+            st.plotly_chart(fig_weigheted_vs_un,use_container_width=True)
+
+
         #Equity plot
-        fig = Equity_plot(df,category_options,time_period_options,framework_options)
-        st.plotly_chart(fig,use_container_width=True)
+        if res_weighted == "Yes":
+            res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"])
+            if res_equity_weighted == "Weighted":
+                fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options)
+                st.plotly_chart(fig,use_container_width=True)
+            else:
+                fig = Equity_plot(df,category_options,time_period_options,framework_options)
+                st.plotly_chart(fig,use_container_width=True)
+        else: 
+            fig = Equity_plot(df,category_options,time_period_options,framework_options)
+            st.plotly_chart(fig,use_container_width=True)
 
         #Market share Plot 
         fig_market_share = market_share_plot(df_vol,category_options_vol_share)
         st.plotly_chart(fig_market_share,use_container_width=True)
 
         #Buble plot
-        fig_buble= buble_plot(merged_df,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
-        st.plotly_chart(fig_buble,use_container_width=True)
+        if res_weighted == "Yes":
+            res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="44")
+            if res_equity_weighted == "Weighted":
+                fig_buble= buble_plot(merged_df_weighted,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
+                st.plotly_chart(fig_buble,use_container_width=True)
+            else:
+                fig_buble= buble_plot(merged_df,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
+                st.plotly_chart(fig_buble,use_container_width=True)
+        else:
+            fig_buble= buble_plot(merged_df,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
+            st.plotly_chart(fig_buble,use_container_width=True)
 
         #Sub_plots
-        fig_sub = sub_plots(merged_df,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
-        st.plotly_chart(fig_sub,use_container_width=True)
+        if res_weighted == "Yes":
+            res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="45")
+            if res_equity_weighted == "Weighted":
+                fig_sub = sub_plots(merged_df_weighted,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
+                st.plotly_chart(fig_sub,use_container_width=True)
+            else:
+                fig_sub = sub_plots(merged_df,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
+                st.plotly_chart(fig_sub,use_container_width=True)
+        else:
+            fig_sub = sub_plots(merged_df,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
+            st.plotly_chart(fig_sub,use_container_width=True)
 
         # Significance Plot
-        fig_significance = Significance_plot(merged_df, Brand_options,framework_options_corr)
-        st.plotly_chart(fig_significance,use_container_width=True)
+        if res_weighted == "Yes":
+            res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="50")
+            if res_equity_weighted == "Weighted":
+                fig_significance = Significance_plot(merged_df_weighted, Brand_options,framework_options_corr)
+                st.plotly_chart(fig_significance,use_container_width=True)
+            else:
+                fig_significance = Significance_plot(merged_df, Brand_options,framework_options_corr)
+                st.plotly_chart(fig_significance,use_container_width=True)
+        
+        else:
+            fig_significance = Significance_plot(merged_df, Brand_options,framework_options_corr)
+            st.plotly_chart(fig_significance,use_container_width=True)
 
         # Correlation Plot
-        fig_corr = correlation_plot(merged_df,Brand_options)
-        st.plotly_chart(fig_corr,use_container_width=True)
+        if res_weighted == "Yes":
+            res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="47")
+            if res_equity_weighted == "Weighted":
+                fig_corr = correlation_plot(merged_df_weighted,Brand_options)
+                st.plotly_chart(fig_corr,use_container_width=True)
+            else:
+                fig_corr = correlation_plot(merged_df,Brand_options)
+                st.plotly_chart(fig_corr,use_container_width=True) 
+        else:   
+            fig_corr = correlation_plot(merged_df,Brand_options)
+            st.plotly_chart(fig_corr,use_container_width=True)
 
 
 
 if __name__=="__main__":
     main()   
-    
-
 
 
 
