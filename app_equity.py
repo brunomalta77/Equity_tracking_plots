@@ -404,7 +404,7 @@ def main():
 
         # Correlation options
         Brand_options = merged_df["brand"].unique()
-        framework_options_corr = ["Volume_share","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
+        framework_options_corr = ["Volume_share","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity","Price_change"]
 
 
         # Comparing the weighted vs the unweighted
@@ -460,14 +460,14 @@ def main():
         if res_weighted == "Yes":
             res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="50")
             if res_equity_weighted == "Weighted":
-                fig_significance = Significance_plot(merged_df_weighted, Brand_options,framework_options_corr)
+                fig_significance = Significance_plot(merged_df_weighted, Brand_options,framework_options_sig)
                 st.plotly_chart(fig_significance,use_container_width=True)
             else:
-                fig_significance = Significance_plot(merged_df, Brand_options,framework_options_corr)
+                fig_significance = Significance_plot(merged_df, Brand_options,framework_options_sig)
                 st.plotly_chart(fig_significance,use_container_width=True)
         
         else:
-            fig_significance = Significance_plot(merged_df, Brand_options,framework_options_corr)
+            fig_significance = Significance_plot(merged_df, Brand_options,framework_options_sig)
             st.plotly_chart(fig_significance,use_container_width=True)
 
         # Correlation Plot
