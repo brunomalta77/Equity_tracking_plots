@@ -18,6 +18,10 @@ import os
 
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
+logo_path = r"data/brand_logo.png"
+image = Image.open(logo_path)
+st.image(image)
+
 st.title("Equity Tracking plots (V 0.1)")
 
 # getting the excel file first by user input
@@ -316,9 +320,6 @@ def correlation_plot(df,brands):
     width=700)
     
     return fig_spearman
-
-
-
 
 
 #------------------------------------------------------------------------app---------------------------------#
