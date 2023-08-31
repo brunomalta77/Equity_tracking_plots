@@ -204,8 +204,7 @@ def sub_plots(df,categories,time_frames,frameworks,values):
 
 # Sub-plots for comparing the weighted vs the unweighted
 def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
-    st.subheader("Weighted VS Unweighted")
-    st.write("Comparing the weihted vs Unweighted equity")
+    st.subheader("Weighted vs Unweighted")
     #getting the date
     start_date = st.date_input("Select start date",key="20",value=datetime(2020, 1, 1))
     end_date =  st.date_input("Select end date",key="21")
@@ -419,8 +418,6 @@ def main():
         if res_weighted == "Yes":
             fig_weigheted_vs_un = sub_plots_w(df,df_weighted,category_options,time_period_options,framework_options)
             st.plotly_chart(fig_weigheted_vs_un,use_container_width=True)
-
-
         
         #Market share Plot 
         fig_market_share = market_share_plot(df_vol,category_options_vol_share)
