@@ -138,7 +138,7 @@ def Equity_plot(df,categories,time_frames,frameworks):
     df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
     df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
     
-    fig = px.line(df_filtered, x="time", y=framework, color="brand")
+    fig = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_sequence=["blue", "green", "red", "purple", "orange","maroon","black","lightgrey"])
     return fig
 
 
