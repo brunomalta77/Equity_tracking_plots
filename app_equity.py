@@ -480,9 +480,9 @@ def main():
             pass
         else:
             st.subheader("Weighted vs Unweighted")
-                if res_weighted == "Yes":
-                    fig_weigheted_vs_un = sub_plots_w(df,df_weighted,category_options,time_period_options,framework_options)
-                    st.plotly_chart(fig_weigheted_vs_un,use_container_width=True)
+            if res_weighted == "Yes":
+                fig_weigheted_vs_un = sub_plots_w(df,df_weighted,category_options,time_period_options,framework_options)
+                st.plotly_chart(fig_weigheted_vs_un,use_container_width=True)
         
         #Market share Plot 
         if mmm ==None:
