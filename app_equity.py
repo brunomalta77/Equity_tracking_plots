@@ -123,7 +123,6 @@ def merged_options(df):
 
 # Equity_plot
 def Equity_plot(df,categories,time_frames,frameworks):
-    st.subheader("Equity Metrics Plot")
     #getting the date
     start_date = st.date_input("Select start date",value=datetime(2020, 1, 1))
     end_date =  st.date_input("Select end date")
@@ -144,7 +143,6 @@ def Equity_plot(df,categories,time_frames,frameworks):
 
 
 def market_share_plot(df,categories):
-    st.subheader("Agreggated Volume Share by Brand Plot")
     #getting the date
     start_date = st.date_input("Select start date",key="1",value=datetime(2020, 1, 1))
     end_date =  st.date_input("Select end date",key="2")
@@ -162,7 +160,6 @@ def market_share_plot(df,categories):
 
 
 def buble_plot(df,categories,time_frames,frameworks,values):
-    st.subheader("Equity vs Market Share (Bubble plot)")
     st.write("4 dimensions: Time(x) /Equity(y)/ Brands(color), Volume share or Price change (buble size)")
     #getting the date
     start_date = st.date_input("Select start date",key="3",value=datetime(2020, 1, 1))
@@ -217,7 +214,6 @@ def sub_plots(df,categories,time_frames,frameworks,values):
 
 # Sub-plots for comparing the weighted vs the unweighted
 def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
-    st.subheader("Weighted vs Unweighted")
     #getting the date
     start_date = st.date_input("Select start date",key="20",value=datetime(2020, 1, 1))
     end_date =  st.date_input("Select end date",key="21")
@@ -255,7 +251,6 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
 
 # Significance Plot
 def Significance_plot(df,brands,frameworks):
-    st.subheader("Equity Plot w/ Significance (90% confidence interval)")
     #getting the date
     start_date = st.date_input("Select start date",key="15",value=datetime(2020, 1, 1))
     end_date =  st.date_input("Select end date",key="16")
@@ -300,7 +295,6 @@ def Significance_plot(df,brands,frameworks):
 
 # Correlation Plot
 def correlation_plot(df,brands):
-    st.subheader("Correlation Plot between Equity Metrics and Aggregated Sales Volume ")
 
     brand = st.radio('Choose your brand:', brands,key="500")
     
@@ -412,8 +406,8 @@ def main():
 
 
         #Equity plot
+        st.subheader("Equity Metrics Plot")
         if res_weighted == "Yes":
-            st.subheader("Equity Metrics Plot")
             res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"])
             if res_equity_weighted == "Weighted":
                 fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options)
@@ -426,15 +420,18 @@ def main():
             st.plotly_chart(fig,use_container_width=True)
 
          # Comparing the weighted vs the unweighted
+        st.subheader("Weighted vs Unweighted")
         if res_weighted == "Yes":
             fig_weigheted_vs_un = sub_plots_w(df,df_weighted,category_options,time_period_options,framework_options)
             st.plotly_chart(fig_weigheted_vs_un,use_container_width=True)
         
         #Market share Plot 
+        st.subheader("Agreggated Volume Share by Brand Plot")
         fig_market_share = market_share_plot(df_vol,category_options_vol_share)
         st.plotly_chart(fig_market_share,use_container_width=True)
 
         #Buble plot
+        st.subheader("Equity vs Market Share (Bubble plot)")
         if res_weighted == "Yes":
             res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="44")
             if res_equity_weighted == "Weighted":
@@ -461,6 +458,7 @@ def main():
             st.plotly_chart(fig_sub,use_container_width=True)
 
         # Significance Plot
+        st.subheader("Equity Plot w/ Significance (90% confidence interval)")
         if res_weighted == "Yes":
             res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="50")
             if res_equity_weighted == "Weighted":
@@ -475,6 +473,7 @@ def main():
             st.plotly_chart(fig_significance,use_container_width=True)
 
         # Correlation Plot
+        st.subheader("Correlation Plot between Equity Metrics and Aggregated Sales Volume ")
         if res_weighted == "Yes":
             res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="47")
             if res_equity_weighted == "Weighted":
