@@ -357,10 +357,10 @@ def main():
         filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm = mmm_info(data,slang)
 
         if res_weighted == "Yes":
-            st.write(f"* **Equity file version** {market} :{day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity}*")
+            st.write(f"* **Equity file version** {market} : {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity}*")
             st.write(f"*  **Age weighted equity file version** {market_weighted}: {day_equity_w}/{month_equity_w}/{year_equity_w} - {hour_equity_w}: {minute_equity_w}: {second_equity_w}*")
 
-            st.write(f"*  **MMM data version** {market} :{day_mmm}/{month_mmm}/{year_mmm} - {hour_mmm}: {minute_mmm}: {second_mmm}*")
+            st.write(f"*  **MMM data version** {market} : {day_mmm}/{month_mmm}/{year_mmm} - {hour_mmm}: {minute_mmm}: {second_mmm}*")
         else:
             st.write(f"* **Equity file version** {market}: {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity}*")
             st.write(f"* **MMM data version** {market} : {day_mmm}/{month_mmm}/{year_mmm}- {hour_mmm} - {minute_mmm}: {second_mmm}*")
