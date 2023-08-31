@@ -22,7 +22,7 @@ st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layou
 logo_path = r"data/brand_logo.png"
 image = Image.open(logo_path)
 
-col1, col2 = st.beta_columns([4, 1])  # Adjust the width ratios as needed
+col1, col2 = st.columns([4, 1])  # Adjust the width ratios as needed
 
 # Logo on the left
 with col1:
