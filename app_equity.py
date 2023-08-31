@@ -336,18 +336,18 @@ def main():
         if market == "germany":
             slang = "MMM_DE_"
             res_weighted = None
-             mmm = "Yes"
+            mmm = "Yes"
             
         if market == "UK":
             slang ="MMM_UK_"
             res_weighted = "Yes"
             market_weighted = "uk_equity_age_weighted"
-             mmm = "Yes"
+            mmm = "Yes"
             
         if market =="italy":
             slang ="MMM_IT"
             res_weighted = None
-             mmm = "Yes"
+            mmm = "Yes"
         
         if market =="france":
             slang = "MMM_FR"
