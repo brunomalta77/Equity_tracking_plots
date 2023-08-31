@@ -291,7 +291,7 @@ def Significance_plot(df,brands,frameworks):
 def correlation_plot(df,brands):
     st.subheader("Correlation Plot between Equity Metrics and Aggregated Sales Volume ")
 
-    brand = st.radio('Choose your brand:', brands,key="20")
+    brand = st.radio('Choose your brand:', brands,key="500")
     
     framework_options_corr = ["Volume_share","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity","Price_change"]
     df_filtered =  df[(df["brand"] == brand)]
