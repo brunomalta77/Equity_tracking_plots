@@ -67,6 +67,8 @@ def calculate_confidence_intervals(data, confidence=0.90):
     return lower_bound, upper_bound
 
 def equity_info(data,market_flag):
+    if market_flag == "UK":
+        market_flag = "
     for x in os.listdir(data):
         if market_flag in x:
             filepath_equity = os.path.join(data,x)
@@ -86,12 +88,6 @@ def mmm_info(data,slang_flag):
             second_mmm = info_number[-1].split(".")[0]
     
     return filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm
-
-
-
-
-
-
 
 
 
@@ -307,7 +303,6 @@ def main():
             res_weighted = st.radio(" Do you want to compare the weighted equity? ",["Yes","No"])
             market_weighted = "uk_equity_age_weighted"
 
-
         if market =="italy":
             slang ="MMM_IT"
             res_weighted = None
@@ -330,7 +325,6 @@ def main():
         else:
             st.write(f"*From the {market} market - Equity date {day_equity}/{month_equity}/{year_equity}- Hours: {hour_equity}: {minute_equity}: {second_equity}*")
             st.write(f"*From the {market} market - MMM date {day_mmm}/{month_mmm}/{year_mmm}- Hours: {hour_mmm}: {minute_mmm}: {second_mmm}*")
-
 
 
         # reading the equity file
