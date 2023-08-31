@@ -158,7 +158,7 @@ def buble_plot(df,categories,time_frames,frameworks,values):
     ws = start_date.strftime('%Y-%m-%d')
     we = end_date.strftime('%Y-%m-%d')
     # getting the parameters
-    category = st.radio('Choose your category:', categories,key="5")
+    category = st.radio('Choose your category:', categories,key="90")
     time_frame = st.radio('Choose your time frame:', time_frames,key="6")
     framework = st.selectbox('Choose your framework:', frameworks,key="7")
     value = st.selectbox('Choose  Price Change / Volume share:', values,key="8")
