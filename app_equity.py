@@ -361,7 +361,7 @@ def main():
         else:
             filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
 
-       if mmm == None:
+        if mmm == None:
             pass 
         else:
             filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm = mmm_info(data,slang)
@@ -382,13 +382,13 @@ def main():
             df = reading_df(filepath_equity)
 
         # reading and processing the mmm file
-         if mmm == None:
+        if mmm == None:
             pass
         else:
             df_vol = processing_mmm(filepath_mmm)
         
         #creating the merged df 
-         if mmm == None:
+        if mmm == None:
             pass
         else:
             if res_weighted == "Yes":
@@ -406,19 +406,19 @@ def main():
 
 
         # Volume share options
-         if mmm== None:
+        if mmm== None:
             pass
         else:
             category_options_vol_share = df_vol["Category"].unique()
 
         #Merged options
-         if mmm== None:
+        if mmm== None:
             pass
         else:
             category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value = merged_options(merged_df)
 
         # Significance options
-         if mmm== None:
+        if mmm== None:
             pass
         else:
             Brand_options = merged_df["brand"].unique()
@@ -426,7 +426,7 @@ def main():
             lower,upper = calculate_confidence_intervals(merged_df["Framework_Awareness"])
 
         # Correlation options
-         if mmm== None:
+        if mmm== None:
             pass
         else:
             Brand_options = merged_df["brand"].unique()
@@ -454,7 +454,7 @@ def main():
             st.plotly_chart(fig_weigheted_vs_un,use_container_width=True)
         
         #Market share Plot 
-         if mmm ==None:
+        if mmm ==None:
             pass
         else:
             st.subheader("Agreggated Volume Share by Brand Plot")
@@ -462,7 +462,7 @@ def main():
             st.plotly_chart(fig_market_share,use_container_width=True)
 
         #Buble plot
-         if mmm ==None:
+        if mmm ==None:
             pass
         else:
             st.subheader("Equity vs Volume Share (Bubble plot)")
@@ -479,7 +479,7 @@ def main():
                 st.plotly_chart(fig_buble,use_container_width=True)
 
         #Sub_plots
-         if mmm ==None:
+        if mmm ==None:
             pass
         else:
             st.subheader("Equity vs Volume Share  (histogram)")
@@ -496,7 +496,7 @@ def main():
                 st.plotly_chart(fig_sub,use_container_width=True)
 
         # Significance Plot
-         if mmm ==None:
+        if mmm ==None:
             pass
         else:
             st.subheader("Equity Plot w/ Significance (90% confidence interval)")
@@ -514,7 +514,7 @@ def main():
                 st.plotly_chart(fig_significance,use_container_width=True)
 
         # Correlation Plot
-         if mmm ==None:
+        if mmm ==None:
             pass
         else:
             st.subheader("Correlation Plot between Equity Metrics and Aggregated Sales Volume ")
