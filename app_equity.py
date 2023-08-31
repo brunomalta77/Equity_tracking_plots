@@ -202,6 +202,45 @@ def sub_plots(df,categories,time_frames,frameworks,values):
 
     return sub_fig
 
+# Sub-plots for comparing the weighted vs the unweighted
+def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
+    st.subheader("Weighted VS Unweighted")
+    st.write("Comparing the weihted vs Unweighted equity")
+    #getting the date
+    start_date = st.date_input("Select start date",key="20",value=datetime(2020, 1, 1))
+    end_date =  st.date_input("Select end date",key="21")
+    #convert our dates
+    ws = start_date.strftime('%Y-%m-%d')
+    we = end_date.strftime('%Y-%m-%d')
+    # getting the parameters
+    category = st.radio('Choose your category:', categories,key="22")
+    time_frame = st.radio('Choose your time frame:', time_frames,key="23")
+    framework = st.selectbox('Choose your framework:', frameworks,key="24")
+    
+    #filter df 
+    df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
+    df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
+    #filter df_weighted
+    df_filtered_w =  df_weighted[(df["Category"] == category) & (df_weighted["time_period"] == time_frame)]
+    df_filtered_w = df_filtered_w[(df_filtered_w['time'] >= ws) & (df_filtered['time'] <= we)]
+
+
+    sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+
+    st.write("(1)Unweighted vs (2) Weighted")
+
+    line_plot = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
+    for trace in line_plot.data:
+        sub_fig.add_trace(trace,row=1,col=1)
+
+    histogram = px.line(df_filtered_w,x="time",y=framework,color ="brand",color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
+    for trace in histogram.data:
+        sub_fig.add_trace(trace,row=2,col=1)
+
+    return sub_fig
+
+
+
 
 # Significance Plot
 def Significance_plot(df,brands,frameworks):
