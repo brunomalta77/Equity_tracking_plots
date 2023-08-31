@@ -413,6 +413,7 @@ def main():
 
         #Equity plot
         if res_weighted == "Yes":
+            st.subheader("Equity Metrics Plot")
             res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"])
             if res_equity_weighted == "Weighted":
                 fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options)
