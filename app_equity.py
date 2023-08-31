@@ -145,7 +145,7 @@ def Equity_plot(df,categories,time_frames,frameworks):
     all_brands = [x for x in df["brand"].unique()]
     brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
     
-    fig = px.line(df_filtered, x="time", y=framework, color_discrete_map=brand_color_mapping)
+    fig = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping)
     return fig
 
 
@@ -166,7 +166,7 @@ def market_share_plot(df,categories):
     all_brands = [x for x in df["brand"].unique()]
     brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
     
-    fig = px.line(df_filtered, x="time", y="Volume_share",color_discrete_map=brand_color_mapping)
+    fig = px.line(df_filtered, x="time", y="Volume_share",color="brand",color_discrete_map=brand_color_mapping)
     return fig
 
 
@@ -191,7 +191,7 @@ def buble_plot(df,categories,time_frames,frameworks,values):
     all_brands = [x for x in df["brand"].unique()]
     brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
     
-    fig = px.scatter(df_filtered, x="time", y=framework, color_discrete_map=brand_color_mapping ,size=value,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
+    fig = px.scatter(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping ,size=value,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
 
     return fig
 
@@ -222,11 +222,11 @@ def sub_plots(df,categories,time_frames,frameworks,values):
     all_brands = [x for x in df["brand"].unique()]
     brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
     
-    line_plot = px.line(df_filtered, x="time", y=framework, color_discrete_map=brand_color_mapping ,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
+    line_plot = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping ,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
     for trace in line_plot.data:
         sub_fig.add_trace(trace,row=1,col=1)
 
-    histogram = px.histogram(df_filtered,x="time",y=value,color_discrete_map=brand_color_mapping ,color_discrete_sequence=["blue", "green", "red", "purple", "orange"],nbins=200)
+    histogram = px.histogram(df_filtered,x="time",y=value,color="brand",color_discrete_map=brand_color_mapping ,color_discrete_sequence=["blue", "green", "red", "purple", "orange"],nbins=200)
     for trace in histogram.data:
         sub_fig.add_trace(trace,row=2,col=1)
 
@@ -261,11 +261,11 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
     brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
 
     
-    line_plot = px.line(df_filtered, x="time", y=framework, color_discrete_map=brand_color_mapping,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
+    line_plot = px.line(df_filtered, x="time", y=framework,color="brand", color_discrete_map=brand_color_mapping,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
     for trace in line_plot.data:
         sub_fig.add_trace(trace,row=1,col=1)
 
-    histogram = px.line(df_filtered_w,x="time",y=framework,color_discrete_map=brand_color_mapping,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
+    histogram = px.line(df_filtered_w,x="time",y=framework,color="brand",color_discrete_map=brand_color_mapping,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
     for trace in histogram.data:
         sub_fig.add_trace(trace,row=2,col=1)
 
