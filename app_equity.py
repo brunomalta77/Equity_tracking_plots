@@ -21,9 +21,17 @@ from PIL import Image
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
 logo_path = r"data/brand_logo.png"
 image = Image.open(logo_path)
-st.sidebar.image(image, width=150)
 
-st.title("Equity Tracking plots (V 0.1)")
+col1, col2 = st.beta_columns([4, 1])  # Adjust the width ratios as needed
+
+# Logo on the left
+with col1:
+    st.image(image, width=150)  # Adjust the width as needed
+
+# Title on the right
+with col2:
+    st.title("Brand Delta Equity Tracking plots (V 0.1)")
+
 
 # getting the excel file first by user input
 data = r"data"
