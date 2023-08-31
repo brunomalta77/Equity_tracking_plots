@@ -402,12 +402,6 @@ def main():
         framework_options_corr = ["Volume_share","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity","Price_change"]
 
 
-        # Comparing the weighted vs the unweighted
-        if res_weighted == "Yes":
-            fig_weigheted_vs_un = sub_plots_w(df,df_weighted,category_options,time_period_options,framework_options)
-            st.plotly_chart(fig_weigheted_vs_un,use_container_width=True)
-
-
         #Equity plot
         if res_weighted == "Yes":
             res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"])
@@ -421,6 +415,13 @@ def main():
             fig = Equity_plot(df,category_options,time_period_options,framework_options)
             st.plotly_chart(fig,use_container_width=True)
 
+         # Comparing the weighted vs the unweighted
+        if res_weighted == "Yes":
+            fig_weigheted_vs_un = sub_plots_w(df,df_weighted,category_options,time_period_options,framework_options)
+            st.plotly_chart(fig_weigheted_vs_un,use_container_width=True)
+
+
+        
         #Market share Plot 
         fig_market_share = market_share_plot(df_vol,category_options_vol_share)
         st.plotly_chart(fig_market_share,use_container_width=True)
