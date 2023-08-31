@@ -182,7 +182,6 @@ def buble_plot(df,categories,time_frames,frameworks,values):
 
 # Creating the Subplots
 def sub_plots(df,categories,time_frames,frameworks,values):
-    st.subheader("Equity vs Market Share  (histogram)")
     st.write("First plot with 3 dimensions (Time(x)/Equity(y)/brands(color) second plot only with the volume_share as histogram")
     #getting the date
     start_date = st.date_input("Select start date",key="9",value=datetime(2020, 1, 1))
@@ -445,6 +444,7 @@ def main():
             st.plotly_chart(fig_buble,use_container_width=True)
 
         #Sub_plots
+        st.subheader("Equity vs Market Share  (histogram)")
         if res_weighted == "Yes":
             res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="45")
             if res_equity_weighted == "Weighted":
