@@ -430,7 +430,7 @@ def main():
         st.plotly_chart(fig_market_share,use_container_width=True)
 
         #Buble plot
-        st.subheader("Equity vs Market Share (Bubble plot)")
+        st.subheader("Equity vs Volume Share (Bubble plot)")
         if res_weighted == "Yes":
             res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="44")
             if res_equity_weighted == "Weighted":
@@ -444,7 +444,7 @@ def main():
             st.plotly_chart(fig_buble,use_container_width=True)
 
         #Sub_plots
-        st.subheader("Equity vs Market Share  (histogram)")
+        st.subheader("Equity vs Volume Share  (histogram)")
         if res_weighted == "Yes":
             res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="45")
             if res_equity_weighted == "Weighted":
