@@ -145,7 +145,7 @@ def Equity_plot(df,categories,time_frames,frameworks):
 
     all_brands = [x for x in df["brand"].unique()]
     brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
-    
+         
     fig = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping)
     return fig
 
