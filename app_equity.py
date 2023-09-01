@@ -346,7 +346,7 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                  line_plot.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
          
          for trace in line_plot.data:
-         sub_fig.add_trace(trace,row=1,col=1)
+                  sub_fig.add_trace(trace,row=1,col=1)
          
          histogram = px.histogram(df_filtered,x="time",y=value,color="brand",color_discrete_map=brand_color_mapping ,color_discrete_sequence=["blue", "green", "red", "purple", "orange"],nbins=200)
          if time_frame == "months":
@@ -386,7 +386,7 @@ def sub_plots(df,categories,time_frames,frameworks,values):
          
                  histogram.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
          for trace in histogram.data:
-         sub_fig.add_trace(trace,row=2,col=1)
+                  sub_fig.add_trace(trace,row=2,col=1)
          
          
          
