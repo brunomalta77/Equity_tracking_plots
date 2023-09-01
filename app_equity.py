@@ -429,7 +429,7 @@ def main():
         if res_weighted == "Yes":
             category_options,time_period_options,framework_options = equity_options(df)
             category_options_w,time_period_options_w,framework_options_w = equity_options(df_weighted)
-            #df[framework_options] = df[framework_options].round(2)
+           
 
         else:
             category_options,time_period_options,framework_options = equity_options(df)
@@ -440,13 +440,15 @@ def main():
             pass
         else:
             category_options_vol_share = df_vol["Category"].unique()
-
+            df_vol[category_options_vol_share]= df_vol[category_options_vol_share].round(2)
+        
         #Merged options
         if mmm== None:
             pass
         else:
             category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value = merged_options(merged_df)
-
+            merged_df[framework_options_merged] = merged_df[framework_options_merged].round(2)
+        
         # Significance options
         if mmm== None:
             pass
