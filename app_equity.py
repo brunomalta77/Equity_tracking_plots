@@ -329,7 +329,7 @@ def correlation_plot(df,brands):
                     
     spearman_corr = filtered_data_final.corr(method='spearman')
 
-    custom_colors = ["red", "green"]
+    custom_colors = ["red","grey","green"]
 
 
     fig_spearman = px.imshow(
