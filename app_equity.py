@@ -178,7 +178,7 @@ def Equity_plot(df,categories,time_frames,frameworks):
                   return fig
 
          
-         else:
+         if time_frame =="weeks":
                   # Extract unique weeks from the "time" column
                   unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
                   
