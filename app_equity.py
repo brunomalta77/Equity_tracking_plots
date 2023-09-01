@@ -58,8 +58,8 @@ def processing_mmm(filepath):
     df_vol["Price_change"] = res
     df_vol.rename(columns={"Value":"Volume_share"},inplace=True)
     df_vol=df_vol.groupby(['time','Y','H','QT','M','W','brand','Metric','Category'])[['Volume_share','Price_change']].sum().reset_index()
-
     return df_vol
+
 
 #merged file
 @st.cache_data() 
@@ -214,7 +214,7 @@ def sub_plots(df,categories,time_frames,frameworks,values):
     #filter
     df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
     df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
-    
+
     sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
 
     df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
@@ -330,7 +330,6 @@ def correlation_plot(df,brands):
     spearman_corr = filtered_data_final.corr(method='spearman')
 
     custom_colors = ["red","grey","green"]
-
 
     fig_spearman = px.imshow(
     spearman_corr.values,
