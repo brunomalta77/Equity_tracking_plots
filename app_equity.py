@@ -172,29 +172,29 @@ def market_share_plot(df,categories):
 
 
 def buble_plot(df,categories,time_frames,frameworks,values):
-    st.write("4 dimensions: Time(x) /Equity(y)/ Brands(color), Volume share or Price change (buble size)")
-    #getting the date
-    start_date = st.date_input("Select start date",key="3",value=datetime(2020, 1, 1))
-    end_date =  st.date_input("Select end date",key="4")
-    #convert our dates
-    ws = start_date.strftime('%Y-%m-%d')
-    we = end_date.strftime('%Y-%m-%d')
-    # getting the parameters
-    category = st.radio('Choose your category:', categories,key="90")
-    time_frame = st.radio('Choose your time frame:', time_frames,key="6")
-    framework = st.selectbox('Choose your framework:', frameworks,key="7")
-    value = st.selectbox('Choose  Price Change / Volume share:', values,key="8")
-    
-    #filter
-    df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
-    df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
-    
-    all_brands = [x for x in df["brand"].unique()]
-    brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
-    
-    fig = px.scatter(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping ,size=value,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
-
-    return fig
+         st.write("4 dimensions: Time(x) /Equity(y)/ Brands(color), Volume share or Price change (buble size)")
+         #getting the date
+         start_date = st.date_input("Select start date",key="3",value=datetime(2020, 1, 1))
+         end_date =  st.date_input("Select end date",key="4")
+         #convert our dates
+         ws = start_date.strftime('%Y-%m-%d')
+         we = end_date.strftime('%Y-%m-%d')
+         # getting the parameters
+         category = st.radio('Choose your category:', categories,key="90")
+         time_frame = st.radio('Choose your time frame:', time_frames,key="6")
+         framework = st.selectbox('Choose your framework:', frameworks,key="7")
+         value = st.selectbox('Choose  Price Change / Volume share:', values,key="8")
+         
+         #filter
+         df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
+         df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
+         
+         all_brands = [x for x in df["brand"].unique()]
+         brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+         
+         fig = px.scatter(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping ,size=value,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
+         
+         return fig
 
 # Creating the Subplots
 def sub_plots(df,categories,time_frames,frameworks,values):
