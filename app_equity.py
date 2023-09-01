@@ -157,7 +157,8 @@ def Equity_plot(df,categories,time_frames,frameworks):
                  ticktext = [m.strftime("%B %Y") for m in unique_months]
          
                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-         
+
+                  return fig
          if time_frame == "quarters":
                   unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
                   
@@ -166,26 +167,28 @@ def Equity_plot(df,categories,time_frames,frameworks):
                   ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
                   
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-
+                  return fig
                  
          if time_frame =="years":
-                 # Extract unique years from the "time" column
-                 unique_years = df_filtered['time'].dt.year.unique()
-         
-                 # Customize the x-axis tick labels to show only one label per year
-                 fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
+                  # Extract unique years from the "time" column
+                  unique_years = df_filtered['time'].dt.year.unique()
+                  
+                  # Customize the x-axis tick labels to show only one label per year
+                  fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
+                  return fig
+
          
          else:
                   # Extract unique weeks from the "time" column
-                 unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
-         
-                 # Customize the x-axis tick labels to show the start date of each week
-                 tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
-                 ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
-         
-                 fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-
-         return fig
+                  unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
+                  
+                  # Customize the x-axis tick labels to show the start date of each week
+                  tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+                  ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+                  
+                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+                  
+                  return fig
 
 
 def market_share_plot(df,categories):
