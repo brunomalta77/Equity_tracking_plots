@@ -429,7 +429,7 @@ def main():
         if res_weighted == "Yes":
             category_options,time_period_options,framework_options = equity_options(df)
             category_options_w,time_period_options_w,framework_options_w = equity_options(df_weighted)
-            df[framework_options] = df[df[framework_options].apply(lambda x: isinstance(x, float))][framework].round(2)
+            df[framework_options] = df["framework_options].round(2)
 
         else:
             category_options,time_period_options,framework_options = equity_options(df)
