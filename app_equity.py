@@ -440,7 +440,7 @@ def main():
             pass
         else:
             category_options_vol_share = df_vol["Category"].unique()
-            df_vol[category_options_vol_share]= df_vol[category_options_vol_share].round(2)
+            df_vol["Volume_share"]= df_vol["Volume_share"].round(2)
         
         #Merged options
         if mmm== None:
@@ -448,6 +448,7 @@ def main():
         else:
             category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value = merged_options(merged_df)
             merged_df[framework_options_merged] = merged_df[framework_options_merged].round(2)
+            merged_df[framework_options_value] =   merged_df[framework_options_value].round(2)
         
         # Significance options
         if mmm== None:
