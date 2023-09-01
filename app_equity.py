@@ -440,7 +440,8 @@ def main():
             pass
         else:
             category_options_vol_share = df_vol["Category"].unique()
-            df_vol["Volume_share"]= df_vol["Volume_share"].round(2)
+            df_vol["Volume_share"] = df_vol["Volume_share"].apply(lambda x: round(x, 2))
+
         
         #Merged options
         if mmm== None:
