@@ -425,34 +425,12 @@ def main():
             else:
                 merged_df = merged_file(df,df_vol)
 
-        ## transforming  all the important values to 2 decimal places##
-        
-        if res_weighted == "Yes":
-            df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]  = df[df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"].apply(lambda x: isinstance(x, float))]["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"].round(2)
-            df_weighted["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]  = df_weighted["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity","Total_Equity"].round(2) 
-        else:
-            df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]  = df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"].round(2) 
-
-        if mmm == None:
-            pass
-        else:
-            df_vol["Volume_share","Price_change"] =  df_vol["Volume_share","Price_change"].round(2)
-       
-        
-        if mmm == None:
-            pass
-        else:
-            if res_weighted == "Yes":
-                merged_df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"] =  merged_df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"].round(2)
-                merged_df_weighted["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"] =    merged_df_weighted["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"].round(2)
-            else:
-                 merged_df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"] =  merged_df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"].round(2)
-
-    
         #Equity options
         if res_weighted == "Yes":
             category_options,time_period_options,framework_options = equity_options(df)
             category_options_w,time_period_options_w,framework_options_w = equity_options(df_weighted)
+            df[framework_options] = df[df[framework_options].apply(lambda x: isinstance(x, float))][framework].round(2)
+
         else:
             category_options,time_period_options,framework_options = equity_options(df)
 
