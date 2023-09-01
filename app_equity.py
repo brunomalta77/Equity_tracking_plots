@@ -128,26 +128,63 @@ def merged_options(df):
 
 # Equity_plot
 def Equity_plot(df,categories,time_frames,frameworks):
-    #getting the date
-    start_date = st.date_input("Select start date",value=datetime(2020, 1, 1))
-    end_date =  st.date_input("Select end date")
-    #convert our dates
-    ws = start_date.strftime('%Y-%m-%d')
-    we = end_date.strftime('%Y-%m-%d')
-    # getting the parameters
-    category = st.radio('Choose your category:', categories)
-    time_frame = st.radio('Choose your time frame:', time_frames)
-    framework = st.selectbox('Choose your framework:', frameworks)
-
-    #filtering
-    df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
-    df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
-
-    all_brands = [x for x in df["brand"].unique()]
-    brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+         #getting the date
+         start_date = st.date_input("Select start date",value=datetime(2020, 1, 1))
+         end_date =  st.date_input("Select end date")
+         #convert our dates
+         ws = start_date.strftime('%Y-%m-%d')
+         we = end_date.strftime('%Y-%m-%d')
+         # getting the parameters
+         category = st.radio('Choose your category:', categories)
+         time_frame = st.radio('Choose your time frame:', time_frames)
+         framework = st.selectbox('Choose your framework:', frameworks)
          
-    fig = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping)
-    return fig
+         #filtering
+         df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
+         df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
+         
+         all_brands = [x for x in df["brand"].unique()]
+         brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+         
+         fig = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping)
+
+         if time_frame == "months":
+                 # Extract unique months from the "time" column
+                 unique_months = df_filtered['time'].dt.to_period('M').unique()
+         
+                 # Customize the x-axis tick labels to show one label per month
+                 tickvals = [f"{m.start_time}" for m in unique_months]
+                 ticktext = [m.strftime("%B %Y") for m in unique_months]
+         
+                 fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+         if time_frame == "quarters":
+                  # Extract unique quarters from the "time" column
+                 unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
+         
+                 # Customize the x-axis tick labels to show one label per quarter
+                 tickvals = [f"{q.start_time}" for q in unique_quarters]
+                 ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
+         
+                 fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+                 
+         if time_frame =="years":
+                 # Extract unique years from the "time" column
+                 unique_years = df_filtered['time'].dt.year.unique()
+         
+                 # Customize the x-axis tick labels to show only one label per year
+                 fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
+         
+         else:
+                  # Extract unique weeks from the "time" column
+                 unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
+         
+                 # Customize the x-axis tick labels to show the start date of each week
+                 tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+                 ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+         
+                 fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+
+         return fig
 
 
 def market_share_plot(df,categories):
