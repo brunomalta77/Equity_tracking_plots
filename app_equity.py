@@ -442,13 +442,12 @@ def main():
             category_options_vol_share = df_vol["Category"].unique()
             df_vol["Volume_share"] = df_vol["Volume_share"].apply(lambda x: round(x, 2))
 
-        
         #Merged options
         if mmm== None:
             pass
         else:
             category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value = merged_options(merged_df)
-            merged_df[framework_options_merged] = merged_df[framework_options_merged].round(2)
+            merged_df[framework_options_merged] = df_vol[framework_options_merged].apply(lambda x: round(x, 2))
             merged_df[framework_options_value] =   merged_df[framework_options_value].round(2)
         
         # Significance options
