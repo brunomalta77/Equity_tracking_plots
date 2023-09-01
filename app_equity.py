@@ -149,16 +149,14 @@ def Equity_plot(df,categories,time_frames,frameworks):
          fig = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping)
 
          if time_frame == "months":
-                 # Extract unique months from the "time" column
-                 unique_months = df_filtered['time'].dt.to_period('M').unique()
-         
-                 # Customize the x-axis tick labels to show one label per month
-                 tickvals = [f"{m.start_time}" for m in unique_months]
-                 ticktext = [m.strftime("%B %Y") for m in unique_months]
-         
-                 fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-
-                  return fig
+                  unique_months = df_filtered['time'].dt.to_period('M').unique()
+                  
+                  # Customize the x-axis tick labels to show one label per month
+                  tickvals = [f"{m.start_time}" for m in unique_months]
+                  ticktext = [m.strftime("%B %Y") for m in unique_months]
+                  
+                  # Update x-axis ticks
+                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
          if time_frame == "quarters":
                   unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
                   
