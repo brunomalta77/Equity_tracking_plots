@@ -425,10 +425,12 @@ def main():
             else:
                 merged_df = merged_file(df,df_vol)
 
-        # transforming  all the important values to 2 decimal places
+        ## transforming  all the important values to 2 decimal places##
         
         if res_weighted == "Yes":
-            df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]  = df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"].round(2) 
+            df[df['Column1'].apply(lambda x: isinstance(x, float))]['Column1'].round(2)
+
+            df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]  = df[df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"].apply(lambda x: isinstance(x, float))]["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"].round(2)
             df_weighted["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]  = df_weighted["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity","Total_Equity"].round(2) 
         else:
             df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]  = df["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"].round(2) 
