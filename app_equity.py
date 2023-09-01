@@ -157,6 +157,7 @@ def Equity_plot(df,categories,time_frames,frameworks):
                   
                   # Update x-axis ticks
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+                  return fig 
          if time_frame == "quarters":
                   unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
                   
