@@ -242,6 +242,7 @@ def buble_plot(df,categories,time_frames,frameworks,values):
          brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
          
          fig = px.scatter(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping ,size=value,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
+         
          if time_frame == "months":
                  # Extract unique months from the "time" column
                  unique_months = df_filtered['time'].dt.to_period('M').unique()
@@ -318,16 +319,16 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                  ticktext = [m.strftime("%B %Y") for m in unique_months]
          
                  line_plot.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+         
          if time_frame == "quarters":
-                  # Extract unique quarters from the "time" column
-                 unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
-         
-                 # Customize the x-axis tick labels to show one label per quarter
-                 tickvals = [f"{q.start_time}" for q in unique_quarters]
-                 ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
-         
-                 line_plot.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-                 
+                  unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
+
+                  # Customize the x-axis tick labels to show one label per quarter
+                  tickvals = [f"{q.start_time}" for q in unique_quarters]
+                  ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
+                  
+                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+
          if time_frame =="years":
                  # Extract unique years from the "time" column
                  unique_years = df_filtered['time'].dt.year.unique()
