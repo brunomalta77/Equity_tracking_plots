@@ -22,7 +22,7 @@ st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layou
 logo_path = r"data/brand_logo.png"
 image = Image.open(logo_path)
 #colors used for the plots
-colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","indigo","olive","silver","darkviolet","grey"]
+colors = ["blue", "green", "red", "purple", "orange","teal","black","midnightblue","indigo","olive","gold","darkviolet","firebrick"]
 
 
 
