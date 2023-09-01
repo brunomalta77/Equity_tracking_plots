@@ -247,14 +247,15 @@ def buble_plot(df,categories,time_frames,frameworks,values):
          fig = px.scatter(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping ,size=value,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
          
          if time_frame == "months":
-                 # Extract unique months from the "time" column
-                 unique_months = df_filtered['time'].dt.to_period('M').unique()
-         
-                 # Customize the x-axis tick labels to show one label per month
-                 tickvals = [f"{m.start_time}" for m in unique_months]
-                 ticktext = [m.strftime("%B %Y") for m in unique_months]
-         
-                 fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+                  # Extract unique months from the "time" column
+                  unique_months = df_filtered['time'].dt.to_period('M').unique()
+                  
+                  # Customize the x-axis tick labels to show one label per month
+                  tickvals = [f"{m.start_time}" for m in unique_months]
+                  ticktext = [m.strftime("%B %Y") for m in unique_months]
+                  
+                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+                  return fig
          if time_frame == "quarters":
                   # Extract unique quarters from the "time" column
                  unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
@@ -264,26 +265,24 @@ def buble_plot(df,categories,time_frames,frameworks,values):
                  ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
          
                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-                 
+                 return fig
          if time_frame =="years":
-                 # Extract unique years from the "time" column
-                 unique_years = df_filtered['time'].dt.year.unique()
-         
-                 # Customize the x-axis tick labels to show only one label per year
-                 fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
-         
-         else:
+                  # Extract unique years from the "time" column
+                  unique_years = df_filtered['time'].dt.year.unique()
+                  
+                  # Customize the x-axis tick labels to show only one label per year
+                  fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
+                  return fig
+         if time_frame=="weeks" :
                   # Extract unique weeks from the "time" column
-                 unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
-         
-                 # Customize the x-axis tick labels to show the start date of each week
-                 tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
-                 ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
-         
-                 fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-
-         
-         return fig
+                  unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
+                  
+                  # Customize the x-axis tick labels to show the start date of each week
+                  tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+                  ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+                  
+                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+                  return fig
 
 # Creating the Subplots
 def sub_plots(df,categories,time_frames,frameworks,values):
