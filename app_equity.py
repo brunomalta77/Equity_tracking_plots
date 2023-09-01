@@ -159,15 +159,15 @@ def Equity_plot(df,categories,time_frames,frameworks):
                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
          
          if time_frame == "quarters":
-                  if time_frame == "quarters":
                   # Extract unique quarters from the "time" column
-                  unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
-                  
-                  # Customize the x-axis tick labels to show the quarters
-                  tickvals = [q for q in unique_quarters]
-                  ticktext = [f"Q{q.quarter}" for q in unique_quarters]
-
-    fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=0)
+                 unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
+                 
+                 # Customize the x-axis tick labels to show the quarters
+                 tickvals = [q for q in unique_quarters]
+                 ticktext = [f"Q{q.quarter}" for q in unique_quarters]
+         
+             fig.update_xaxes(type='category', tickvals=tickvals, ticktext=ticktext)
+                 
                  
          if time_frame =="years":
                  # Extract unique years from the "time" column
