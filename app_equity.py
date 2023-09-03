@@ -321,6 +321,7 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                  ticktext = [m.strftime("%B %Y") for m in unique_months]
          
                  line_plot.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+
          
          if time_frame == "quarters":
                   unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
