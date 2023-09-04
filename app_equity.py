@@ -318,7 +318,7 @@ def buble_plot(df,categories,time_frames,frameworks,values):
                   
                   # Customize the x-axis tick labels to show the start date of each semiannual period
                   tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
-                  ticktext = [f"Semiannual {i //} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
+                  ticktext = [f"Semiannual {i} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
                   
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
                   
@@ -449,7 +449,7 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                   
                   # Customize the x-axis tick labels to show the start date of each semiannual period
                   tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
-                  ticktext = [f"Semiannual {i //} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
+                  ticktext = [f"Semiannual {i} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
                   
                   sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
                   
@@ -592,7 +592,7 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   
                   # Customize the x-axis tick labels to show the start date of each semiannual period
                   tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
-                  ticktext = [f"Semiannual {i //} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
+                  ticktext = [f"Semiannual {i} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
                   
                   sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
                   
