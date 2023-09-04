@@ -189,7 +189,24 @@ def Equity_plot(df,categories,time_frames,frameworks):
                   
                   return fig
          else:
+       
+                  # Extract unique semiannual periods from the "time" column
+                  unique_periods = pd.date_range(start=ws, end=we, freq='6M').date
+                  
+                  # Customize the x-axis tick labels to show the start date of each semiannual period
+                  tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
+                  ticktext = [f"Semiannual {i // 2 + 1} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
+                  
+                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+                  
                   return fig
+
+
+
+
+
+
+
 
 def market_share_plot(df,categories):
          #getting the date
