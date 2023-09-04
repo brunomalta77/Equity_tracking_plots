@@ -142,6 +142,9 @@ def Equity_plot(df,categories,time_frames,frameworks):
          #filtering
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
          df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
+         df_filtered = df_filtered.sort_values(by="time")
+
+
          
          all_brands = [x for x in df["brand"].unique()]
          brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
@@ -195,7 +198,7 @@ def Equity_plot(df,categories,time_frames,frameworks):
                   
                   # Customize the x-axis tick labels to show the start date of each semiannual period
                   tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
-                  ticktext = [f"Semiannual {i // 2 + 1} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
+                  ticktext = [f"Semiannual {i //} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
                   
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
                   
@@ -259,6 +262,9 @@ def buble_plot(df,categories,time_frames,frameworks,values):
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
          df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
          
+         df_filtered = df_filtered.sort_values(by="time")
+
+         
          all_brands = [x for x in df["brand"].unique()]
          brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
          
@@ -292,6 +298,7 @@ def buble_plot(df,categories,time_frames,frameworks,values):
                   # Customize the x-axis tick labels to show only one label per year
                   fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
                   return fig
+         
          if time_frame=="weeks" :
                   # Extract unique weeks from the "time" column
                   unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
@@ -304,7 +311,17 @@ def buble_plot(df,categories,time_frames,frameworks,values):
                   return fig
 
          else:
+                  # Extract unique semiannual periods from the "time" column
+                  unique_periods = pd.date_range(start=ws, end=we, freq='6M').date
+                  
+                  # Customize the x-axis tick labels to show the start date of each semiannual period
+                  tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
+                  ticktext = [f"Semiannual {i //} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
+                  
+                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+                  
                   return fig
+
 
 # Creating the Subplots
 def sub_plots(df,categories,time_frames,frameworks,values):
@@ -324,11 +341,12 @@ def sub_plots(df,categories,time_frames,frameworks,values):
          #filter
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
          df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
+         df_filtered = df_filtered.sort_values(by="time")
+
+
          
          sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
          
-         df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
-         df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
          
          all_brands = [x for x in df["brand"].unique()]
          brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
@@ -423,6 +441,28 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
 
+         else:
+                  # Extract unique semiannual periods from the "time" column
+                  unique_periods = pd.date_range(start=ws, end=we, freq='6M').date
+                  
+                  # Customize the x-axis tick labels to show the start date of each semiannual period
+                  tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
+                  ticktext = [f"Semiannual {i //} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
+                  
+                  sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+                  
+                  # Add line plot to the first subplot
+                  for trace in line_plot.data:
+                     sub_fig.add_trace(trace, row=1, col=1)
+                  
+                  # Add histogram to the second subplot
+                  for trace in histogram.data:
+                     sub_fig.add_trace(trace, row=2, col=1)
+                  
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+
+         
          
          return sub_fig
 
@@ -445,6 +485,9 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
          #filter df_weighted
          df_filtered_w =  df_weighted[(df["Category"] == category) & (df_weighted["time_period"] == time_frame)]
          df_filtered_w = df_filtered_w[(df_filtered_w['time'] >= ws) & (df_filtered['time'] <= we)]
+         df_filtered = df_filtered.sort_values(by="time")
+
+
          
          all_brands = [x for x in df["brand"].unique()]
          
@@ -540,7 +583,28 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
-         
+
+         else:
+                   # Extract unique semiannual periods from the "time" column
+                  unique_periods = pd.date_range(start=ws, end=we, freq='6M').date
+                  
+                  # Customize the x-axis tick labels to show the start date of each semiannual period
+                  tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
+                  ticktext = [f"Semiannual {i //} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
+                  
+                  sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+                  
+                  # Add line plot to the first subplot
+                  for trace in line_plot.data:
+                     sub_fig.add_trace(trace, row=1, col=1)
+                  
+                  # Add histogram to the second subplot
+                  for trace in line_plot_w.data:
+                     sub_fig.add_trace(trace, row=2, col=1)
+                  
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+
 
          sub_fig.update_xaxes(title_text="Unweighted Plot",title_font=dict(color="blue"), row=1, col=1)
          sub_fig.update_xaxes(title_text="Weighted Plol",title_font=dict(color="red"), row=2, col=1)
