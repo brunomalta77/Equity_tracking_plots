@@ -398,7 +398,7 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                      sub_fig.add_trace(trace, row=1, col=1)
                   
                   # Add histogram to the second subplot
-                  for trace in histogram.data:
+                  for trace in line_plot_w.data:
                      sub_fig.add_trace(trace, row=2, col=1)
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
