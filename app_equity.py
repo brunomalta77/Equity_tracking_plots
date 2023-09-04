@@ -449,43 +449,54 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
 
 # Significance Plot
 def Significance_plot(df,brands,frameworks):
-    #getting the date
-    start_date = st.date_input("Select start date",key="15",value=datetime(2020, 1, 1))
-    end_date =  st.date_input("Select end date",key="16")
-    #convert our dates
-    ws = start_date.strftime('%Y-%m-%d')
-    we = end_date.strftime('%Y-%m-%d')
-    
-    brand = st.radio('Choose your brand:', brands,key="17")
-    framework = st.selectbox('Choose your framework:', frameworks,key="18")
-    
-    filtered_data = df[(df["brand"] == brand)]
-    filtered_data = filtered_data[(filtered_data['time'] >= ws) & (filtered_data['time'] <= we)]
-    
-    # Create the main line trace
-    main_trace = go.Scatter(x=filtered_data["time"], y=filtered_data[framework], mode='lines', name='Main Line')
-    
-    #getting the lower and upper boundaries
-    lower,upper = calculate_confidence_intervals(filtered_data[framework])
+         #getting the date
+         start_date = st.date_input("Select start date",key="15",value=datetime(2020, 1, 1))
+         end_date =  st.date_input("Select end date",key="16")
+         #convert our dates
+         ws = start_date.strftime('%Y-%m-%d')
+         we = end_date.strftime('%Y-%m-%d')
+         
+         brand = st.radio('Choose your brand:', brands,key="17")
+         framework = st.selectbox('Choose your framework:', frameworks,key="18")
+         
+         filtered_data = df[(df["brand"] == brand)]
+         filtered_data = filtered_data[(filtered_data['time'] >= ws) & (filtered_data['time'] <= we)]
+         
+         # Create the main line trace
+         main_trace = go.Scatter(x=filtered_data["time"], y=filtered_data[framework], mode='lines', name='Main Line')
+         
+         #getting the lower and upper boundaries
+         lower,upper = calculate_confidence_intervals(filtered_data[framework])
+         
+         # Create the shaded confidence interval area
+         confidence_interval_shape = {
+         'type': 'rect',
+         'xref': 'paper',  # Use 'paper' for the x-axis reference
+         'yref': 'y',
+         'x0': 0,  # Start at the left edge of the plot
+         'y0': lower,
+         'x1': 1,  # End at the right edge of the plot
+         'y1': upper,
+         'fillcolor': 'rgba(255, 0, 0, 0.2)',
+         'line': {'width': 0},
+         'opacity': 1,
+         'layer': 'above'
+         }
+         
+         # Create the figure and add the traces and shape
+         fig = go.Figure(data=[main_trace])
+         fig.add_shape(confidence_interval_shape)
 
-    # Create the shaded confidence interval area
-    confidence_interval_shape = {
-        'type': 'rect',
-        'xref': 'paper',  # Use 'paper' for the x-axis reference
-        'yref': 'y',
-        'x0': 0,  # Start at the left edge of the plot
-        'y0': lower,
-        'x1': 1,  # End at the right edge of the plot
-        'y1': upper,
-        'fillcolor': 'rgba(255, 0, 0, 0.2)',
-        'line': {'width': 0},
-        'opacity': 1,
-        'layer': 'above'
-    }
-
-    # Create the figure and add the traces and shape
-    fig = go.Figure(data=[main_trace])
-    fig.add_shape(confidence_interval_shape)
+         # Extract unique quarters from the "time" column
+         unique_quarters = filtered_data['time'].dt.to_period('Q').unique()
+         
+         # Customize the x-axis tick labels to show one label per quarter
+         tickvals = [f"{q.start_time}" for q in unique_quarters]
+         ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
+         
+         # Update x-axis ticks
+         fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+         
 
     return fig
 
