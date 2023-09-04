@@ -256,6 +256,7 @@ def buble_plot(df,categories,time_frames,frameworks,values):
                   
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
                   return fig
+         
          if time_frame == "quarters":
                   # Extract unique quarters from the "time" column
                  unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
@@ -480,14 +481,13 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
 
                   
          if time_frame == "weeks":
-                  # Extract unique weeks from the "time" column
+                   # Extract unique weeks from the "time" column
                   unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
                   
                   # Customize the x-axis tick labels to show the start date of each week
                   tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
                   ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
-
-
+                  
                   # Create subplots with separate figures
                   sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
                   
@@ -496,11 +496,12 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                      sub_fig.add_trace(trace, row=1, col=1)
                   
                   # Add histogram to the second subplot
-                  for trace in line_plot_w.data:
+                  for trace in histogram.data:
                      sub_fig.add_trace(trace, row=2, col=1)
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+         
 
          
          return sub_fig
