@@ -433,17 +433,6 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
          
          line_plot = px.line(df_filtered, x="time", y=framework,color="brand", color_discrete_map=brand_color_mapping)
          line_plot_w = px.line(df_filtered_w,x="time",y=framework,color="brand",color_discrete_map=brand_color_mapping)
-
-         # Create subplots with separate figures
-         sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
-         
-         # Add line plot to the first subplot
-         for trace in line_plot.data:
-            sub_fig.add_trace(trace, row=1, col=1)
-         
-         # Add histogram to the second subplot
-         for trace in line_plot_w.data:
-            sub_fig.add_trace(trace, row=2, col=1)
          
          if time_frame == "months":
                   # Extract unique months from the "time" column
@@ -452,6 +441,18 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   # Customize the x-axis tick labels to show one label per month
                   tickvals = [f"{m.start_time}" for m in unique_months]
                   ticktext = [m.strftime("%B %Y") for m in unique_months]
+
+                   # Create subplots with separate figures
+                  sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+                  
+                  # Add line plot to the first subplot
+                  for trace in line_plot.data:
+                     sub_fig.add_trace(trace, row=1, col=1)
+                  
+                  # Add histogram to the second subplot
+                  for trace in line_plot_w.data:
+                     sub_fig.add_trace(trace, row=2, col=1)
+
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
