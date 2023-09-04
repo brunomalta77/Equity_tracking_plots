@@ -312,6 +312,8 @@ def sub_plots(df,categories,time_frames,frameworks,values):
          brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
          
          line_plot = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping ,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
+         histogram = px.histogram(df_filtered,x="time",y=value,color="brand",color_discrete_map=brand_color_mapping ,color_discrete_sequence=["blue", "green", "red", "purple", "orange"],nbins=200)
+
          if time_frame == "months":
                  # Extract unique months from the "time" column
                  unique_months = df_filtered['time'].dt.to_period('M').unique()
@@ -320,7 +322,20 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                  tickvals = [f"{m.start_time}" for m in unique_months]
                  ticktext = [m.strftime("%B %Y") for m in unique_months]
          
-                 line_plot.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+                  # Create subplots with separate figures
+                 sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+         
+                 # Add line plot to the first subplot
+                 for trace in line_plot.data:
+                     sub_fig.add_trace(trace, row=1, col=1)
+         
+                 # Add histogram to the second subplot
+                 for trace in histogram.data:
+                     sub_fig.add_trace(trace, row=2, col=1)
+         
+                 sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+                 sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+
 
          
          if time_frame == "quarters":
@@ -329,17 +344,45 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                   # Customize the x-axis tick labels to show one label per quarter
                   tickvals = [f"{q.start_time}" for q in unique_quarters]
                   ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
+
+                  # Create subplots with separate figures
+                 sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+         
+                 # Add line plot to the first subplot
+                 for trace in line_plot.data:
+                     sub_fig.add_trace(trace, row=1, col=1)
+         
+                 # Add histogram to the second subplot
+                 for trace in histogram.data:
+                     sub_fig.add_trace(trace, row=2, col=1)
+         
+                 sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+                 sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
                   
-                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+
+
+
 
          if time_frame =="years":
                  # Extract unique years from the "time" column
                  unique_years = df_filtered['time'].dt.year.unique()
          
-                 # Customize the x-axis tick labels to show only one label per year
-                 line_plot.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
+                  # Create subplots with separate figures
+                 sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
          
-         else:
+                 # Add line plot to the first subplot
+                 for trace in line_plot.data:
+                     sub_fig.add_trace(trace, row=1, col=1)
+         
+                 # Add histogram to the second subplot
+                 for trace in histogram.data:
+                     sub_fig.add_trace(trace, row=2, col=1)
+         
+                 sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=1, col=1)
+                 sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=2, col=1)
+
+
+         if time_frame== "weeks":
                   # Extract unique weeks from the "time" column
                  unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
          
@@ -347,52 +390,19 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                  tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
                  ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
          
-                 line_plot.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+                  # Create subplots with separate figures
+                 sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
          
-         for trace in line_plot.data:
-                  sub_fig.add_trace(trace,row=1,col=1)
+                 # Add line plot to the first subplot
+                 for trace in line_plot.data:
+                     sub_fig.add_trace(trace, row=1, col=1)
          
-         histogram = px.histogram(df_filtered,x="time",y=value,color="brand",color_discrete_map=brand_color_mapping ,color_discrete_sequence=["blue", "green", "red", "purple", "orange"],nbins=200)
-         if time_frame == "months":
-                 # Extract unique months from the "time" column
-                 unique_months = df_filtered['time'].dt.to_period('M').unique()
+                 # Add histogram to the second subplot
+                 for trace in histogram.data:
+                     sub_fig.add_trace(trace, row=2, col=1)
          
-                 # Customize the x-axis tick labels to show one label per month
-                 tickvals = [f"{m.start_time}" for m in unique_months]
-                 ticktext = [m.strftime("%B %Y") for m in unique_months]
-         
-                 histogram.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-         
-         if time_frame == "quarters":
-                  # Extract unique quarters from the "time" column
-                 unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
-         
-                 # Customize the x-axis tick labels to show one label per quarter
-                 tickvals = [f"{q.start_time}" for q in unique_quarters]
-                 ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
-         
-                 histogram.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-                 
-         if time_frame =="years":
-                 # Extract unique years from the "time" column
-                 unique_years = df_filtered['time'].dt.year.unique()
-         
-                 # Customize the x-axis tick labels to show only one label per year
-                 histogram.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
-         
-         else:
-                  # Extract unique weeks from the "time" column
-                 unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
-         
-                 # Customize the x-axis tick labels to show the start date of each week
-                 tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
-                 ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
-         
-                 histogram.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-         for trace in histogram.data:
-                  sub_fig.add_trace(trace,row=2,col=1)
-         
-         
+                 sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+                 sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
          
          return sub_fig
 
