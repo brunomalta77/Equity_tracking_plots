@@ -142,6 +142,7 @@ def Equity_plot(df,categories,time_frames,frameworks):
          #filtering
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
          df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
+         
          df_filtered = df_filtered.sort_values(by="time")
 
 
@@ -161,6 +162,7 @@ def Equity_plot(df,categories,time_frames,frameworks):
                   # Update x-axis ticks
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
                   return fig 
+         
          if time_frame == "quarters":
                   unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
                   
