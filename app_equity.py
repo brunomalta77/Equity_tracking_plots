@@ -381,7 +381,6 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                   sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=2, col=1)
 
-
          if time_frame== "weeks":
                   # Extract unique weeks from the "time" column
                   unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
@@ -408,42 +407,118 @@ def sub_plots(df,categories,time_frames,frameworks,values):
 
 # Sub-plots for comparing the weighted vs the unweighted
 def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
-    #getting the date
-    start_date = st.date_input("Select start date",key="20",value=datetime(2020, 1, 1))
-    end_date =  st.date_input("Select end date",key="21")
-    #convert our dates
-    ws = start_date.strftime('%Y-%m-%d')
-    we = end_date.strftime('%Y-%m-%d')
-    # getting the parameters
-    category = st.radio('Choose your category:', categories,key="22")
-    time_frame = st.radio('Choose your time frame:', time_frames,key="23")
-    framework = st.selectbox('Choose your framework:', frameworks,key="24")
-    
-    #filter df 
-    df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
-    df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
-    #filter df_weighted
-    df_filtered_w =  df_weighted[(df["Category"] == category) & (df_weighted["time_period"] == time_frame)]
-    df_filtered_w = df_filtered_w[(df_filtered_w['time'] >= ws) & (df_filtered['time'] <= we)]
+         #getting the date
+         start_date = st.date_input("Select start date",key="20",value=datetime(2020, 1, 1))
+         end_date =  st.date_input("Select end date",key="21")
+         #convert our dates
+         ws = start_date.strftime('%Y-%m-%d')
+         we = end_date.strftime('%Y-%m-%d')
+         # getting the parameters
+         category = st.radio('Choose your category:', categories,key="22")
+         time_frame = st.radio('Choose your time frame:', time_frames,key="23")
+         framework = st.selectbox('Choose your framework:', frameworks,key="24")
+         
+         #filter df 
+         df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
+         df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
+         #filter df_weighted
+         df_filtered_w =  df_weighted[(df["Category"] == category) & (df_weighted["time_period"] == time_frame)]
+         df_filtered_w = df_filtered_w[(df_filtered_w['time'] >= ws) & (df_filtered['time'] <= we)]
+         
+         st.write("(1)Unweighted vs (2) Weighted")
+         
+         line_plot = px.line(df_filtered, x="time", y=framework,color="brand", color_discrete_map=brand_color_mapping,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
+         line_plot_w = px.line(df_filtered_w,x="time",y=framework,color="brand",color_discrete_map=brand_color_mapping,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
+         
+         all_brands = [x for x in df["brand"].unique()]
+         brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+
+         if time_frame == "months":
+                  # Extract unique months from the "time" column
+                  unique_months = df_filtered['time'].dt.to_period('M').unique()
+                  
+                  # Customize the x-axis tick labels to show one label per month
+                  tickvals = [f"{m.start_time}" for m in unique_months]
+                  ticktext = [m.strftime("%B %Y") for m in unique_months]
+                  
+                  # Create subplots with separate figures
+                  sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+                  
+                  # Add line plot to the first subplot
+                  for trace in line_plot.data:
+                     sub_fig.add_trace(trace, row=1, col=1)
+                  
+                  # Add histogram to the second subplot
+                  for trace in line_plot_w.data:
+                     sub_fig.add_trace(trace, row=2, col=1)
+                  
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+         
+          if time_frame == "quarters":
+                  unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
+                  
+                  # Customize the x-axis tick labels to show one label per quarter
+                  tickvals = [f"{q.start_time}" for q in unique_quarters]
+                  ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
+                  
+                  # Create subplots with separate figures
+                  sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+                  
+                  # Add line plot to the first subplot
+                  for trace in line_plot.data:
+                     sub_fig.add_trace(trace, row=1, col=1)
+                  
+                  # Add histogram to the second subplot
+                  for trace in histogram.data:
+                     sub_fig.add_trace(trace, row=2, col=1)
+                  
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
 
 
-    sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+         if time_frame =="years":
+                  # Extract unique years from the "time" column
+                  unique_years = df_filtered['time'].dt.year.unique()
+                  
+                  # Create subplots with separate figures
+                  sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+                  
+                  # Add line plot to the first subplot
+                  for trace in line_plot.data:
+                           sub_fig.add_trace(trace, row=1, col=1)
+                  
+                  # Add histogram to the second subplot
+                  for trace in histogram.data:
+                           sub_fig.add_trace(trace, row=2, col=1)
+                  
+                  sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=1, col=1)
+                  sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=2, col=1)
 
-    st.write("(1)Unweighted vs (2) Weighted")
-
-    all_brands = [x for x in df["brand"].unique()]
-    brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
-
-    
-    line_plot = px.line(df_filtered, x="time", y=framework,color="brand", color_discrete_map=brand_color_mapping,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
-    for trace in line_plot.data:
-        sub_fig.add_trace(trace,row=1,col=1)
-
-    histogram = px.line(df_filtered_w,x="time",y=framework,color="brand",color_discrete_map=brand_color_mapping,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
-    for trace in histogram.data:
-        sub_fig.add_trace(trace,row=2,col=1)
-
-    return sub_fig
+         if time_frame== "weeks":
+                  # Extract unique weeks from the "time" column
+                  unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
+                  
+                  # Customize the x-axis tick labels to show the start date of each week
+                  tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+                  ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+                  
+                  # Create subplots with separate figures
+                  sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+                  
+                  # Add line plot to the first subplot
+                  for trace in line_plot.data:
+                     sub_fig.add_trace(trace, row=1, col=1)
+                  
+                  # Add histogram to the second subplot
+                  for trace in histogram.data:
+                     sub_fig.add_trace(trace, row=2, col=1)
+                  
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+         
+         
+         return sub_fig
 
 
 
