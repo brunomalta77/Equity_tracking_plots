@@ -428,6 +428,7 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
          st.write("(1)Unweighted vs (2) Weighted")
          
          all_brands = [x for x in df["brand"].unique()]
+         
          brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
          
          line_plot = px.line(df_filtered, x="time", y=framework,color="brand", color_discrete_map=brand_color_mapping,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
