@@ -188,7 +188,8 @@ def Equity_plot(df,categories,time_frames,frameworks):
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
                   
                   return fig
-
+         else:
+                  return fig
 
 def market_share_plot(df,categories):
          #getting the date
@@ -283,6 +284,9 @@ def buble_plot(df,categories,time_frames,frameworks,values):
                   ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
                   
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+                  return fig
+
+         else:
                   return fig
 
 # Creating the Subplots
