@@ -523,8 +523,8 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
          
 
-         sub_fig.update_yaxes(title_text="Unweighted Plot", row=1, col=1)
-         sub_fig.update_yaxes(title_text="Weighted Plol", row=2, col=1)
+         sub_fig.update_xaxes(title_text="Unweighted Plot", row=1, col=1)
+         sub_fig.update_xaxes(title_text="Weighted Plol", row=2, col=1)
          return sub_fig
 
 
