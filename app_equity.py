@@ -208,11 +208,6 @@ def Equity_plot(df,categories,time_frames,frameworks):
 
 
 
-
-
-
-
-
 def market_share_plot(df,categories):
          #getting the date
          start_date = st.date_input("Select start date",key="1",value=datetime(2020, 1, 1))
@@ -240,8 +235,6 @@ def market_share_plot(df,categories):
          ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
          
          fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-         
-
          
          return fig
 
@@ -461,8 +454,6 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
-
-         
          
          return sub_fig
 
@@ -567,7 +558,7 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                      sub_fig.add_trace(trace, row=2, col=1)
                   
                   sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=1, col=1)
-                  sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years_w], ticktext=unique_years_w, tickangle=45, row=2, col=1)
+                  sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=2, col=1)
 
                   sub_fig.update_xaxes(title_text="Unweighted Plot",title_font=dict(color="blue"), row=1, col=1)
                   sub_fig.update_xaxes(title_text="Weighted Plol",title_font=dict(color="red"), row=2, col=1)
