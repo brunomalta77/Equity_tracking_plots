@@ -498,7 +498,7 @@ def Significance_plot(df,brands,frameworks):
          fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
          
 
-    return fig
+         return fig
 
 
 
