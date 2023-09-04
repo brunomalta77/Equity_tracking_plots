@@ -592,6 +592,10 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   return sub_fig
 
 
+         if time_frame =="semiannual":
+                  pass
+
+
 # Significance Plot
 def Significance_plot(df,brands,frameworks):
          #getting the date
