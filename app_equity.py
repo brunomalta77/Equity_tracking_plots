@@ -591,31 +591,8 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   return sub_fig
 
          
-         if time_frame =="semiannual":
-                   # Extract unique semiannual periods from the "time" column
-                  unique_periods = pd.date_range(start=ws, end=we, freq='6M').date
-                  
-                  # Customize the x-axis tick labels to show the start date of each semiannual period
-                  tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
-                  ticktext = [f"Semiannual {i} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
-                  
-                  sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
-                  
-                  # Add line plot to the first subplot
-                  for trace in line_plot.data:
-                     sub_fig.add_trace(trace, row=1, col=1)
-                  
-                  # Add histogram to the second subplot
-                  for trace in line_plot_w.data:
-                     sub_fig.add_trace(trace, row=2, col=1)
-                  
-                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
-                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
-
-
-                  sub_fig.update_xaxes(title_text="Unweighted Plot",title_font=dict(color="blue"), row=1, col=1)
-                  sub_fig.update_xaxes(title_text="Weighted Plol",title_font=dict(color="red"), row=2, col=1)
-                  return sub_fig
+         else:
+                  pass
 
 
 
