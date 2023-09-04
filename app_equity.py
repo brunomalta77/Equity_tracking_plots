@@ -474,12 +474,12 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
          #filter df 
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
          df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
-         df_filtered = df_filtered.sort_values(by="time")
+         #df_filtered = df_filtered.sort_values(by="time")
 
          #filter df_weighted
          df_filtered_w =  df_weighted[(df_weighted["Category"] == category) & (df_weighted["time_period"] == time_frame)]
          df_filtered_w = df_filtered_w[(df_filtered_w['time'] >= ws) & (df_filtered['time'] <= we)]
-         df_filtered_w = df_filtered_w.sort_values(by="time")
+         #df_filtered_w = df_filtered_w.sort_values(by="time")
 
          
          all_brands = [x for x in df["brand"].unique()]
