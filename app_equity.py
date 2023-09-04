@@ -362,8 +362,6 @@ def sub_plots(df,categories,time_frames,frameworks,values):
 
 
 
-
-
          if time_frame =="years":
                   # Extract unique years from the "time" column
                   unique_years = df_filtered['time'].dt.year.unique()
@@ -398,7 +396,7 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                      sub_fig.add_trace(trace, row=1, col=1)
                   
                   # Add histogram to the second subplot
-                  for trace in line_plot_w.data:
+                  for trace in histogram.data:
                      sub_fig.add_trace(trace, row=2, col=1)
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
