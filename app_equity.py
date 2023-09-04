@@ -455,7 +455,7 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
          
-          if time_frame == "quarters":
+         if time_frame == "quarters":
                   unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
                   
                   # Customize the x-axis tick labels to show one label per quarter
@@ -516,7 +516,7 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
-         
+
          
          return sub_fig
 
