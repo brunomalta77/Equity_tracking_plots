@@ -425,8 +425,6 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
          df_filtered_w =  df_weighted[(df["Category"] == category) & (df_weighted["time_period"] == time_frame)]
          df_filtered_w = df_filtered_w[(df_filtered_w['time'] >= ws) & (df_filtered['time'] <= we)]
          
-         st.write("(1)Unweighted vs (2) Weighted")
-         
          all_brands = [x for x in df["brand"].unique()]
          
          brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
@@ -523,8 +521,8 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
          
 
-         sub_fig.update_xaxes(title_text="Unweighted Plot", row=1, col=1)
-         sub_fig.update_xaxes(title_text="Weighted Plol", row=2, col=1)
+         sub_fig.update_xaxes(title_text="Unweighted Plot",title_font=dict(color="blue"), row=1, col=1)
+         sub_fig.update_xaxes(title_text="Weighted Plol",title_font=dict(color="red"), row=2, col=1)
          return sub_fig
 
 
