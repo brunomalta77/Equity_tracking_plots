@@ -456,7 +456,7 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
-                  return sub_fig
+                 
 
          
          if time_frame == "quarters":
@@ -468,7 +468,7 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
-                  return sub_fig
+                 
 
 
          if time_frame =="years":
@@ -478,7 +478,7 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=2, col=1)
 
-                   return sub_fig
+                  
          if time_frame == "weeks":
                   # Extract unique weeks from the "time" column
                   unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
@@ -492,7 +492,7 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
 
          
-                  return sub_fig
+         return sub_fig
 
 
 
