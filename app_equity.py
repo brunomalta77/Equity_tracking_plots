@@ -587,7 +587,7 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
 
-         else:
+         if time_frame =="semiannual":
                    # Extract unique semiannual periods from the "time" column
                   unique_periods = pd.date_range(start=ws, end=we, freq='6M').date
                   
