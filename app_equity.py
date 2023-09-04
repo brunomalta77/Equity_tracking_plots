@@ -431,10 +431,9 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
          
          brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
          
-         line_plot = px.line(df_filtered, x="time", y=framework,color="brand", color_discrete_map=brand_color_mapping,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
-         histogram = px.line(df_filtered_w,x="time",y=framework,color="brand",color_discrete_map=brand_color_mapping,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
+         line_plot = px.line(df_filtered, x="time", y=framework,color="brand", color_discrete_map=brand_color_mapping)
+         histogram = px.line(df_filtered_w,x="time",y=framework,color="brand",color_discrete_map=brand_color_mapping)
          
-
          
          if time_frame == "months":
                   # Extract unique months from the "time" column
@@ -470,11 +469,11 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   
                   # Add line plot to the first subplot
                   for trace in line_plot.data:
-                     sub_fig.add_trace(trace, row=1, col=1)
+                           sub_fig.add_trace(trace, row=1, col=1)
                   
                   # Add histogram to the second subplot
                   for trace in histogram.data:
-                     sub_fig.add_trace(trace, row=2, col=1)
+                           sub_fig.add_trace(trace, row=2, col=1)
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
@@ -511,11 +510,11 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   
                   # Add line plot to the first subplot
                   for trace in line_plot.data:
-                     sub_fig.add_trace(trace, row=1, col=1)
+                           sub_fig.add_trace(trace, row=1, col=1)
                   
                   # Add histogram to the second subplot
                   for trace in histogram.data:
-                     sub_fig.add_trace(trace, row=2, col=1)
+                           sub_fig.add_trace(trace, row=2, col=1)
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
