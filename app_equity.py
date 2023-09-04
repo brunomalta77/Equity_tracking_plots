@@ -193,7 +193,7 @@ def Equity_plot(df,categories,time_frames,frameworks):
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
                   
                   return fig
-         if time_frame == "semiannual":
+         else:
        
                   # Extract unique semiannual periods from the "time" column
                   unique_periods = pd.date_range(start=ws, end=we, freq='6M').date
