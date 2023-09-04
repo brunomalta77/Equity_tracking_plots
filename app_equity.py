@@ -474,12 +474,12 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
          #filter df 
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
          df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
-         #df_filtered = df_filtered.sort_values(by="time")
+         df_filtered = df_filtered.sort_values(by="time")
 
          #filter df_weighted
          df_filtered_w =  df_weighted[(df_weighted["Category"] == category) & (df_weighted["time_period"] == time_frame)]
-         df_filtered_w = df_filtered_w[(df_filtered_w['time'] >= ws) & (df_filtered['time'] <= we)]
-         #df_filtered_w = df_filtered_w.sort_values(by="time")
+         df_filtered_w = df_filtered_w[(df_filtered_w['time'] >= ws) & (df_filtered_w['time'] <= we)]
+         df_filtered_w = df_filtered_w.sort_values(by="time")
 
          
          all_brands = [x for x in df["brand"].unique()]
@@ -540,7 +540,6 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   sub_fig.update_xaxes(title_text="Weighted Plol",title_font=dict(color="red"), row=2, col=1)
                   return sub_fig
 
-         
          if time_frame == "years":
                   # Extract unique years from the "time" column
                   unique_years = df_filtered['time'].dt.year.unique()
@@ -562,7 +561,6 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
-                  
                   sub_fig.update_xaxes(title_text="Unweighted Plot", title_font=dict(color="blue"), row=1, col=1)
                   sub_fig.update_xaxes(title_text="Weighted Plot", title_font=dict(color="red"), row=2, col=1)
                   
@@ -592,11 +590,6 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   sub_fig.update_xaxes(title_text="Unweighted Plot",title_font=dict(color="blue"), row=1, col=1)
                   sub_fig.update_xaxes(title_text="Weighted Plol",title_font=dict(color="red"), row=2, col=1)
                   return sub_fig
-
-         
-         else:
-                  pass
-
 
 
 # Significance Plot
