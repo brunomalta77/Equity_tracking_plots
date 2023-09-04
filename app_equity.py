@@ -315,94 +315,94 @@ def sub_plots(df,categories,time_frames,frameworks,values):
          histogram = px.histogram(df_filtered,x="time",y=value,color="brand",color_discrete_map=brand_color_mapping ,color_discrete_sequence=["blue", "green", "red", "purple", "orange"],nbins=200)
 
          if time_frame == "months":
-                 # Extract unique months from the "time" column
-                 unique_months = df_filtered['time'].dt.to_period('M').unique()
-         
-                 # Customize the x-axis tick labels to show one label per month
-                 tickvals = [f"{m.start_time}" for m in unique_months]
-                 ticktext = [m.strftime("%B %Y") for m in unique_months]
-         
+                  # Extract unique months from the "time" column
+                  unique_months = df_filtered['time'].dt.to_period('M').unique()
+                  
+                  # Customize the x-axis tick labels to show one label per month
+                  tickvals = [f"{m.start_time}" for m in unique_months]
+                  ticktext = [m.strftime("%B %Y") for m in unique_months]
+                  
                   # Create subplots with separate figures
-                 sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
-         
-                 # Add line plot to the first subplot
-                 for trace in line_plot.data:
+                  sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+                  
+                  # Add line plot to the first subplot
+                  for trace in line_plot.data:
                      sub_fig.add_trace(trace, row=1, col=1)
-         
-                 # Add histogram to the second subplot
-                 for trace in histogram.data:
+                  
+                  # Add histogram to the second subplot
+                  for trace in histogram.data:
                      sub_fig.add_trace(trace, row=2, col=1)
-         
-                 sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
-                 sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+                  
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
 
 
          
          if time_frame == "quarters":
                   unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
-
+                  
                   # Customize the x-axis tick labels to show one label per quarter
                   tickvals = [f"{q.start_time}" for q in unique_quarters]
                   ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
-
-                  # Create subplots with separate figures
-                 sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
-         
-                 # Add line plot to the first subplot
-                 for trace in line_plot.data:
-                     sub_fig.add_trace(trace, row=1, col=1)
-         
-                 # Add histogram to the second subplot
-                 for trace in histogram.data:
-                     sub_fig.add_trace(trace, row=2, col=1)
-         
-                 sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
-                 sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
                   
+                  # Create subplots with separate figures
+                  sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+                  
+                  # Add line plot to the first subplot
+                  for trace in line_plot.data:
+                     sub_fig.add_trace(trace, row=1, col=1)
+                  
+                  # Add histogram to the second subplot
+                  for trace in histogram.data:
+                     sub_fig.add_trace(trace, row=2, col=1)
+                  
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+
 
 
 
 
          if time_frame =="years":
-                 # Extract unique years from the "time" column
-                 unique_years = df_filtered['time'].dt.year.unique()
-         
+                  # Extract unique years from the "time" column
+                  unique_years = df_filtered['time'].dt.year.unique()
+                  
                   # Create subplots with separate figures
-                 sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
-         
-                 # Add line plot to the first subplot
-                 for trace in line_plot.data:
-                     sub_fig.add_trace(trace, row=1, col=1)
-         
-                 # Add histogram to the second subplot
-                 for trace in histogram.data:
-                     sub_fig.add_trace(trace, row=2, col=1)
-         
-                 sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=1, col=1)
-                 sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=2, col=1)
+                  sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+                  
+                  # Add line plot to the first subplot
+                  for trace in line_plot.data:
+                           sub_fig.add_trace(trace, row=1, col=1)
+                  
+                  # Add histogram to the second subplot
+                  for trace in histogram.data:
+                           sub_fig.add_trace(trace, row=2, col=1)
+                  
+                  sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=1, col=1)
+                  sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=2, col=1)
 
 
          if time_frame== "weeks":
                   # Extract unique weeks from the "time" column
-                 unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
-         
-                 # Customize the x-axis tick labels to show the start date of each week
-                 tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
-                 ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
-         
+                  unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
+                  
+                  # Customize the x-axis tick labels to show the start date of each week
+                  tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+                  ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+                  
                   # Create subplots with separate figures
-                 sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
-         
-                 # Add line plot to the first subplot
-                 for trace in line_plot.data:
+                  sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+                  
+                  # Add line plot to the first subplot
+                  for trace in line_plot.data:
                      sub_fig.add_trace(trace, row=1, col=1)
-         
-                 # Add histogram to the second subplot
-                 for trace in histogram.data:
+                  
+                  # Add histogram to the second subplot
+                  for trace in histogram.data:
                      sub_fig.add_trace(trace, row=2, col=1)
-         
-                 sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
-                 sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+                  
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+                  sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
          
          return sub_fig
 
