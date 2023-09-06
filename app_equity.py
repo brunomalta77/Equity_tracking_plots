@@ -745,6 +745,7 @@ def Significance_plot(df,brands,frameworks):
          # Update x-axis ticks
          fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
          
+         fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
 
          return fig
 
