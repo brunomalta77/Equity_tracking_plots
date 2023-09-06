@@ -393,6 +393,12 @@ def sub_plots(df,categories,time_frames,frameworks,values):
          line_plot = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping ,color_discrete_sequence=["blue", "green", "red", "purple", "orange"])
          histogram = px.histogram(df_filtered,x="time",y=value,color="brand",color_discrete_map=brand_color_mapping ,color_discrete_sequence=["blue", "green", "red", "purple", "orange"],nbins=200)
 
+
+         line_plot.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
+
+         # Update custom hover template for histogram (scatter plot)
+         histogram.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
+         
          if time_frame == "months":
                   # Extract unique months from the "time" column
                   unique_months = df_filtered['time'].dt.to_period('M').unique()
@@ -414,10 +420,7 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
-                  sub_fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
 
-
-         
          if time_frame == "quarters":
                   unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
                   
