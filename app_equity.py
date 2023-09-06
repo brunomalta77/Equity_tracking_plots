@@ -216,14 +216,19 @@ def Equity_plot(df,categories,time_frames,frameworks):
 
 
 def market_share_plot(df,categories):
-         #getting the date
-         start_date = st.date_input("Select start date",key="1",value=datetime(2020, 1, 1))
-         end_date =  st.date_input("Select end date",key="2")
-         #convert our dates
-         ws = start_date.strftime('%Y-%m-%d')
-         we = end_date.strftime('%Y-%m-%d')
-         # getting the parameters
-         category = st.radio('Choose your category:', categories)
+         # creating the columns layout
+         left_column, right_column = st.columns(2)
+
+         with left_column:
+                  #getting the date
+                  start_date = st.date_input("Select start date",key="1",value=datetime(2020, 1, 1))
+                  end_date =  st.date_input("Select end date",key="2")
+                  #convert our dates
+                  ws = start_date.strftime('%Y-%m-%d')
+                  we = end_date.strftime('%Y-%m-%d')
+        with right_column:
+                  # getting the parameters
+                  category = st.radio('Choose your category:', categories)
          
          #filtering
          df_filtered =  df[(df["Category"] == category)]
