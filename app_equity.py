@@ -543,6 +543,13 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
          
          line_plot = px.line(df_filtered, x="time", y=framework,color="brand", color_discrete_map=brand_color_mapping)
          line_plot_w = px.line(df_filtered_w,x="time",y=framework,color="brand",color_discrete_map=brand_color_mapping)
+
+         
+         line_plot.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
+
+         # Update custom hover template for histogram (scatter plot)
+         line_plot_w.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
+
          
          if time_frame == "months":
                   # Extract unique months from the "time" column
