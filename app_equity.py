@@ -312,7 +312,7 @@ def buble_plot(df,categories,time_frames,frameworks,values):
                   ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
          
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
+                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}<br>Size: %{marker.size:.2s}')
 
                   return fig
          
@@ -322,7 +322,8 @@ def buble_plot(df,categories,time_frames,frameworks,values):
                   
                   # Customize the x-axis tick labels to show only one label per year
                   fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
-                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
+                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}<br>Size: %{marker.size:.2s}')
+
 
                   return fig
          
@@ -335,7 +336,8 @@ def buble_plot(df,categories,time_frames,frameworks,values):
                   ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
                   
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
+                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}<br>Size: %{marker.size:.2s}')
+
 
                   return fig
 
@@ -348,7 +350,8 @@ def buble_plot(df,categories,time_frames,frameworks,values):
                   ticktext = [f"Semiannual {i} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
                   
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
+                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}<br>Size: %{marker.size:.2s}')
+
 
                   return fig
 
