@@ -254,17 +254,24 @@ def market_share_plot(df,categories):
 
 def buble_plot(df,categories,time_frames,frameworks,values):
          st.write("4 dimensions: Time(x) /Equity(y)/ Brands(color), Volume share or Price change (buble size)")
-         #getting the date
-         start_date = st.date_input("Select start date",key="3",value=datetime(2020, 1, 1))
-         end_date =  st.date_input("Select end date",key="4")
-         #convert our dates
-         ws = start_date.strftime('%Y-%m-%d')
-         we = end_date.strftime('%Y-%m-%d')
-         # getting the parameters
-         category = st.radio('Choose your category:', categories,key="90")
-         time_frame = st.radio('Choose your time frame:', time_frames,key="6")
-         framework = st.selectbox('Choose your framework:', frameworks,key="7")
-         value = st.selectbox('Choose  Price Change / Volume share:', values,key="8")
+         # getting the columns
+         left_column_1,right_column_1,right_column_2 = st.columns(3)
+         
+         with left_column_1:
+                  #getting the date
+                  start_date = st.date_input("Select start date",key="3",value=datetime(2020, 1, 1))
+                  end_date =  st.date_input("Select end date",key="4")
+                  #convert our dates
+                  ws = start_date.strftime('%Y-%m-%d')
+                  we = end_date.strftime('%Y-%m-%d')
+         
+         with right_column_1:
+                  # getting the parameters
+                  category = st.radio('Choose your category:', categories,key="90")
+                  time_frame = st.radio('Choose your time frame:', time_frames,key="6")
+         with right_column_2:
+                  framework = st.selectbox('Choose your framework:', frameworks,key="7")
+                  value = st.selectbox('Choose  Price Change / Volume share:', values,key="8")
          
          #filter
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
@@ -335,17 +342,23 @@ def buble_plot(df,categories,time_frames,frameworks,values):
 # Creating the Subplots
 def sub_plots(df,categories,time_frames,frameworks,values):
          st.write("First plot with 3 dimensions (Time(x)/Equity(y)/brands(color) second plot only with the volume_share as histogram")
-         #getting the date
-         start_date = st.date_input("Select start date",key="9",value=datetime(2020, 1, 1))
-         end_date =  st.date_input("Select end date",key="10")
-         #convert our dates
-         ws = start_date.strftime('%Y-%m-%d')
-         we = end_date.strftime('%Y-%m-%d')
-         # getting the parameters
-         category = st.radio('Choose your category:', categories,key="11")
-         time_frame = st.radio('Choose your time frame:', time_frames,key="12")
-         framework = st.selectbox('Choose your framework:', frameworks,key="13")
-         value = st.selectbox('Choose  Price Change / Volume share:', values,key="14")
+         #getting our columns layout
+         left_column_1,right_column_1,right_column_2 = st.columns(3)
+         
+         with left_column_1:
+                  #getting the date
+                  start_date = st.date_input("Select start date",key="9",value=datetime(2020, 1, 1))
+                  end_date =  st.date_input("Select end date",key="10")
+                  #convert our dates
+                  ws = start_date.strftime('%Y-%m-%d')
+                  we = end_date.strftime('%Y-%m-%d')
+         with right_column_1:
+                  # getting the parameters
+                  category = st.radio('Choose your category:', categories,key="11")
+                  time_frame = st.radio('Choose your time frame:', time_frames,key="12")
+         with right_column_2:
+                  framework = st.selectbox('Choose your framework:', frameworks,key="13")
+                  value = st.selectbox('Choose  Price Change / Volume share:', values,key="14")
          
          #filter
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
@@ -473,16 +486,24 @@ def sub_plots(df,categories,time_frames,frameworks,values):
 
 # Sub-plots for comparing the weighted vs the unweighted
 def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
-         #getting the date
-         start_date = st.date_input("Select start date",key="20",value=datetime(2020, 1, 1))
-         end_date =  st.date_input("Select end date",key="21")
-         #convert our dates
-         ws = start_date.strftime('%Y-%m-%d')
-         we = end_date.strftime('%Y-%m-%d')
-         # getting the parameters
-         category = st.radio('Choose your category:', categories,key="22")
-         time_frame = st.radio('Choose your time frame:', time_frames,key="23")
-         framework = st.selectbox('Choose your framework:', frameworks,key="24")
+         # getting the columns
+         left_column_1, left_column_2,right_column_1,right_column_2 = st.columns(4)
+
+         with left_column_1:
+                  #getting the date
+                  start_date = st.date_input("Select start date",key="20",value=datetime(2020, 1, 1))
+                  end_date =  st.date_input("Select end date",key="21")
+                  #convert our dates
+                  ws = start_date.strftime('%Y-%m-%d')
+                  we = end_date.strftime('%Y-%m-%d')
+         
+         with left_column_2:
+                  # getting the parameters
+                  category = st.radio('Choose your category:', categories,key="22")
+         with right_column_1:
+                  time_frame = st.radio('Choose your time frame:', time_frames,key="23")
+         with right_column_2:
+                  framework = st.selectbox('Choose your framework:', frameworks,key="24")
          
          #filter df 
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
@@ -639,15 +660,24 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
                   
 # Significance Plot
 def Significance_plot(df,brands,frameworks):
-         #getting the date
-         start_date = st.date_input("Select start date",key="15",value=datetime(2020, 1, 1))
-         end_date =  st.date_input("Select end date",key="16")
-         #convert our dates
-         ws = start_date.strftime('%Y-%m-%d')
-         we = end_date.strftime('%Y-%m-%d')
+         # getting the columns for the layouts
+         left_column_1, right_column_1,right_column_2 = st.columns(3)
          
-         brand = st.radio('Choose your brand:', brands,key="17")
-         framework = st.selectbox('Choose your framework:', frameworks,key="18")
+         
+         
+         
+         with left_column_1:
+                  #getting the date
+                  start_date = st.date_input("Select start date",key="15",value=datetime(2020, 1, 1))
+                  end_date =  st.date_input("Select end date",key="16")
+                  #convert our dates
+                  ws = start_date.strftime('%Y-%m-%d')
+                  we = end_date.strftime('%Y-%m-%d')
+
+         with right_column_1:
+                  brand = st.radio('Choose your brand:', brands,key="17")
+         with right_column_2:
+                  framework = st.selectbox('Choose your framework:', frameworks,key="18")
          
          filtered_data = df[(df["brand"] == brand)]
          filtered_data = filtered_data[(filtered_data['time'] >= ws) & (filtered_data['time'] <= we)]
