@@ -414,6 +414,7 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                   
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
                   sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+                  sub_fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
 
 
          
