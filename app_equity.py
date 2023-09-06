@@ -226,7 +226,8 @@ def market_share_plot(df,categories):
                   #convert our dates
                   ws = start_date.strftime('%Y-%m-%d')
                   we = end_date.strftime('%Y-%m-%d')
-        with right_column:
+         
+         with right_column:
                   # getting the parameters
                   category = st.radio('Choose your category:', categories)
          
