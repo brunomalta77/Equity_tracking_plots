@@ -112,7 +112,7 @@ def mmm_info(data,slang_flag):
 def equity_options(df):
     category_options = df["Category"].unique()
     time_period_options = df["time_period"].unique()
-    framework_options = ["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
+    framework_options = ["AF_Nutrition","AF_Sustainability","AF_Functionality","AF_Brand_Strength","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
     return (category_options,time_period_options,framework_options)
 
 
@@ -120,7 +120,7 @@ def equity_options(df):
 def merged_options(df):
     category_options_merged = df["Category"].unique()
     time_period_options_merged = df["time_period"].unique()
-    framework_options_merged = ["AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
+    framework_options_merged = ["AF_Nutrition","AF_Sustainability","AF_Functionality","AF_Brand_Strength","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
     framework_options_value = ["Volume_share","Price_change"]
     return(category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
 
