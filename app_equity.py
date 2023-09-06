@@ -128,16 +128,23 @@ def merged_options(df):
 
 # Equity_plot
 def Equity_plot(df,categories,time_frames,frameworks):
-         #getting the date
-         start_date = st.date_input("Select start date",value=datetime(2020, 1, 1))
-         end_date =  st.date_input("Select end date")
-         #convert our dates
-         ws = start_date.strftime('%Y-%m-%d')
-         we = end_date.strftime('%Y-%m-%d')
+         # creating the columns layout
+         left_column_1, left_column_2,right_column_1,right_column_2 = st.columns(4)
+         
+         with left_column_1:
+                  #getting the date
+                  start_date = st.date_input("Select start date",value=datetime(2020, 1, 1))
+                  end_date =  st.date_input("Select end date")
+                  #convert our dates
+                  ws = start_date.strftime('%Y-%m-%d')
+                  we = end_date.strftime('%Y-%m-%d')
          # getting the parameters
-         category = st.radio('Choose your category:', categories)
-         time_frame = st.radio('Choose your time frame:', time_frames)
-         framework = st.selectbox('Choose your framework:', frameworks)
+         with left_column_2:
+                  category = st.radio('Choose your category:', categories)
+         with right_column_1:
+                  time_frame = st.radio('Choose your time frame:', time_frames)
+         with right_column_2:
+                  framework = st.selectbox('Choose your framework:', frameworks)
          
          #filtering
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
