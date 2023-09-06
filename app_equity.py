@@ -300,7 +300,7 @@ def buble_plot(df,categories,time_frames,frameworks,values):
                   ticktext = [m.strftime("%B %Y") for m in unique_months]
                   
                   fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
+                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}<br>Size: %{marker.size:.2s}')
                   return fig
          
          if time_frame == "quarters":
