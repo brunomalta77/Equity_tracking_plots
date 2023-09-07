@@ -587,7 +587,7 @@ def sub_plots_media(df,categories,time_frames,frameworks,values):
          brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
          
          line_plot = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping)
-         histogram = px.histogram(df_filtered,x="time",y=value_media_spend,color="brand",color_discrete_map=brand_color_mapping,nbins=1000)
+         histogram = px.histogram(df_filtered,x="time",y=value_media_spend,color="brand",color_discrete_map=brand_color_mapping,nbins=600)
          
          
          line_plot.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
