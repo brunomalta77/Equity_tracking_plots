@@ -40,6 +40,8 @@ with col1:
 
 # getting the excel file first by user input
 data = r"data"
+media_data = r"data\Media_invest_all.xlsx"
+
 
 # equity file
 @st.cache_data() 
@@ -59,6 +61,14 @@ def processing_mmm(filepath):
     df_vol.rename(columns={"Value":"Volume_share"},inplace=True)
     df_vol=df_vol.groupby(['time','Y','H','QT','M','W','brand','Metric','Category'])[['Volume_share','Price_change']].sum().reset_index()
     return df_vol
+
+# Media files
+@st.cache_data()
+def media_plan(filepath,sheet_spend,sheet_week):
+         df_uk_spend = pd.read_excel(filepath,sheet_name=sheet_spend)
+         df_uk_weeks = pd.read_excel(filepath,sheet_name=sheet_week)
+         return (df_uk_spend,df_uk_weeks)
+
 
 
 #merged file
@@ -108,6 +118,39 @@ def mmm_info(data,slang_flag):
     return filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm
 
 
+# media processing
+def media_spend_processed(df,df_spend,df_weeks):
+         # making everything as a string and in lower case
+         df_weeks["w"] = df_weeks["w"].apply(lambda x : str(x).lower())
+         df_weeks["y"] = df_weeks["y"].apply(lambda x : str(x).lower())
+         df_weeks["m"] = df_weeks["m"].apply(lambda x : str(x).lower())
+         df_weeks["qt"] = df_weeks["qt"].apply(lambda x : str(x).lower())
+         df_weeks["h"] = df_weeks["h"].apply(lambda x : str(x).lower())
+         
+         # renaming and put everything into string and lower case
+         df_spend.rename(columns={"Group Type":"Media_spend"},inplace=True)
+         df_spend.rename(columns={"time_frame":"time_period"},inplace=True)
+         df_spend["Date"] = df_spend["Date"].apply(lambda x : str(x).lower())
+         
+         # mapping our codes from the y,h,qt,m,w into time
+         trans_dic = {}
+         trans_dic.update({k: i for k, i in zip(df_weeks["w"], df_weeks["time"])})
+         trans_dic.update({k: i for k, i in zip(df_weeks["y"], df_weeks["time"])})
+         trans_dic.update({k: i for k, i in zip(df_weeks["m"], df_weeks["time"])})
+         trans_dic.update({k: i for k, i in zip(df_weeks["qt"], df_weeks["time"])})
+         trans_dic.update({k: i for k, i in zip(df_weeks["h"], df_weeks["time"])})
+         
+         #creating the time column
+         df_spend["time"] = [trans_dic[x] for x in df_spend["Date"]]
+         
+         #grouping by
+         df_spend=df_spend.groupby(['Date','time_period','brand','Media_spend','Category','time'])['value'].sum().reset_index()
+         
+         merged_df = pd.merge(df_spend,df,on=["time","brand","Category"],how="inner")
+         
+         return merged_df
+
+
 
 def equity_options(df):
     category_options = df["Category"].unique()
@@ -123,6 +166,15 @@ def merged_options(df):
     framework_options_merged = ["AF_Nutrition","AF_Sustainability","AF_Functionality","AF_Brand_Strength","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
     framework_options_value = ["Volume_share","Price_change"]
     return(category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
+
+
+def merged_options_media(df):
+         category_options_merged_media = df["Category"].unique()
+         time_period_options_merged_media = df["time_period_x"].unique()
+         framework_options_media = ["AF_Nutrition","AF_Sustainability","AF_Functionality","AF_Brand_Strength","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
+         framework_options_value_media = ["value"]
+         return(category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
+         
 
 
 
@@ -505,6 +557,149 @@ def sub_plots(df,categories,time_frames,frameworks,values):
          
          return sub_fig
 
+
+# Subplot Media
+def sub_plots_media(df,categories,time_frames,frameworks,values):
+         st.subheader("Equity vs Media spend")
+         left_column_1,right_column_1,right_column_2 = st.columns(3)
+         
+         with left_column_1:
+                  #getting the date
+                  start_date = st.date_input("Select start date",key="9",value=datetime(2020, 1, 1))
+                  end_date =  st.date_input("Select end date",key="10")
+                  #convert our dates
+                  ws = start_date.strftime('%Y-%m-%d')
+                  we = end_date.strftime('%Y-%m-%d')
+         with right_column_1:
+                  # getting the parameters
+                  category = st.radio('Choose your category:', categories,key="124124")
+                  time_frame = st.radio('Choose your time frame:', time_frames,key="546456")
+         with right_column_2:
+                  framework = st.selectbox('Choose your framework:', frameworks,key="43534654")
+                  value_media_spend = st.selectbox('Media spend', values,key="827398")
+
+         #filter
+         df_filtered =  df[(df["Category"] == category) & (df["time_period_x"] == time_frame)]
+         df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
+         
+         df_filtered = df_filtered.sort_values(by="time")
+         all_brands = [x for x in df["brand"].unique()]
+         brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+         
+         line_plot = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping)
+         histogram = px.histogram(df_filtered,x="time",y=value_media_spend,color="brand",color_discrete_map=brand_color_mapping,nbins=200)
+         
+         
+         line_plot.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
+         histogram.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
+         
+         if time_frame == "months":
+            # Extract unique months from the "time" column
+            unique_months = df_filtered['time'].dt.to_period('M').unique()
+            
+            # Customize the x-axis tick labels to show one label per month
+            tickvals = [f"{m.start_time}" for m in unique_months]
+            ticktext = [m.strftime("%B %Y") for m in unique_months]
+            
+            # Create subplots with separate figures
+            sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+            
+            # Add line plot to the first subplot
+            for trace in line_plot.data:
+                sub_fig.add_trace(trace, row=1, col=1)
+            
+            # Add histogram to the second subplot
+            for trace in histogram.data:
+                sub_fig.add_trace(trace, row=2, col=1)
+            
+            sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+            sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+         
+         if time_frame == "quarters":
+            unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
+            
+            # Customize the x-axis tick labels to show one label per quarter
+            tickvals = [f"{q.start_time}" for q in unique_quarters]
+            ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
+            
+            # Create subplots with separate figures
+            sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+            
+            # Add line plot to the first subplot
+            for trace in line_plot.data:
+                sub_fig.add_trace(trace, row=1, col=1)
+            
+            # Add histogram to the second subplot
+            for trace in histogram.data:
+                sub_fig.add_trace(trace, row=2, col=1)
+            
+            sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+            sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+         
+         if time_frame =="years":
+            # Extract unique years from the "time" column
+            unique_years = df_filtered['time'].dt.year.unique()
+            
+            # Create subplots with separate figures
+            sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+            
+            # Add line plot to the first subplot
+            for trace in line_plot.data:
+                    sub_fig.add_trace(trace, row=1, col=1)
+            
+            # Add histogram to the second subplot
+            for trace in histogram.data:
+                    sub_fig.add_trace(trace, row=2, col=1)
+            
+            sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=1, col=1)
+            sub_fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45, row=2, col=1)
+         
+         if time_frame== "weeks":
+            # Extract unique weeks from the "time" column
+            unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
+            
+            # Customize the x-axis tick labels to show the start date of each week
+            tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+            ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+            
+            # Create subplots with separate figures
+            sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+            
+            # Add line plot to the first subplot
+            for trace in line_plot.data:
+                sub_fig.add_trace(trace, row=1, col=1)
+            
+            # Add histogram to the second subplot
+            for trace in histogram.data:
+                sub_fig.add_trace(trace, row=2, col=1)
+            
+            sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+            sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+         
+         if time_frame == "semiannual":
+            # Extract unique semiannual periods from the "time" column
+            unique_periods = pd.date_range(start=ws, end=we, freq='6M').date
+            
+            # Customize the x-axis tick labels to show the start date of each semiannual period
+            tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
+            ticktext = [f"Semiannual {i} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
+            
+            sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+            
+            # Add line plot to the first subplot
+            for trace in line_plot.data:
+                sub_fig.add_trace(trace, row=1, col=1)
+            
+            # Add histogram to the second subplot
+            for trace in histogram.data:
+                sub_fig.add_trace(trace, row=2, col=1)
+            
+            sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=1, col=1)
+            sub_fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45, row=2, col=1)
+         
+         return sub_fig
+
+
 # Sub-plots for comparing the weighted vs the unweighted
 def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
          # getting the columns
@@ -791,27 +986,37 @@ def main():
         markets_available = ["germany","UK","italy","france"]
         market = st.selectbox('', markets_available)
         
-        if market == "germany":
-            slang = "MMM_DE_"
-            res_weighted = None
-            mmm = "Yes"
-            
-        if market == "UK":
-            slang ="MMM_UK_"
-            res_weighted = "Yes"
-            market_weighted = "uk_equity_age_weighted"
-            mmm = "Yes"
-            
-        if market =="italy":
-            slang ="MMM_IT"
-            res_weighted = None
-            mmm = "Yes"
-        
-        if market =="france":
-            slang = "MMM_FR"
-            res_weighted = None
-            mmm =None
+         if market == "germany":
+                  slang = "MMM_DE_"
+                  res_weighted = None
+                  mmm = "Yes"
+                  sheet_week = "WeekMap_DE"
+                  sheet_spend = "DE_Raw Spend"
 
+         
+         if market == "UK":
+                  slang ="MMM_UK_"
+                  res_weighted = "Yes"
+                  market_weighted = "uk_equity_age_weighted"
+                  mmm = "Yes"
+                  sheet_week = "WeekMap_UK"
+                  sheet_spend = "UK_Raw Spend"
+             
+         if market =="italy":
+                  slang ="MMM_IT"
+                  res_weighted = None
+                  mmm = "Yes"
+                  sheet_week = "WeekMap_IT"
+                  sheet_spend = "IT_Raw Spend"
+
+             
+         if market =="france":
+                  slang = "MMM_FR"
+                  res_weighted = None
+                  mmm =None
+
+
+             
         # getting our equity    
         if res_weighted == "Yes":
             filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
@@ -858,6 +1063,28 @@ def main():
             else:
                 merged_df = merged_file(df,df_vol)
 
+          # creating the Media merged_df with options ! 
+          if mmm == None:
+            pass
+        else:
+            if res_weighted == "Yes":
+                df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
+                merged_df_media_weighted = media_spend_processed(df_weighted,df_uk_spend,df_uk_weeks)
+                category_options_merged_media_w,time_period_options_merged_media_w,framework_options_media_w, framework_options_value_media_w= merged_options_media(merged_df_media_weighted)
+                
+                df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
+                merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
+                category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
+        
+            else:
+                df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
+                merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
+                category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
+
+
+
+
+             
         #Equity options
         if res_weighted == "Yes":
             category_options,time_period_options,framework_options = equity_options(df)
@@ -960,6 +1187,23 @@ def main():
             else:
                 fig_sub = sub_plots(merged_df,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
                 st.plotly_chart(fig_sub,use_container_width=True)
+
+         # Media_spend sub-plot. 
+        if mmm== None:
+            pass
+        else:
+            if res_weighted == "Yes":
+                res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="00")
+                if res_equity_weighted == "Weighted":
+                    fig_media = sub_plots_media(merged_df_media_weighted,category_options_merged_media_w,time_period_options_merged_media_w,framework_options_media_w, framework_options_value_media_w)
+                    st.plotly_chart(fig_media,use_container_width=True)
+                else:
+                    fig_media = sub_plots_media(merged_df_media,category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
+                    st.plotly_chart(fig_media,use_container_width=True)
+            else:
+                fig_media = sub_plots_media(merged_df_media,category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
+                st.plotly_chart(fig_media,use_container_width=True)
+
 
         # Significance Plot
         if mmm ==None:
