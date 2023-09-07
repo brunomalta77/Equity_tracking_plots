@@ -40,7 +40,7 @@ with col1:
 
 # getting the excel file first by user input
 data = r"data"
-media_data = r"data\Media_invest_all.xlsx"
+media_data = r"data/Media_invest_all.xlsx"
 
 
 # equity file
