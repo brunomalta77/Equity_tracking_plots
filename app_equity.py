@@ -1064,23 +1064,23 @@ def main():
                 merged_df = merged_file(df,df_vol)
          
           # creating the Media merged_df with options ! 
-          if mmm == None:
-            pass
+         if mmm == None:
+                  pass
          else:
-            if res_weighted == "Yes":
-                df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
-                merged_df_media_weighted = media_spend_processed(df_weighted,df_uk_spend,df_uk_weeks)
-                category_options_merged_media_w,time_period_options_merged_media_w,framework_options_media_w, framework_options_value_media_w= merged_options_media(merged_df_media_weighted)
-                
-                df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
-                merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
-                category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
+                  if res_weighted == "Yes":
+                           df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
+                           merged_df_media_weighted = media_spend_processed(df_weighted,df_uk_spend,df_uk_weeks)
+                           category_options_merged_media_w,time_period_options_merged_media_w,framework_options_media_w, framework_options_value_media_w= merged_options_media(merged_df_media_weighted)
+                  
+                           df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
+                           merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
+                           category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
          
-            else:
-                df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
-                merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
-                category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
-         
+                  else:
+                           df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
+                           merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
+                           category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
+
          
 
 
