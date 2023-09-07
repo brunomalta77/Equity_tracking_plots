@@ -982,10 +982,10 @@ def main():
     with st.container():
     #None Global
 
-        # user input for equity and mmm file. 
-        markets_available = ["germany","UK","italy","france"]
-        market = st.selectbox('', markets_available)
-        
+         # user input for equity and mmm file. 
+         markets_available = ["germany","UK","italy","france"]
+         market = st.selectbox('', markets_available)
+         
          if market == "germany":
                   slang = "MMM_DE_"
                   res_weighted = None
