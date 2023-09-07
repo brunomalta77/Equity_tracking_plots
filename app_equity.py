@@ -565,18 +565,18 @@ def sub_plots_media(df,categories,time_frames,frameworks,values):
          
          with left_column_1:
                   #getting the date
-                  start_date = st.date_input("Select start date",key="9",value=datetime(2020, 1, 1))
-                  end_date =  st.date_input("Select end date",key="10")
+                  start_date = st.date_input("Select start date",key="67567567",value=datetime(2020, 1, 1))
+                  end_date =  st.date_input("Select end date",key="567567567")
                   #convert our dates
                   ws = start_date.strftime('%Y-%m-%d')
                   we = end_date.strftime('%Y-%m-%d')
          with right_column_1:
                   # getting the parameters
-                  category = st.radio('Choose your category:', categories,key="124124")
-                  time_frame = st.radio('Choose your time frame:', time_frames,key="546456")
+                  category = st.radio('Choose your category:', categories,key="12756757567")
+                  time_frame = st.radio('Choose your time frame:', time_frames,key="54567567567")
          with right_column_2:
-                  framework = st.selectbox('Choose your framework:', frameworks,key="43534654")
-                  value_media_spend = st.selectbox('Media spend', values,key="827398")
+                  framework = st.selectbox('Choose your framework:', frameworks,key="43534654567567")
+                  value_media_spend = st.selectbox('Media spend', values,key="8273985756")
 
          #filter
          df_filtered =  df[(df["Category"] == category) & (df["time_period_x"] == time_frame)]
