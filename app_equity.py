@@ -594,7 +594,7 @@ def sub_plots_media(df,categories,time_frames,frameworks,values):
          histogram.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
 
          #updating the width
-         histogram.update_traces(marker=dict(line=dict(width=0.3)))
+         histogram.update_traces(marker=dict(line=dict(width=0.1)))
          
          if time_frame == "months":
             # Extract unique months from the "time" column
