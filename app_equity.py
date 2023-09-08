@@ -581,6 +581,22 @@ def sub_plots_media(df,categories,time_frames,frameworks,values):
          #filter
          df_filtered =  df[(df["Category"] == category) & (df["time_period_x"] == time_frame)]
          df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
+
+         # layout stuff
+         if time_frame == "months":
+                  df_filtered['time'] = df_filtered['time'].dt.to_period('M').dt.to_timestamp()
+         
+         if time_frame == "quarters":
+                  df_filtered['time'] = df_filtered['time'].dt.to_period('Q').dt.to_timestamp()
+         
+         if time_frame == "years":
+                  df_filtered['time'] = df_filtered['time'].dt.to_period('Y').dt.to_timestamp()
+         
+         if time_frame == "semiannual":
+                  df_filtered['time'] = df_filtered['time'].dt.to_period('Q').dt.start_time + pd.DateOffset(months=6)
+
+
+
          
          df_filtered = df_filtered.sort_values(by="time")
          all_brands = [x for x in df["brand"].unique()]
