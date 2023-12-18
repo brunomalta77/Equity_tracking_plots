@@ -155,7 +155,7 @@ def media_spend_processed(df,df_spend,df_weeks):
 def equity_options(df):
     category_options = df["Category"].unique()
     time_period_options = df["time_period"].unique()
-    framework_options = ["AF_Nutrition","AF_Sustainability","AF_Functionality","AF_Taste","AF_Brand_Strength","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
+    framework_options = ["AF_Brand_Love","AF_Motivation_for_Change","AF_Consumption_Experience","AF_Supporting_Experience","AF_Value_for_Money","Framework_Awareness","Framework_Saliency","Framework_Affinity","Total_Equity"]
     return (category_options,time_period_options,framework_options)
 
 
@@ -171,7 +171,7 @@ def merged_options(df):
 def merged_options_media(df):
          category_options_merged_media = df["Category"].unique()
          time_period_options_merged_media = df["time_period_x"].unique()
-         framework_options_media = ["AF_Nutrition","AF_Sustainability","AF_Taste","AF_Functionality","AF_Brand_Strength","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
+         framework_options_media = ["AF_Brand_Love","AF_Motivation_for_Change","AF_Consumption_Experience","AF_Supporting_Experience","AF_Value_for_Money","Framework_Awareness","Framework_Saliency","Framework_Affinity","Total_Equity"]
          framework_options_value_media = ["value"]
          return(category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
          
@@ -1000,8 +1000,17 @@ def main():
     #None Global
 
          # user input for equity and mmm file. 
-         markets_available = ["germany","UK","italy","france"]
+         markets_available = ["japan"]
          market = st.selectbox('', markets_available)
+
+         if market == "japan":
+                  slang = "MMM_JA"
+                  res_weighted = None
+                  mmm = None
+        
+
+
+
          
          if market == "germany":
                   slang = "MMM_DE_"
