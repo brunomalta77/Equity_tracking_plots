@@ -39,7 +39,7 @@ with col1:
 
 
 # getting the excel file first by user input
-data = r"data"
+data = r"data_BAT_Japan"
 media_data = r"data/Media_invest_all.xlsx"
 
 
