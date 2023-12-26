@@ -46,8 +46,12 @@ media_data = r"data/Media_invest_all.xlsx"
 # equity file
 @st.cache_data() 
 def reading_df(filepath):
-    df = pd.read_excel(filepath)
-    return df
+         if ".xlsx" in filepath:
+                  df = pd.read_excel(filepath)
+                  return df
+         if ".parquet" in filepath:
+                  df = pd.read_parquet(filepath)
+                  return df
 
 #mmm file 
 @st.cache_data() 
