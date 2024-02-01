@@ -1027,6 +1027,7 @@ def campaign_plot(data,frameworks_outside,market):
          st.subheader("Campaign plot")
     
          df = get_campaigns(data,res_campaign_list,market)
+         st.write(df)
          campaigns =  campaign_options(df)
          
          #Preprocessing ( getting the unique brands)
