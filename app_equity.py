@@ -53,6 +53,16 @@ def reading_df(filepath):
                   df = pd.read_parquet(filepath)
                   return df
 
+#campaign file
+@st.cache_data()
+def get_campaigns(data,res_campaign_list,market):
+    for x in os.listdir(data):
+        if "campaigns" in x and market in x:
+            df_campaign = pd.read_excel(os.path.join(data,x),sheet_name=res_campaign_list)
+            return df_campaign 
+
+
+
 #mmm file 
 @st.cache_data() 
 def processing_mmm(filepath):
@@ -998,6 +1008,146 @@ def correlation_plot(df,brands):
     return fig_spearman
 
 
+#------Campaign plot just with the campaign plots--------.
+
+def campaign_plot(data,frameworks_outside,campaigns,market):
+    campaign_list = ["average_smoothened","total_smoothened","average_unsmoothened","total_unsmoothened"]
+    res_campaign_list = st.selectbox("Select the sheet taht you want to use",campaign_list)
+    st.subheader("Campaign plot")
+    
+    df = get_campaigns(data,res_campaign_list,market)
+    
+    #Preprocessing ( getting the unique brands)
+    colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","indigo","olive","silver","darkviolet","grey"]
+    brands = df.brand.unique()
+    time_period = ["weeks","months","years"]
+    legend = None
+    # creating the columns for the app
+    right_column_1,left_column_1,right_column_2,left_column_2 = st.columns(4)
+    
+    with right_column_1:
+    #getting the Prior date
+        start_date_prior = st.selectbox("Choose your prior time period",time_period)
+        time_period_range_prior =  st.number_input(f"How many {start_date_prior} do you want ?",key="end_date_prior",max_value = 100,value=2,step=1)
+        #convert our dates
+        #ws_prior = start_date_prior.strftime('%Y-%m-%d')
+        #we_prior = end_date_prior.strftime('%Y-%m-%d')
+    
+    with left_column_1:
+    #getting the Post date
+        start_date_post = st.selectbox("Choose your post time period",time_period,key="post_date")
+        time_period_range_post =  st.number_input(f"How many {start_date_post} do you want ?",key="end_date_post",max_value = 100,value=2,step=1)
+        #convert our dates
+        #ws_post = start_date_post.strftime('%Y-%m-%d')
+        #we_post = end_date_post.strftime('%Y-%m-%d')
+    
+    with right_column_2:
+        brand = st.radio('Choose your brand:',brands,key="brand_campaign")
+        campaign = st.multiselect('Choose your campaigns',campaigns,key="campaign_campaign")
+    # getting the framework parameters ( stand by ? )
+    frameworks = ['Awareness', 'Saliency', 'Affinity']
+    with left_column_2:
+        framework = st.selectbox('Choose your framework:',frameworks,key="framework_campaign")
+
+        #framework list
+        if framework == "Awareness":
+            framework_list = ["AA_eSoV","AA_Reach","AA_Brand_Breadth"]
+        if framework == "Saliency":
+            framework_list = ["AS_Average_Engagement","AS_Usage_SoV","AS_Search_Index","AS_Brand_Centrality"]
+        if framework == "Affinity":
+            framework_list = ["AF_Brand_Love","AF_Motivation_for_Change","AF_Consumption_Experience","AF_Supporting_Experience","AF_Value_for_Money"]
+
+    # filtering brand
+    df_filtered = df[df.brand == brand]
+
+# Grid for the subplots
+if framework == "Saliency" or framework == "Awareness" or framework =="Affinity":
+size = len(framework_list)
+try:   
+# Create subplots
+fig = make_subplots(rows=len(campaign),cols=size,shared_xaxes=False, shared_yaxes=False,row_titles= campaign)
+
+# Loop over each campaign
+for i, name_of_campaign in enumerate(campaign):
+   row_campaign = df_filtered[(df_filtered["campaign_name"] == name_of_campaign) & (df_filtered["time_period"]=="weeks")]
+   start_date_campaign = str(row_campaign.time.iloc[0].date())
+   end_date_campaign = str(row_campaign.end_date.iloc[0].date())
+   campaign_df = df_filtered[((df_filtered["time"]) >= pd.to_datetime(start_date_campaign)) & (df_filtered["time"] < pd.to_datetime(end_date_campaign))]
+   campaign_df =  campaign_df[campaign_df["time_period"]== "weeks"]
+   
+   #write the campaign start and the campaign end for the user to check
+   st.markdown(f"**Campaign - {name_of_campaign}** - starts at {start_date_campaign} and ends at {end_date_campaign}")
+
+   
+   #Calculating the  prior and post time, with the weeks,years numbers.....
+   # filtering by the time_period_prior
+   df_filtered_time_period_prior = df_filtered[df_filtered.time_period == start_date_prior]
+   if start_date_prior == "weeks":
+       ws_prior = datetime.strptime(start_date_campaign, "%Y-%m-%d") - relativedelta(weeks=time_period_range_prior)
+   if start_date_prior == "months":
+       ws_prior =  datetime.strptime(start_date_campaign, "%Y-%m-%d") - relativedelta(months=time_period_range_prior)
+   if start_date_prior == "years":
+       ws_prior =  datetime.strptime(start_date_campaign, "%Y-%m-%d") - relativedelta(years=time_period_range_prior)
+
+   df_filtered_prior = df_filtered_time_period_prior[(df_filtered_time_period_prior['time'] >= ws_prior) & (df_filtered_time_period_prior['time'] < start_date_campaign )]
+   df_filtered_prior = df_filtered_prior.sort_values(by="time")
+
+
+   # filtering by the time_period_post
+   df_filtered_time_period_pos = df_filtered[df_filtered.time_period == start_date_post]
+   if start_date_post == "weeks":
+       ws_post = datetime.strptime(end_date_campaign, "%Y-%m-%d") + relativedelta(weeks=time_period_range_post)
+   if start_date_post == "months":
+       ws_post = datetime.strptime(end_date_campaign, "%Y-%m-%d") + relativedelta(months=time_period_range_post)
+   if start_date_post == "years":
+       ws_post = datetime.strptime(end_date_campaign, "%Y-%m-%d") + relativedelta(years=time_period_range_post)
+
+   df_filtered_post = df_filtered_time_period_pos[(df_filtered_time_period_pos['time'] > end_date_campaign) & (df_filtered_time_period_pos['time'] <= ws_post)]
+   df_filtered_post = df_filtered_post.sort_values(by="time")
+
+   # Calculate means
+   campaign_means = [campaign_df[col].mean() for col in  framework_list]
+   prior_means = [df_filtered_prior[col].mean() for col in  framework_list]
+   pos_means = [df_filtered_post[col].mean() for col in  framework_list]
+   
+   
+   # Specify different widths for each set of bars
+   width_prior = 0.2
+   width_campaign = 0.2
+   width_pos = 0.2
+
+
+   #variable for not appearing the graph
+   check = False
+   if framework == "Saliency" or framework =="Awareness" or framework == "Affinity":
+   # Add traces to subplots
+       for (index,data) in enumerate(framework_list):
+           if legend == None:
+               fig.add_trace(go.Bar(x=[framework_list[index]], y=[prior_means[index]], name="Prior Period",width =  width_prior,marker_color=colors[5],showlegend=True), row=i+1, col=1+index)
+               fig.add_trace(go.Bar(x=[framework_list[index]], y=[campaign_means[index]], name="Campaign",width =  width_campaign,marker_color=colors[3],showlegend=True), row=i+1, col=1+index)
+               fig.add_trace(go.Bar(x=[framework_list[index]], y=[pos_means[index]], name="Post Period",width =  width_pos,marker_color=colors[8],showlegend=True), row=i+1, col=1+index)
+               legend = True
+               check = True 
+           else:
+               fig.add_trace(go.Bar(x=[framework_list[index]], y=[prior_means[index]], name="Prior Period",width =  width_prior,marker_color=colors[5],showlegend=False), row=i+1, col=1+index)
+               fig.add_trace(go.Bar(x=[framework_list[index]], y=[campaign_means[index]], name="Campaign",width =  width_campaign,marker_color=colors[3],showlegend=False), row=i+1, col=1+index)
+               fig.add_trace(go.Bar(x=[framework_list[index]], y=[pos_means[index]], name="Post Period",width =  width_pos,marker_color=colors[8],showlegend=False), row=i+1, col=1+index)
+               
+           if check == True:
+               fig.update_layout(height=1200 ,width = 1500)
+               # Update y-axis tick format
+               fig.update_yaxes(tickformat=".1f")
+               
+           else:
+               pass
+
+return(fig)
+
+except:
+st.warning("Check your data:your equity data does not have campaigns or your brand does not have campaigns!")
+
+
+
 #------------------------------------------------------------------------app---------------------------------#
 def main():
     with st.container():
@@ -1011,7 +1161,7 @@ def main():
                   slang = "MMM_JA"
                   res_weighted = None
                   mmm = None
-        
+                  campaign_option = True
 
 
 
@@ -1270,6 +1420,18 @@ def main():
                 fig_corr = correlation_plot(merged_df,Brand_options)
                 st.plotly_chart(fig_corr,use_container_width=True)
          
+          
+         #Campaign plot 
+         if campaign_option == None:
+            pass
+         else:
+            _,_,frameworks = equity_options(df)
+            campaigns =  campaign_options(df)
+            fig = campaign_plot(data,frameworks,campaigns,market)
+            try:
+                st.plotly_chart(fig)
+            except:
+                st.warning("Impossible to show any graph")
 
 
 if __name__=="__main__":
