@@ -1021,13 +1021,14 @@ def correlation_plot(df,brands):
 
 #------Campaign plot just with the campaign plots--------.
 
-def campaign_plot(data,frameworks_outside,campaigns,market):
+def campaign_plot(data,frameworks_outside,market):
          campaign_list = ["average_smoothened","total_smoothened","average_unsmoothened","total_unsmoothened"]
          res_campaign_list = st.selectbox("Select the sheet taht you want to use",campaign_list)
          st.subheader("Campaign plot")
     
          df = get_campaigns(data,res_campaign_list,market)
-    
+         campaigns =  campaign_options(df)
+         
          #Preprocessing ( getting the unique brands)
          colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","indigo","olive","silver","darkviolet","grey"]
          brands = df.brand.unique()
@@ -1433,8 +1434,7 @@ def main():
             pass
          else:
             _,_,frameworks = equity_options(df)
-            campaigns =  campaign_options(df)
-            fig = campaign_plot(data,frameworks,campaigns,market)
+            fig = campaign_plot(data,frameworks,market)
             try:
                 st.plotly_chart(fig)
             except:
