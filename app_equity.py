@@ -189,7 +189,22 @@ def merged_options_media(df):
          framework_options_value_media = ["value"]
          return(category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
          
-
+# creating the campaign_options to choose from.
+def campaign_options(df):
+         campaign_list = []
+         if not df.loc[df.campaign == 1].empty:
+                  for x in df.campaign_name.value_counts().keys():
+                           if x == None:
+                                    pass
+                           else:
+                                    if df.campaign_name.value_counts()[x] == 1:
+                                             campaign_list.append(x)
+    
+         else:
+                  st.warning("Do not have any campaigns")
+                  return df
+    
+         return campaign_list
 
 
 # Equity_plot
