@@ -1022,12 +1022,12 @@ def campaign_plot(data,frameworks_outside,campaigns,market):
          right_column_1,left_column_1,right_column_2,left_column_2 = st.columns(4)
     
          with right_column_1:
-         #getting the Prior date
-         start_date_prior = st.selectbox("Choose your prior time period",time_period)
-         time_period_range_prior =  st.number_input(f"How many {start_date_prior} do you want ?",key="end_date_prior",max_value = 100,value=2,step=1)
+                  #getting the Prior date
+                  start_date_prior = st.selectbox("Choose your prior time period",time_period)
+                  time_period_range_prior =  st.number_input(f"How many {start_date_prior} do you want ?",key="end_date_prior",max_value = 100,value=2,step=1)
     
          with left_column_1:
-         #getting the Post date
+                  #getting the Post date
                   start_date_post = st.selectbox("Choose your post time period",time_period,key="post_date")
                   time_period_range_post =  st.number_input(f"How many {start_date_post} do you want ?",key="end_date_post",max_value = 100,value=2,step=1)
         
