@@ -43,6 +43,7 @@ data = r"data_BAT_Japan"
 media_data = r"data/Media_invest_all.xlsx"
 
 
+
 # equity file
 @st.cache_data() 
 def reading_df(filepath):
