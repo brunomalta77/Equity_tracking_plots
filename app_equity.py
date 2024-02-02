@@ -59,7 +59,7 @@ def reading_df(filepath):
 def get_campaigns(data,res_campaign_list,market):
     for x in os.listdir(data):
         if "campaigns" in x and market in x:
-            df_campaign = pd.read_excel(os.path.join(data,x),sheet_name=res_campaign_list,engine='openpyxl')
+            df_campaign = pd.read_excel(os.path.join(data,x))
             return df_campaign 
 
 
