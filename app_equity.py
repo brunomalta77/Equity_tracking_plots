@@ -60,7 +60,7 @@ def get_campaigns(data,res_campaign_list,market):
          for x in os.listdir(data):
                   if "campaigns" in x and market in x:
                            campaign_path = os.path.join(data,x)
-                           df_campaign = pd.read_excel(campaign_path,engine='openpyxl')
+                           df_campaign = pd.read_excel(campaign_path,sheet_name=res_campaign_list)
                            return df_campaign 
 
 
@@ -1029,7 +1029,7 @@ def campaign_plot(data,frameworks_outside,market):
          st.subheader("Campaign plot")
     
          df = get_campaigns(data,res_campaign_list,market)
-         st.write(df)
+         
          campaigns =  campaign_options(df)
          
          #Preprocessing ( getting the unique brands)
