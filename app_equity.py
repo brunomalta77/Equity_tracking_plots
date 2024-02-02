@@ -60,8 +60,7 @@ def get_campaigns(data,res_campaign_list,market):
          for x in os.listdir(data):
                   if "campaigns" in x and market in x:
                            campaign_path = os.path.join(data,x)
-                           st.write(campaign_path)
-                           df_campaign = pd.read_excel(campaign_path)
+                           df_campaign = pd.read_excel(campaign_path,engine='openpyxl')
                            return df_campaign 
 
 
