@@ -59,8 +59,9 @@ def reading_df(filepath):
 def get_campaigns(data,res_campaign_list,market):
          for x in os.listdir(data):
                   if "campaigns" in x and market in x:
-                           st.write(x)
-                           df_campaign = pd.read_excel(os.path.join(data,x))
+                           campaign_path = os.path.join(data,x)
+                           st.write(campaign_path)
+                           df_campaign = pd.read_excel(campaign_path)
                            return df_campaign 
 
 
