@@ -1076,88 +1076,88 @@ def campaign_plot(data,frameworks_outside,market):
          # Grid for the subplots
          if framework == "Saliency" or framework == "Awareness" or framework =="Affinity":
                   size = len(framework_list)
-         #try:   
-         # Create subplots
-         fig = make_subplots(rows=len(campaign),cols=size,shared_xaxes=False, shared_yaxes=False,row_titles= campaign)
-
-         # Loop over each campaign
-         for i, name_of_campaign in enumerate(campaign):
-            row_campaign = df_filtered[(df_filtered["campaign_name"] == name_of_campaign) & (df_filtered["time_period"]=="weeks")]
-            start_date_campaign = str(row_campaign.time.iloc[0].date())
-            end_date_campaign = str(row_campaign.end_date.iloc[0].date())
-            campaign_df = df_filtered[((df_filtered["time"]) >= pd.to_datetime(start_date_campaign)) & (df_filtered["time"] < pd.to_datetime(end_date_campaign))]
-            campaign_df =  campaign_df[campaign_df["time_period"]== "weeks"]
-            
-            #write the campaign start and the campaign end for the user to check
-            st.markdown(f"**Campaign - {name_of_campaign}** - starts at {start_date_campaign} and ends at {end_date_campaign}")
-
-   
-            #Calculating the  prior and post time, with the weeks,years numbers.....
-            # filtering by the time_period_prior
-            df_filtered_time_period_prior = df_filtered[df_filtered.time_period == start_date_prior]
-            if start_date_prior == "weeks":
-                ws_prior = datetime.strptime(start_date_campaign, "%Y-%m-%d") - relativedelta(weeks=time_period_range_prior)
-            if start_date_prior == "months":
-                ws_prior =  datetime.strptime(start_date_campaign, "%Y-%m-%d") - relativedelta(months=time_period_range_prior)
-            if start_date_prior == "years":
-                ws_prior =  datetime.strptime(start_date_campaign, "%Y-%m-%d") - relativedelta(years=time_period_range_prior)
+         try:   
+                  # Create subplots
+                  fig = make_subplots(rows=len(campaign),cols=size,shared_xaxes=False, shared_yaxes=False,row_titles= campaign)
          
-            df_filtered_prior = df_filtered_time_period_prior[(df_filtered_time_period_prior['time'] >= ws_prior) & (df_filtered_time_period_prior['time'] < start_date_campaign )]
-            df_filtered_prior = df_filtered_prior.sort_values(by="time")
-
-
-            # filtering by the time_period_post
-            df_filtered_time_period_pos = df_filtered[df_filtered.time_period == start_date_post]
-            if start_date_post == "weeks":
-                ws_post = datetime.strptime(end_date_campaign, "%Y-%m-%d") + relativedelta(weeks=time_period_range_post)
-            if start_date_post == "months":
-                ws_post = datetime.strptime(end_date_campaign, "%Y-%m-%d") + relativedelta(months=time_period_range_post)
-            if start_date_post == "years":
-                ws_post = datetime.strptime(end_date_campaign, "%Y-%m-%d") + relativedelta(years=time_period_range_post)
+                  # Loop over each campaign
+                  for i, name_of_campaign in enumerate(campaign):
+                     row_campaign = df_filtered[(df_filtered["campaign_name"] == name_of_campaign) & (df_filtered["time_period"]=="weeks")]
+                     start_date_campaign = str(row_campaign.time.iloc[0].date())
+                     end_date_campaign = str(row_campaign.end_date.iloc[0].date())
+                     campaign_df = df_filtered[((df_filtered["time"]) >= pd.to_datetime(start_date_campaign)) & (df_filtered["time"] < pd.to_datetime(end_date_campaign))]
+                     campaign_df =  campaign_df[campaign_df["time_period"]== "weeks"]
+                     
+                     #write the campaign start and the campaign end for the user to check
+                     st.markdown(f"**Campaign - {name_of_campaign}** - starts at {start_date_campaign} and ends at {end_date_campaign}")
          
-            df_filtered_post = df_filtered_time_period_pos[(df_filtered_time_period_pos['time'] > end_date_campaign) & (df_filtered_time_period_pos['time'] <= ws_post)]
-            df_filtered_post = df_filtered_post.sort_values(by="time")
-
-            # Calculate means
-            campaign_means = [campaign_df[col].mean() for col in  framework_list]
-            prior_means = [df_filtered_prior[col].mean() for col in  framework_list]
-            pos_means = [df_filtered_post[col].mean() for col in  framework_list]
             
-            
-            # Specify different widths for each set of bars
-            width_prior = 0.2
-            width_campaign = 0.2
-            width_pos = 0.2
-
-
-            #variable for not appearing the graph
-            check = False
-            if framework == "Saliency" or framework =="Awareness" or framework == "Affinity":
-            # Add traces to subplots
-                for (index,data) in enumerate(framework_list):
-                    if legend == None:
-                        fig.add_trace(go.Bar(x=[framework_list[index]], y=[prior_means[index]], name="Prior Period",width =  width_prior,marker_color=colors[5],showlegend=True), row=i+1, col=1+index)
-                        fig.add_trace(go.Bar(x=[framework_list[index]], y=[campaign_means[index]], name="Campaign",width =  width_campaign,marker_color=colors[3],showlegend=True), row=i+1, col=1+index)
-                        fig.add_trace(go.Bar(x=[framework_list[index]], y=[pos_means[index]], name="Post Period",width =  width_pos,marker_color=colors[8],showlegend=True), row=i+1, col=1+index)
-                        legend = True
-                        check = True 
-                    else:
-                        fig.add_trace(go.Bar(x=[framework_list[index]], y=[prior_means[index]], name="Prior Period",width =  width_prior,marker_color=colors[5],showlegend=False), row=i+1, col=1+index)
-                        fig.add_trace(go.Bar(x=[framework_list[index]], y=[campaign_means[index]], name="Campaign",width =  width_campaign,marker_color=colors[3],showlegend=False), row=i+1, col=1+index)
-                        fig.add_trace(go.Bar(x=[framework_list[index]], y=[pos_means[index]], name="Post Period",width =  width_pos,marker_color=colors[8],showlegend=False), row=i+1, col=1+index)
-                        
-                    if check == True:
-                        fig.update_layout(height=1200 ,width = 1500)
-                        # Update y-axis tick format
-                        fig.update_yaxes(tickformat=".1f")
-                        
-                    else:
-                        pass
+                     #Calculating the  prior and post time, with the weeks,years numbers.....
+                     # filtering by the time_period_prior
+                     df_filtered_time_period_prior = df_filtered[df_filtered.time_period == start_date_prior]
+                     if start_date_prior == "weeks":
+                         ws_prior = datetime.strptime(start_date_campaign, "%Y-%m-%d") - relativedelta(weeks=time_period_range_prior)
+                     if start_date_prior == "months":
+                         ws_prior =  datetime.strptime(start_date_campaign, "%Y-%m-%d") - relativedelta(months=time_period_range_prior)
+                     if start_date_prior == "years":
+                         ws_prior =  datetime.strptime(start_date_campaign, "%Y-%m-%d") - relativedelta(years=time_period_range_prior)
+                  
+                     df_filtered_prior = df_filtered_time_period_prior[(df_filtered_time_period_prior['time'] >= ws_prior) & (df_filtered_time_period_prior['time'] < start_date_campaign )]
+                     df_filtered_prior = df_filtered_prior.sort_values(by="time")
          
-         return(fig)
+         
+                     # filtering by the time_period_post
+                     df_filtered_time_period_pos = df_filtered[df_filtered.time_period == start_date_post]
+                     if start_date_post == "weeks":
+                         ws_post = datetime.strptime(end_date_campaign, "%Y-%m-%d") + relativedelta(weeks=time_period_range_post)
+                     if start_date_post == "months":
+                         ws_post = datetime.strptime(end_date_campaign, "%Y-%m-%d") + relativedelta(months=time_period_range_post)
+                     if start_date_post == "years":
+                         ws_post = datetime.strptime(end_date_campaign, "%Y-%m-%d") + relativedelta(years=time_period_range_post)
+                  
+                     df_filtered_post = df_filtered_time_period_pos[(df_filtered_time_period_pos['time'] > end_date_campaign) & (df_filtered_time_period_pos['time'] <= ws_post)]
+                     df_filtered_post = df_filtered_post.sort_values(by="time")
+         
+                     # Calculate means
+                     campaign_means = [campaign_df[col].mean() for col in  framework_list]
+                     prior_means = [df_filtered_prior[col].mean() for col in  framework_list]
+                     pos_means = [df_filtered_post[col].mean() for col in  framework_list]
+                     
+                     
+                     # Specify different widths for each set of bars
+                     width_prior = 0.2
+                     width_campaign = 0.2
+                     width_pos = 0.2
+         
+         
+                     #variable for not appearing the graph
+                     check = False
+                     if framework == "Saliency" or framework =="Awareness" or framework == "Affinity":
+                     # Add traces to subplots
+                         for (index,data) in enumerate(framework_list):
+                             if legend == None:
+                                 fig.add_trace(go.Bar(x=[framework_list[index]], y=[prior_means[index]], name="Prior Period",width =  width_prior,marker_color=colors[5],showlegend=True), row=i+1, col=1+index)
+                                 fig.add_trace(go.Bar(x=[framework_list[index]], y=[campaign_means[index]], name="Campaign",width =  width_campaign,marker_color=colors[3],showlegend=True), row=i+1, col=1+index)
+                                 fig.add_trace(go.Bar(x=[framework_list[index]], y=[pos_means[index]], name="Post Period",width =  width_pos,marker_color=colors[8],showlegend=True), row=i+1, col=1+index)
+                                 legend = True
+                                 check = True 
+                             else:
+                                 fig.add_trace(go.Bar(x=[framework_list[index]], y=[prior_means[index]], name="Prior Period",width =  width_prior,marker_color=colors[5],showlegend=False), row=i+1, col=1+index)
+                                 fig.add_trace(go.Bar(x=[framework_list[index]], y=[campaign_means[index]], name="Campaign",width =  width_campaign,marker_color=colors[3],showlegend=False), row=i+1, col=1+index)
+                                 fig.add_trace(go.Bar(x=[framework_list[index]], y=[pos_means[index]], name="Post Period",width =  width_pos,marker_color=colors[8],showlegend=False), row=i+1, col=1+index)
+                                 
+                             if check == True:
+                                 fig.update_layout(height=1200 ,width = 1500)
+                                 # Update y-axis tick format
+                                 fig.update_yaxes(tickformat=".1f")
+                                 
+                             else:
+                                 pass
+                  
+                  return(fig)
 
-         #except:
-         #         st.warning("Check your data:your equity data does not have campaigns or your brand does not have campaigns!")
+         except:
+                  st.warning("Check your data:your equity data does not have campaigns or your brand does not have campaigns!")
 
 
 
