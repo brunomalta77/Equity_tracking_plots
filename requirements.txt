@@ -5,3 +5,4 @@ streamlit
 joblib
 plotly
 openpyxl==3.0.10
+dateutil.relativedelta
