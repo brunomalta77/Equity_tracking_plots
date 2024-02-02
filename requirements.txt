@@ -4,4 +4,4 @@ seaborn
 streamlit 
 joblib
 plotly
-openpyxl
+openpyxl==3.0.10
