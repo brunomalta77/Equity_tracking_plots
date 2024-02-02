@@ -57,11 +57,11 @@ def reading_df(filepath):
 #campaign file
 @st.cache_data()
 def get_campaigns(data,res_campaign_list,market):
-    for x in os.listdir(data):
-        st.write(x)
-         if "campaigns" in x and market in x:
-            df_campaign = pd.read_excel(os.path.join(data,x))
-            return df_campaign 
+         for x in os.listdir(data):
+                  st.write(x)
+                  if "campaigns" in x and market in x:
+                           df_campaign = pd.read_excel(os.path.join(data,x))
+                           return df_campaign 
 
 
 
