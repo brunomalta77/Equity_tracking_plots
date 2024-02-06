@@ -1103,7 +1103,7 @@ def campaign_plot(data,frameworks_outside,market):
                          ws_prior =  datetime.strptime(start_date_campaign, "%Y-%m-%d") - relativedelta(years=time_period_range_prior)
                   
                      df_filtered_prior = df_filtered_time_period_prior[(df_filtered_time_period_prior['time'] >= ws_prior) & (df_filtered_time_period_prior['time'] < start_date_campaign )]
-                     df_filtered_prior = df_filtered_prior.sort_values(by="time")
+                     #df_filtered_prior = df_filtered_prior.sort_values(by="time")
          
          
                      # filtering by the time_period_post
@@ -1116,7 +1116,7 @@ def campaign_plot(data,frameworks_outside,market):
                          ws_post = datetime.strptime(end_date_campaign, "%Y-%m-%d") + relativedelta(years=time_period_range_post)
                   
                      df_filtered_post = df_filtered_time_period_pos[(df_filtered_time_period_pos['time'] > end_date_campaign) & (df_filtered_time_period_pos['time'] <= ws_post)]
-                     df_filtered_post = df_filtered_post.sort_values(by="time")
+                     #df_filtered_post = df_filtered_post.sort_values(by="time")
          
                      # Calculate means
                      campaign_means = [campaign_df[col].mean() for col in  framework_list]
