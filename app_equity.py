@@ -70,15 +70,39 @@ def get_campaigns(data,res_campaign_list,market):
 #mmm file 
 @st.cache_data() 
 def processing_mmm(filepath):
-    df_vol = pd.read_excel(filepath)
-    sales = list(df_vol[df_vol["Metric"] == "SalesValue"]["Value"])
-    volume = list(df_vol[df_vol["Metric"] == "SalesVol"]["Value"])
-    res = [round(x / y,2) if y != 0 else 0 for x, y in zip(sales, volume)]
-    df_vol = df_vol[df_vol["Metric"]== "SalesVol"]
-    df_vol["Price_change"] = res
-    df_vol.rename(columns={"Value":"Volume_share"},inplace=True)
-    df_vol=df_vol.groupby(['time','Y','H','QT','M','W','brand','Metric','Category'])[['Volume_share','Price_change']].sum().reset_index()
-    return df_vol
+         #df_vol = pd.read_excel(filepath)
+         #sales = list(df_vol[df_vol["Metric"] == "SalesValue"]["Value"])
+         #volume = list(df_vol[df_vol["Metric"] == "SalesVol"]["Value"])
+         #res = [round(x / y,2) if y != 0 else 0 for x, y in zip(sales, volume)]
+         #df_vol = df_vol[df_vol["Metric"]== "SalesVol"]
+         #df_vol["Price_change"] = res
+         #df_vol.rename(columns={"Value":"Volume_share"},inplace=True)
+         #df_vol=df_vol.groupby(['time','Y','H','QT','M','W','brand','Metric','Category'])[['Volume_share','Price_change']].sum().reset_index()
+         #return df_vol
+
+         #for bat
+         df_vol = pd.read_excel(filepath,sheet_name="Data")
+         
+         brands = df_vol.brand.unique()
+         
+         for x in brands:
+         brand_mask = df_vol.brand == x
+         
+         lw_column = f"LW_totalconsumable_VolumeSticks_{x}"
+         fm_column = f"FM_totalconsumable_VolumeSticks_{x}"
+         
+         if lw_column in df_vol.columns and fm_column in df_vol.columns:
+            df_vol.loc[brand_mask, "total_volume_sticks"] = df_vol.loc[brand_mask, lw_column] + df_vol.loc[brand_mask, fm_column]
+         
+         
+         return df_vol
+
+         
+
+
+
+
+
 
 # Media files
 @st.cache_data()
@@ -173,7 +197,7 @@ def media_spend_processed(df,df_spend,df_weeks):
 def equity_options(df):
     category_options = df["Category"].unique()
     time_period_options = df["time_period"].unique()
-    framework_options = ["AF_Brand_Love","AF_Motivation_for_Change","AF_Consumption_Experience","AF_Supporting_Experience","AF_Value_for_Money","Framework_Awareness","Framework_Saliency","Framework_Affinity","Total_Equity"]
+    framework_options = ["AF_Brand_Love","AF_Motivation_for_Change","AF_Consumption_Experience","AF_Supporting_Experience","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
     return (category_options,time_period_options,framework_options)
 
 
@@ -181,15 +205,15 @@ def equity_options(df):
 def merged_options(df):
     category_options_merged = df["Category"].unique()
     time_period_options_merged = df["time_period"].unique()
-    framework_options_merged = ["AF_Nutrition","AF_Sustainability","AF_Taste","AF_Functionality","AF_Brand_Strength","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
-    framework_options_value = ["Volume_share","Price_change"]
+    framework_options_merged = ["AF_Brand_Love","AF_Motivation_for_Change","AF_Consumption_Experience","AF_Supporting_Experience","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
+    framework_options_value = ["total_volume_sticks"]
     return(category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
 
 
 def merged_options_media(df):
          category_options_merged_media = df["Category"].unique()
          time_period_options_merged_media = df["time_period_x"].unique()
-         framework_options_media = ["AF_Brand_Love","AF_Motivation_for_Change","AF_Consumption_Experience","AF_Supporting_Experience","AF_Value_for_Money","Framework_Awareness","Framework_Saliency","Framework_Affinity","Total_Equity"]
+         framework_options_media = ["AF_Brand_Love","AF_Motivation_for_Change","AF_Consumption_Experience","AF_Supporting_Experience","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
          framework_options_value_media = ["value"]
          return(category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
          
@@ -327,7 +351,7 @@ def market_share_plot(df,categories):
          all_brands = [x for x in df["brand"].unique()]
          brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
          
-         fig = px.line(df_filtered, x="time", y="Volume_share",color="brand",color_discrete_map=brand_color_mapping)
+         fig = px.line(df_filtered, x="time", y="total_volume_sticks",color="brand",color_discrete_map=brand_color_mapping)
 
          # Extract unique quarters from the "time" column
          unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
@@ -997,7 +1021,7 @@ def correlation_plot(df,brands):
 
     brand = st.radio('Choose your brand:', brands,key="500")
     
-    framework_options_corr = ["Volume_share","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity","Price_change"]
+    framework_options_corr =  ["total_volume_sticks","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
     df_filtered =  df[(df["brand"] == brand)]
     filtered_data_final = df_filtered[framework_options_corr]
                     
@@ -1175,12 +1199,10 @@ def main():
          if market == "japan":
                   slang = "MMM_JA"
                   res_weighted = None
-                  mmm = None
+                  mmm = "Yes"
                   campaign_option = True
-
-
-
-         
+                  parquet = False
+                  
          if market == "germany":
                   slang = "MMM_DE_"
                   res_weighted = None
