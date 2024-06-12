@@ -544,13 +544,6 @@ def sub_plots(df,categories,time_frames,frameworks,values):
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
          df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
          df_filtered = df_filtered.sort_values(by="time")
-          #special case months
-         if time_frame =="months":
-                 df_filtered = df_filtered[~df_filtered['time'].dt.strftime('%d').str.endswith('01')]
-    
-  
-
-         
          sub_fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
          
          
