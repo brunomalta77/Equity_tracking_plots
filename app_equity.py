@@ -480,7 +480,7 @@ def sub_plots(df,categories,time_frames,frameworks,values):
                   time_frame = st.radio('Choose your time frame:', time_frames,key="12")
          with right_column_2:
                   framework = st.selectbox('Choose your framework:', frameworks,key="13")
-                  value = st.selectbox('Choose  Price Change / Volume share:', values,key="14")
+                  value = st.selectbox('Consumables volume', values,key="14")
          
          #filter
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
