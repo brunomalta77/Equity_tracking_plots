@@ -1196,37 +1196,37 @@ def main():
                   slang = "MMM_JP"
                   res_weighted = None
                   mmm = "Yes"
-                  campaign_option = True
-                  parquet = False
+                  campaign_option = None
+                  media_option = False
                   
-         if market == "germany":
-                  slang = "MMM_DE_"
-                  res_weighted = None
-                  mmm = "Yes"
-                  sheet_week = "WeekMap_DE"
-                  sheet_spend = "DE_Raw Spend"
+         #if market == "germany":
+                  #slang = "MMM_DE_"
+                  #res_weighted = None
+                  #mmm = "Yes"
+                  #sheet_week = "WeekMap_DE"
+                  #sheet_spend = "DE_Raw Spend"
 
          
-         if market == "UK":
-                  slang ="MMM_UK_"
-                  res_weighted = "Yes"
-                  market_weighted = "uk_equity_age_weighted"
-                  mmm = "Yes"
-                  sheet_week = "WeekMap_UK"
-                  sheet_spend = "UK_Raw Spend"
+         #if market == "UK":
+                  #slang ="MMM_UK_"
+                  #res_weighted = "Yes"
+                  #market_weighted = "uk_equity_age_weighted"
+                  #mmm = "Yes"
+                  #sheet_week = "WeekMap_UK"
+                  #sheet_spend = "UK_Raw Spend"
              
-         if market =="italy":
-                  slang ="MMM_IT"
-                  res_weighted = None
-                  mmm = "Yes"
-                  sheet_week = "WeekMap_IT"
-                  sheet_spend = "IT_Raw Spend"
+         #if market =="italy":
+                  #slang ="MMM_IT"
+                  #res_weighted = None
+                  #mmm = "Yes"
+                  #sheet_week = "WeekMap_IT"
+                  #sheet_spend = "IT_Raw Spend"
 
              
-         if market =="france":
-                  slang = "MMM_FR"
-                  res_weighted = None
-                  mmm =None
+         #if market =="france":
+                  #slang = "MMM_FR"
+                  #res_weighted = None
+                  #mmm =None
 
 
              
