@@ -86,13 +86,13 @@ def processing_mmm(filepath):
          brands = df_vol.brand.unique()
          
          for x in brands:
-         brand_mask = df_vol.brand == x
+                  brand_mask = df_vol.brand == x
          
-         lw_column = f"LW_totalconsumable_VolumeSticks_{x}"
-         fm_column = f"FM_totalconsumable_VolumeSticks_{x}"
+                  lw_column = f"LW_totalconsumable_VolumeSticks_{x}"
+                  fm_column = f"FM_totalconsumable_VolumeSticks_{x}"
          
-         if lw_column in df_vol.columns and fm_column in df_vol.columns:
-            df_vol.loc[brand_mask, "total_volume_sticks"] = df_vol.loc[brand_mask, lw_column] + df_vol.loc[brand_mask, fm_column]
+                  if lw_column in df_vol.columns and fm_column in df_vol.columns:
+                     df_vol.loc[brand_mask, "total_volume_sticks"] = df_vol.loc[brand_mask, lw_column] + df_vol.loc[brand_mask, fm_column]
          
          
          return df_vol
