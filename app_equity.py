@@ -382,7 +382,7 @@ def buble_plot(df,categories,time_frames,frameworks,values):
                   time_frame = st.radio('Choose your time frame:', time_frames,key="6")
          with right_column_2:
                   framework = st.selectbox('Choose your framework:', frameworks,key="7")
-                  value = st.selectbox('Choose  Price Change / Volume share:', values,key="8")
+                  value = st.selectbox('Consumables volume', values,key="8")
          
          #filter
          df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
