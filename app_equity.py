@@ -382,6 +382,7 @@ def Equity_plot(df,categories,time_frames,frameworks):
 
 
 def market_share_plot(df,categories):
+         df= df[df.time_period == "weeks"]
          # creating the columns layout
          left_column, right_column = st.columns(2)
 
