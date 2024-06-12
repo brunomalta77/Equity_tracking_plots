@@ -83,17 +83,19 @@ def processing_mmm(filepath):
          #for bat
          df_vol = pd.read_excel(filepath,sheet_name="Data")
          
-         brands = df_vol.brand.unique()
+         df_vol['time'] = pd.to_datetime(df_vol['time'])
+
          
-         for x in brands:
-                  brand_mask = df_vol.brand == x
+         # Apply the function to each brand
+         df_vol = pd.concat([convert_time_period(df_vol[df_vol['brand'] == brand]) for brand in df_vol['brand'].unique()], ignore_index=True)
+         df_vol["Category"] = "thp"
          
-                  lw_column = f"LW_totalconsumable_VolumeSticks_{x}"
-                  fm_column = f"FM_totalconsumable_VolumeSticks_{x}"
+         # Sort by the 'time' column while it is still a datetime type
+         df_vol = df_vol.sort_values(by=["time"])
          
-                  if lw_column in df_vol.columns and fm_column in df_vol.columns:
-                     df_vol.loc[brand_mask, "total_volume_sticks"] = df_vol.loc[brand_mask, lw_column] + df_vol.loc[brand_mask, fm_column]
-         
+         # Convert the 'time' column to a formatted string after sorting
+         df_vol['time'] = df_vol['time'].dt.strftime('%Y/%m/%d %I:%M:%S %p')
+                  
          
          return df_vol
 
@@ -112,17 +114,14 @@ def convert_time_period(df):
          # Set the time column as the index
          df.set_index('time', inplace=True)
          
-         # Aggregate to months
-         df_months = df.resample('M').sum().reset_index()
+         # Aggregate to months, quarters, and years using the start of the period
+         df_months = df.resample('MS').sum().reset_index()
          df_months['time_period'] = 'months'
          
-         
-         # Aggregate to quarters
-         df_quarters = df.resample('Q').sum().reset_index()
+         df_quarters = df.resample('QS').sum().reset_index()
          df_quarters['time_period'] = 'quarters'
          
-         # Aggregate to years
-         df_years = df.resample('Y').sum().reset_index()
+         df_years = df.resample('YS').sum().reset_index()
          df_years['time_period'] = 'years'
          
          # Add the brand column back
@@ -130,9 +129,8 @@ def convert_time_period(df):
          df_quarters['brand'] = df['brand'].iloc[0]
          df_years['brand'] = df['brand'].iloc[0]
          
+         return pd.concat([df.reset_index(), df_months, df_quarters, df_years], ignore_index=True)
          
-         return pd.concat([df.reset_index(), df_months, df_quarters,df_years], ignore_index=True)
-
 
 
 
@@ -142,18 +140,36 @@ def convert_time_period(df):
 #merged file
 @st.cache_data() 
 def merged_file(df,df_vol):
-         df_merged = pd.merge(df_vol,df,on=["time","brand","Category"],how="inner")
-    
-         # Convert time column to datetime if not already
-         df_merged['time'] = pd.to_datetime(df_merged['time'])
+         #just to be sure
          
-         # Apply the function to each brand
-         df_transformed = pd.concat([convert_time_period(df_merged[df_merged['brand'] == brand]) for brand in df_merged['brand'].unique()], ignore_index=True)
+         # Ensure 'time' is datetime
+         df_vol['time'] = pd.to_datetime(df_vol['time'])
+         df['time'] = pd.to_datetime(df['time'])
          
-         df_transformed["Category"]="thp"
-         df_transformed = df_transformed.sort_values(by="time")
+         # Ensure 'brand' and 'time_period' are strings
+         df_vol['brand'] = df_vol['brand'].astype(str)
+         df['brand'] = df['brand'].astype(str)
          
-         return df_transformed 
+         df_vol['time_period'] = df_vol['time_period'].astype(str)
+         df['time_period'] = df['time_period'].astype(str)
+                  
+
+         df_merged = pd.merge(df_vol,df,on=["time","brand","time_period"],how="inner")
+
+         brands = df_merged.brand.unique()
+
+         for x in brands:
+             brand_mask = df_merged.brand == x
+             
+             lw_column = f"LW_totalconsumable_VolumeSticks_{x}"
+             fm_column = f"FM_totalconsumable_VolumeSticks_{x}"
+             
+             if lw_column in df_merged.columns and fm_column in df_merged.columns:
+                 df_merged.loc[brand_mask, "total_volume_sticks"] = df_merged.loc[brand_mask, lw_column] + df_merged.loc[brand_mask, fm_column]
+         
+                 
+                  
+         return df_merged 
 
 
 # Function to calculate confidence intervals
