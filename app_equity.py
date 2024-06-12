@@ -1425,7 +1425,7 @@ def main():
             pass
          else:
             st.subheader("Agreggated Volume Share by Brand Plot")
-            fig_market_share = market_share_plot(df_merged,category_options_vol_share)
+            fig_market_share = market_share_plot(merged_df,category_options_vol_share)
             st.plotly_chart(fig_market_share,use_container_width=True)
          
          #Buble plot
