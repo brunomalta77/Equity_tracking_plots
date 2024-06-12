@@ -1291,8 +1291,8 @@ def main():
                            df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
                            merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
                            category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
-          else:
-                   pass
+         else:
+                  pass
          
 
 
