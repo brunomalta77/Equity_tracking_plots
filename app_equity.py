@@ -1277,9 +1277,7 @@ def main():
                 merged_df = merged_file(df,df_vol)
          
           # creating the Media merged_df with options ! 
-         if mmm == None:
-                  pass
-         else:
+          if mmm != None and media_option != False:       
                   if res_weighted == "Yes":
                            df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
                            merged_df_media_weighted = media_spend_processed(df_weighted,df_uk_spend,df_uk_weeks)
@@ -1293,7 +1291,8 @@ def main():
                            df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
                            merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
                            category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
-
+          else:
+                   pass
          
 
 
@@ -1402,21 +1401,20 @@ def main():
                 st.plotly_chart(fig_sub,use_container_width=True)
          
          # Media_spend sub-plot. 
-         if mmm== None:
-            pass
+         if mmm != None and media_option != False:
+                  if res_weighted == "Yes":
+                           res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="00")
+                           if res_equity_weighted == "Weighted":
+                                      fig_media = sub_plots_media(merged_df_media_weighted,category_options_merged_media_w,time_period_options_merged_media_w,framework_options_media_w, framework_options_value_media_w)
+                                      st.plotly_chart(fig_media,use_container_width=True)
+                           else:
+                                      fig_media = sub_plots_media(merged_df_media,category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
+                                      st.plotly_chart(fig_media,use_container_width=True)
+                  else:
+                         fig_media = sub_plots_media(merged_df_media,category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
+                         st.plotly_chart(fig_media,use_container_width=True)
          else:
-            if res_weighted == "Yes":
-                res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="00")
-                if res_equity_weighted == "Weighted":
-                    fig_media = sub_plots_media(merged_df_media_weighted,category_options_merged_media_w,time_period_options_merged_media_w,framework_options_media_w, framework_options_value_media_w)
-                    st.plotly_chart(fig_media,use_container_width=True)
-                else:
-                    fig_media = sub_plots_media(merged_df_media,category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
-                    st.plotly_chart(fig_media,use_container_width=True)
-            else:
-                fig_media = sub_plots_media(merged_df_media,category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
-                st.plotly_chart(fig_media,use_container_width=True)
-         
+                  pass
          
          # Significance Plot
          if mmm ==None:
