@@ -1193,7 +1193,7 @@ def main():
          market = st.selectbox('', markets_available)
 
          if market == "japan":
-                  slang = "MMM_JA"
+                  slang = "MMM_JP"
                   res_weighted = None
                   mmm = "Yes"
                   campaign_option = True
