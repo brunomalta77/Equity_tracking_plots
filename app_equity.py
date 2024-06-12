@@ -994,7 +994,7 @@ def sub_plots_w(df,df_weighted,categories,time_frames,frameworks):
 
 # Significance Plot
 def Significance_plot(df,brands,frameworks):
-         df = df[df.time_period=="weeks]
+         df = df[df.time_period=="weeks"]
          # getting the columns for the layouts
          left_column_1, right_column_1,right_column_2 = st.columns(3)
          
