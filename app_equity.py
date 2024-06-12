@@ -1277,7 +1277,7 @@ def main():
                 merged_df = merged_file(df,df_vol)
          
           # creating the Media merged_df with options ! 
-          if mmm != None and media_option != False:       
+         if mmm != None and media_option != False:       
                   if res_weighted == "Yes":
                            df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
                            merged_df_media_weighted = media_spend_processed(df_weighted,df_uk_spend,df_uk_weeks)
