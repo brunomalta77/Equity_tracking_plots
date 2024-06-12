@@ -338,7 +338,7 @@ def market_share_plot(df,categories):
          
          with right_column:
                   # getting the parameters
-                  category = st.radio('Choose your category:', categories)
+                  category = st.radio('Choose your category:', categories,key=222)
          
          #filtering
          df_filtered =  df[(df["Category"] == category)]
