@@ -50,7 +50,7 @@ media_data = r"data/Media_invest_all.xlsx"
 @st.cache_data() 
 def reading_df(filepath):
          if ".xlsx" in filepath:
-                  df = pd.read_excel(filepath)
+                  df = pd.read_excel(filepath,sheet_name="weighted_average_smoothened")
                   return df
          if ".parquet" in filepath:
                   df = pd.read_parquet(filepath)
