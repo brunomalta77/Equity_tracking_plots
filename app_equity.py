@@ -154,7 +154,7 @@ def merged_file(df,df_vol):
          df['time_period'] = df['time_period'].astype(str)
                   
 
-         df_merged = pd.merge(df_vol,df,on=["time","brand","time_period"],how="inner")
+         df_merged = pd.merge(df_vol,df,on=["time","brand","time_period","Category"],how="inner")
 
          brands = df_merged.brand.unique()
 
