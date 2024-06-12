@@ -107,13 +107,54 @@ def media_plan(filepath,sheet_spend,sheet_week):
          df_uk_weeks = pd.read_excel(filepath,sheet_name=sheet_week)
          return (df_uk_spend,df_uk_weeks)
 
+@st.cache_data()
+def convert_time_period(df):
+         # Set the time column as the index
+         df.set_index('time', inplace=True)
+         
+         # Aggregate to months
+         df_months = df.resample('M').sum().reset_index()
+         df_months['time_period'] = 'months'
+         
+         
+         # Aggregate to quarters
+         df_quarters = df.resample('Q').sum().reset_index()
+         df_quarters['time_period'] = 'quarters'
+         
+         # Aggregate to years
+         df_years = df.resample('Y').sum().reset_index()
+         df_years['time_period'] = 'years'
+         
+         # Add the brand column back
+         df_months['brand'] = df['brand'].iloc[0]
+         df_quarters['brand'] = df['brand'].iloc[0]
+         df_years['brand'] = df['brand'].iloc[0]
+         
+         
+         return pd.concat([df.reset_index(), df_months, df_quarters,df_years], ignore_index=True)
+
+
+
+
+
 
 
 #merged file
 @st.cache_data() 
 def merged_file(df,df_vol):
-    df_merged = pd.merge(df_vol,df,on=["time","brand","Category"],how="inner")
-    return df_merged
+         df_merged = pd.merge(df_vol,df,on=["time","brand","Category"],how="inner")
+    
+         # Convert time column to datetime if not already
+         df_merged['time'] = pd.to_datetime(df_merged['time'])
+         
+         # Apply the function to each brand
+         df_transformed = pd.concat([convert_time_period(df_merged[df_merged['brand'] == brand]) for brand in df_merged['brand'].unique()], ignore_index=True)
+         
+         df_transformed["Category"]="thp"
+         df_transformed = df_transformed.sort_values(by="time")
+         
+         return df_transformed 
+
 
 # Function to calculate confidence intervals
 def calculate_confidence_intervals(data, confidence=0.90):
