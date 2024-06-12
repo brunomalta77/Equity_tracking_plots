@@ -1324,7 +1324,7 @@ def main():
             pass
          else:
             Brand_options = merged_df["brand"].unique()
-            framework_options_sig = ["Volume_share","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity","Price_change"]
+            framework_options_sig = ["total_volume_sticks","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
             lower,upper = calculate_confidence_intervals(merged_df["Framework_Awareness"])
          
          # Correlation options
