@@ -57,15 +57,9 @@ def get_user_info(access_token):
 
 def login():
          auth_url = get_auth_url()
-         html_string = f"""
-         <a href="{auth_url}">
-         <img src="{image_url}" style="width: 20px; height: 20px; vertical-align: middle;">
-         Log in with Microsoft
-         </a>
-         """    
-
-         #st.markdown(f'[Log in with microsoft]({auth_url})')
-         st.markdown(html_string, unsafe_allow_html=True)
+         st.image(image_microsoft, width=20)
+         st.markdown(f'[Log in with microsoft]({auth_url})')
+         
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
