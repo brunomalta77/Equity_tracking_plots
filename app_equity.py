@@ -34,7 +34,7 @@ CLIENT_ID = "1363ef83-1b3e-4bd7-add0-9f1bd40d69ba"
 CLIENT_SECRET = "142545f0-6624-4c08-9288-73e78b8906d0"
 AUTHORITY = "https://login.microsoftonline.com/68421f43-a2e1-4c77-90f4-e12a5c7e0dbc"
 SCOPE = ["User.Read"]
-REDIRECT_URI = "https://frnldjw2-8501.uks1.devtunnels.ms" # This should match your Azure AD app configuration
+REDIRECT_URI = "https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app" # This should match your Azure AD app configuration
 
 # Initialize MSAL application
 app = msal.ConfidentialClientApplication(
