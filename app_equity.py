@@ -1057,13 +1057,13 @@ def main():
                   if "code" in params:
                      code = params["code"][0]
                      token = get_token_from_code(code)
-                     if token:
-                         st.session_state.access_token = token
-                         st.experimental_set_query_params()
-                         st.experimental_rerun()
-         
-             with st.container():
-             #None Global
+                  if token:
+                           st.session_state.access_token = token
+                           st.experimental_set_query_params()
+                           st.experimental_rerun()
+
+                  with st.container():
+                  #None Global
          
                   # user input for equity and mmm file. 
                   markets_available = ["germany","UK","italy","france"]
