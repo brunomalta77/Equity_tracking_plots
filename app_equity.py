@@ -22,9 +22,9 @@ import msal
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
 logo_path = r"data/brand_logo.png"
-logo_microsoft_path =  r"data/microsoft.png"
+logo_microsoft_path =  r"https://www.shareicon.net/data/256x256/2015/09/15/101518_microsoft_512x512.png"
 image = Image.open(logo_path)
-image_microsoft = Image.open(logo_microsoft_path)
+#image_microsoft = Image.open(logo_microsoft_path)
 #colors used for the plots
 colors = ["blue", "green", "red", "purple", "orange","teal","black","paleturquoise","indigo","darkseagreen","gold","darkviolet","firebrick","navy","deeppink",
          "orangered"]
@@ -57,9 +57,19 @@ def get_user_info(access_token):
 
 def login():
          auth_url = get_auth_url()
-         st.image(image_microsoft, width=20)
-         st.markdown(f'[Log in with microsoft]({auth_url})')
-         
+         #st.image(image_microsoft, width=20)
+         #st.markdown(f'[Log in with microsoft]({auth_url})')
+
+         html_string = f"""
+         <a href="{auth_url}">
+             <img src="{logo_microsoft_path}" style="width: 20px; height: 20px; vertical-align: middle;">
+             Log in with Microsoft
+         </a>
+         """
+
+         # Use st.markdown to render the HTML
+         st.markdown(html_string, unsafe_allow_html=True)
+
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
