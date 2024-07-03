@@ -63,7 +63,7 @@ def login():
          html_string = f"""
          <a href="{auth_url}">
              <img src="{logo_microsoft_path}" style="width: 20px; height: 20px; vertical-align: middle;">
-             Log in with Microsoft
+                Log in with Microsoft
          </a>
          """
 
