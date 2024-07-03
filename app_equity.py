@@ -1031,36 +1031,36 @@ def main():
          st.title("Streamlit App with Microsoft SSO")
          #Global variables
          if 'login_user' not in st.session_state:
-         st.login_user = False
+                  st.login_user = False
          
          if 'main_continue' not in st.session_state:
-         st.main_continue = False
+                  st.main_continue = False
          
          if 'access' not in st.session_state:
-         st.access = False
+                  st.access = False
          
          
          if st.button("Logout"):
-         st.markdown("""
-            <meta http-equiv="refresh" content="0; url='https://www.google.com'" />
-            """, unsafe_allow_html=True)
-         
+                  st.markdown("""
+                     <meta http-equiv="refresh" content="0; url='https://www.google.com'" />
+                     """, unsafe_allow_html=True)
+                  
          # if st.button("Logout"):
          #     del st.session_state.access_token 
          #     st.access = False
          #     st.stop()
          
          if st.access == False:
-         login()
-         # Check for authorization code in URL
-         params = st.experimental_get_query_params()
-         if "code" in params:
-            code = params["code"][0]
-            token = get_token_from_code(code)
-            if token:
-                st.session_state.access_token = token
-                st.experimental_set_query_params()
-                st.experimental_rerun()
+                  login()
+                  # Check for authorization code in URL
+                  params = st.experimental_get_query_params()
+                  if "code" in params:
+                     code = params["code"][0]
+                     token = get_token_from_code(code)
+                     if token:
+                         st.session_state.access_token = token
+                         st.experimental_set_query_params()
+                         st.experimental_rerun()
          
              with st.container():
              #None Global
