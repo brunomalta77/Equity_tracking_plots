@@ -55,7 +55,7 @@ def get_user_info(access_token):
 
 def login():
     auth_url = get_auth_url()
-    st.markdown(f'[Login with Microsoft]({auth_url})')
+    st.markdown(f'[Log in with microsoft]({auth_url})')
 
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
