@@ -1067,7 +1067,6 @@ def main():
                                                       st.experimental_set_query_params()
                                              
                                              with st.container():
-                                                      st.session_state.access = True
                                                       #None Global
                                     
                                                       # user input for equity and mmm file. 
@@ -1327,7 +1326,8 @@ def main():
                                                          else:   
                                                              fig_corr = correlation_plot(merged_df,Brand_options)
                                                              st.plotly_chart(fig_corr,use_container_width=True)
-
+                                             
+                                             st.session_state.access = True
                                     
          else:
                   # User is logged in, show content and logout button
