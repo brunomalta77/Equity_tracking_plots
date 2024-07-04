@@ -1635,20 +1635,6 @@ def main():
                                                       """, unsafe_allow_html=True)
 
                   
-                  #if st.button("Logout"):
-                  #logout_button = """
-                  #<div class="logout-button">
-                  #   <button onclick="window.location.href='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'">Logout</button>
-                  #</div>
-                  #"""
-                  #st.markdown(logout_button, unsafe_allow_html=True)
-
-                  
-                  #st.markdown("""
-                  #<meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
-                  #""", unsafe_allow_html=True)
-                           
-
 if __name__=="__main__":
     main()   
 
