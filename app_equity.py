@@ -1622,7 +1622,16 @@ def main():
                   </style>
                   """, unsafe_allow_html=True)
                   
-                
+                  logout_container = st.container()
+                  
+                  with logout_container:
+                           col1, col2 = st.columns([19, 1])
+                           with col2:
+                                    if st.session_state.get('access', False):
+                                             if st.button("Logout", key="logout_button"):
+                                                      st.markdown("""
+                                                      <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
+                                                      """, unsafe_allow_html=True)
 
                   
                   #if st.button("Logout"):
@@ -1634,9 +1643,9 @@ def main():
                   #st.markdown(logout_button, unsafe_allow_html=True)
 
                   
-                  st.markdown("""
-                  <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
-                   """, unsafe_allow_html=True)
+                  #st.markdown("""
+                  #<meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
+                  #""", unsafe_allow_html=True)
                            
 
 if __name__=="__main__":
