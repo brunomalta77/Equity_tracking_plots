@@ -1593,23 +1593,41 @@ def main():
                                                              fig_corr = correlation_plot(merged_df,Brand_options)
                                                              st.plotly_chart(fig_corr,use_container_width=True)
                   if st.button("Logout"):
-                             st.markdown("""
-                             <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
-                              """, unsafe_allow_html=True)
+                           logout_button_html = """
+                          <style>
+                              .logout-button-container {
+                                  position: fixed;
+                                  top: 0;
+                                  right: 0;
+                                  padding: 1rem;
+                                  z-index: 999;
+                              }
+                              .logout-button {
+                                  background-color: #ff4b4b;
+                                  color: white;
+                                  padding: 0.5rem 1rem;
+                                  border: none;
+                                  border-radius: 4px;
+                                  cursor: pointer;
+                                  font-size: 1rem;
+                              }
+                              .logout-button:hover {
+                                  background-color: #ff0000;
+                              }
+                          </style>
+                          <div class="logout-button-container">
+                              <button class="logout-button" onclick="window.location.href='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'">Logout</button>
+                          </div>
+                          """
+                             
+                             st.markdown(logout_button_html, unsafe_allow_html=True)
+                             
+                             
+                             
+                             #st.markdown("""
+                             #<meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
+                             # """, unsafe_allow_html=True)
                            
-
-
-         
-         #if st.session_state.access == True:
-         #         if st.button("Logout"):
-         #                  st.markdown("""
-         #                     <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
-         #                     """, unsafe_allow_html=True)
-         
-         # if st.button("Logout"):
-         #     del st.session_state.access_token 
-         #     st.access = False
-         #     st.stop()
 
 if __name__=="__main__":
     main()   
