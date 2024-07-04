@@ -1043,6 +1043,8 @@ def correlation_plot(df,brands):
 
 #------------------------------------------------------------------------app------------------------------------------------------------------------------#
 def main():
+         
+         logout_container = st.container()
          st.title("Streamlit App with Microsoft SSO")
          #Global variables
          # Initialize session state variables
@@ -1622,7 +1624,6 @@ def main():
                   </style>
                   """, unsafe_allow_html=True)
                   
-                  logout_container = st.container()
                   
                   with logout_container:
                            col1, col2 = st.columns([19, 1])
