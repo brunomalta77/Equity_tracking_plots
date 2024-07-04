@@ -1596,28 +1596,39 @@ def main():
                   # Custom CSS to push the logout button to the right and style it
                   st.markdown("""
                   <style>
-                  div.stButton > button:first-child {
-                  background-color: #ff4b4b;
-                  color: white;
-                  position: absolute;
+                  #root > div:nth-child(1) > div > div > div > div > section > div {padding-top: 2rem;}
+                  .logout-button {
+                  position: fixed;
                   top: 0.5rem;
                   right: 0.5rem;
-                  z-index: 999;
+                  z-index: 999999;
                   }
-                  div.stButton > button:hover {
-                  background-color: #ff0000;
+                  .logout-button button {
+                  background-color: #ff4b4b;
                   color: white;
+                  border: none;
+                  padding: 0.25rem 0.75rem;
+                  text-align: center;
+                  text-decoration: none;
+                  display: inline-block;
+                  font-size: 1rem;
+                  margin: 4px 2px;
+                  cursor: pointer;
+                  border-radius: 4px;
                   }
-                  </style>""", unsafe_allow_html=True)
+                  .logout-button button:hover {
+                  background-color: #ff0000;
+                  }
+                  </style>
+                  """, unsafe_allow_html=True)
                   
-                  # Create a layout with two columns
-                  content_column, button_column = st.columns([3, 1])
+                
 
-                  with button_column:
-                           if st.button("Logout"):
-                                    st.markdown("""
-                                       <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
-                                       """, unsafe_allow_html=True)
+                  
+                  if st.button("Logout"):
+                           st.markdown("""
+                              <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
+                              """, unsafe_allow_html=True)
 
                              
                              
