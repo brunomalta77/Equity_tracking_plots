@@ -1058,7 +1058,7 @@ def main():
                   if not st.session_state.login_clicked:
                            if st.button("Login"):
                                     st.session_state.login_clicked = True
-                                    st.experimental_rerun()
+                                    
                   else:
                            login()
                            # Check for authorization code in URL
