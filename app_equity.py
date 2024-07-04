@@ -1080,7 +1080,14 @@ def main():
                                     st.session_state.access_token = token
                                     st.experimental_set_query_params()
                                     st.experimental_rerun()
-                                    
+
+
+                           if st.session_state.access == True:
+                                    if st.button("Logout"):
+                                             st.markdown("""
+                                             <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
+                                             """, unsafe_allow_html=True)
+                           
                            with st.container():
                                     #None Global
                   
