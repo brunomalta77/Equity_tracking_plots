@@ -1058,6 +1058,7 @@ def main():
          if not st.session_state.access:                  
                                     login()
                                     st.session_state.access = True
+                                    st.experimental_rerun()
                                     # Check for authorization code in URL
                                     params = st.experimental_get_query_params()
                                     if "code" in params:
