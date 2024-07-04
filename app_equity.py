@@ -1046,6 +1046,7 @@ def main():
          st.title("Streamlit App with Microsoft SSO")
          #Global variables
          # Initialize session state variables
+         
          if 'login_user' not in st.session_state:
                   st.session_state.login_user = False
          
@@ -1059,9 +1060,9 @@ def main():
          if st.session_state.access:
                   if st.button("Logout"):
                            st.markdown("""
-                              <meta http-equiv="refresh" content="0; url='https://www.google.com'" />
+                              <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
                               """, unsafe_allow_html=True)
-                  
+         
          # if st.button("Logout"):
          #     del st.session_state.access_token 
          #     st.access = False
@@ -1074,9 +1075,9 @@ def main():
                   if "code" in params:
                            code = params["code"][0]
                            token = get_token_from_code(code)
+                           st.session_state.access = True
                            if token:
                                     st.session_state.access_token = token
-                                    st.session_state.access = True
                                     st.experimental_set_query_params()
                                     st.experimental_rerun()
                                     
