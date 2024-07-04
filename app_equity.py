@@ -1045,16 +1045,18 @@ def correlation_plot(df,brands):
 def main():
          st.title("Streamlit App with Microsoft SSO")
          #Global variables
+         # Initialize session state variables
          if 'login_user' not in st.session_state:
-                  st.login_user = False
+                  st.session_state.login_user = False
          
          if 'main_continue' not in st.session_state:
-                  st.main_continue = False
+                  st.session_state.main_continue = False
          
          if 'access' not in st.session_state:
-                  st.access = False
+                  st.session_state.access = False
+
          
-         if st.access == True :
+         if st.session_state.access:
                   if st.button("Logout"):
                            st.markdown("""
                               <meta http-equiv="refresh" content="0; url='https://www.google.com'" />
@@ -1065,7 +1067,7 @@ def main():
          #     st.access = False
          #     st.stop()
          
-         if st.access == False:
+         if not st.session_state.access:
                   login()
                   # Check for authorization code in URL
                   params = st.experimental_get_query_params()
