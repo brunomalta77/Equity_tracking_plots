@@ -1079,7 +1079,7 @@ def main():
                                     st.session_state.access = True
                                     st.experimental_set_query_params()
                                     st.experimental_rerun()
-                                    st.access = True
+                                    
                            with st.container():
                                     #None Global
                   
