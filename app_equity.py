@@ -1054,12 +1054,7 @@ def main():
          if 'login_clicked' not in st.session_state:
                   st.session_state.login_clicked = False
 
-         if not st.session_state.access:
-                  if not st.session_state.login_clicked:
-                           if st.button("Login"):
-                                    st.session_state.login_clicked = True
-                                    
-                           if st.session_state.login_clicked:
+         if not st.session_state.access:                  
                                     login()
                                     # Check for authorization code in URL
                                     params = st.experimental_get_query_params()
@@ -1338,8 +1333,6 @@ def main():
                   # User is logged in, show content and logout button
                   st.write("You are logged in!")
                   if st.button("Logout"):
-                           st.session_state.access = False
-                           st.session_state.login_clicked = False
                            if 'access_token' in st.session_state:
                                     del st.session_state.access_token
                            st.experimental_rerun()
