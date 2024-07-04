@@ -1067,6 +1067,7 @@ def main():
                                                       st.experimental_set_query_params()
                                              
                                              with st.container():
+                                                      st.session_state.access = True
                                                       #None Global
                                     
                                                       # user input for equity and mmm file. 
