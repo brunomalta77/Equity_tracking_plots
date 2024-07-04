@@ -1041,7 +1041,7 @@ def correlation_plot(df,brands):
     return fig_spearman
 
 
-#------------------------------------------------------------------------app---------------------------------#
+#------------------------------------------------------------------------app------------------------------------------------------------------------------#
 def main():
          st.title("Streamlit App with Microsoft SSO")
          #Global variables
@@ -1057,7 +1057,7 @@ def main():
 
          if not st.session_state.access:                  
                                     login()
-                                    st.experimental_rerun()
+                                    #st.experimental_rerun()
                                     # Check for authorization code in URL
                                     params = st.experimental_get_query_params()
                                     if "code" in params:
