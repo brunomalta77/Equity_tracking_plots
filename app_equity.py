@@ -1057,7 +1057,7 @@ def main():
                   st.session_state.access = False
 
          
-         if st.session_state.access:
+         if st.session_state.access == True:
                   if st.button("Logout"):
                            st.markdown("""
                               <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
