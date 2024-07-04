@@ -1051,11 +1051,13 @@ def main():
          # Initialize session state variables
          if 'access' not in st.session_state:
                   st.session_state.access = False
+                  
          if 'login_clicked' not in st.session_state:
                   st.session_state.login_clicked = False
 
          if not st.session_state.access:                  
                                     login()
+                                    st.session_state.access = True
                                     # Check for authorization code in URL
                                     params = st.experimental_get_query_params()
                                     if "code" in params:
@@ -1063,7 +1065,6 @@ def main():
                                              token = get_token_from_code(code)
                                              if token:
                                                       st.session_state.access_token = token
-                                                      st.session_state.access = True
                                                       st.experimental_set_query_params()
                                              
                                              with st.container():
