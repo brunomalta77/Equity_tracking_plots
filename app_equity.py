@@ -1620,7 +1620,7 @@ def main():
                           </div>
                           """
                              
-                             st.markdown(logout_button_html, unsafe_allow_html=True)
+                           st.markdown(logout_button_html, unsafe_allow_html=True)
                              
                              
                              
