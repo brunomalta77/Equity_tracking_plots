@@ -1065,8 +1065,7 @@ def main():
                                                       st.session_state.access_token = token
                                                       st.session_state.access = True
                                                       st.experimental_set_query_params()
-                                                      st.experimental_rerun()
-                                                
+                                             
                                              with st.container():
                                                       #None Global
                                     
