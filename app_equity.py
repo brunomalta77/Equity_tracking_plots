@@ -1592,36 +1592,33 @@ def main():
                                                          else:   
                                                              fig_corr = correlation_plot(merged_df,Brand_options)
                                                              st.plotly_chart(fig_corr,use_container_width=True)
-                  if st.button("Logout"):
-                           logout_button_html = """
-                          <style>
-                              .logout-button-container {
-                                  position: fixed;
-                                  top: 0;
-                                  right: 0;
-                                  padding: 1rem;
-                                  z-index: 999;
-                              }
-                              .logout-button {
-                                  background-color: #ff4b4b;
-                                  color: white;
-                                  padding: 0.5rem 1rem;
-                                  border: none;
-                                  border-radius: 4px;
-                                  cursor: pointer;
-                                  font-size: 1rem;
-                              }
-                              .logout-button:hover {
-                                  background-color: #ff0000;
-                              }
-                          </style>
-                          <div class="logout-button-container">
-                              <button class="logout-button" onclick="window.location.href='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'">Logout</button>
-                          </div>
-                          """
-                             
-                           st.markdown(logout_button_html, unsafe_allow_html=True)
-                             
+                  
+                  # Custom CSS to push the logout button to the right and style it
+                  st.markdown("""
+                  <style>
+                  div.stButton > button:first-child {
+                  background-color: #ff4b4b;
+                  color: white;
+                  position: absolute;
+                  top: 0.5rem;
+                  right: 0.5rem;
+                  z-index: 999;
+                  }
+                  div.stButton > button:hover {
+                  background-color: #ff0000;
+                  color: white;
+                  }
+                  </style>""", unsafe_allow_html=True)
+                  
+                  # Create a layout with two columns
+                  content_column, button_column = st.columns([3, 1])
+
+                  with button_column:
+                           if st.button("Logout"):
+                                    st.markdown("""
+                                       <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
+                                       """, unsafe_allow_html=True)
+
                              
                              
                              #st.markdown("""
