@@ -1076,6 +1076,7 @@ def main():
                            token = get_token_from_code(code)
                            if token:
                                     st.session_state.access_token = token
+                                    st.session_state.access = True
                                     st.experimental_set_query_params()
                                     st.experimental_rerun()
                                     st.access = True
