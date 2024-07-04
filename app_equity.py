@@ -1593,9 +1593,9 @@ def main():
                                                              fig_corr = correlation_plot(merged_df,Brand_options)
                                                              st.plotly_chart(fig_corr,use_container_width=True)
                   if st.button("Logout"):
-                           if 'access_token' in st.session_state:
-                                    del st.session_state.access_token
-                           st.experimental_rerun()
+                             st.markdown("""
+                             <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-idpmnwwksvjnrgdu5rmitk.streamlit.app'" />
+                              """, unsafe_allow_html=True)
                            
 
 
