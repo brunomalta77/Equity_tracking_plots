@@ -1328,7 +1328,7 @@ def main():
                                                              st.plotly_chart(fig_corr,use_container_width=True)
                                              
                                              st.session_state.access = True
-                                    
+                                             st.experimental_rerun()
          else:
                   # User is logged in, show content and logout button
                   st.write("You are logged in!")
