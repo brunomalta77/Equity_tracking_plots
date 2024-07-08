@@ -9,10 +9,8 @@ import seaborn as sns
 import streamlit as st
 import joblib
 import requests
-import pandas as pd
 import plotly.express as px 
 from plotly.subplots import make_subplots
-import numpy as np 
 import plotly.graph_objects as go
 import os 
 from PIL import Image
