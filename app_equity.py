@@ -1070,7 +1070,7 @@ def main():
                   #None Global
 
                   # user input for equity and mmm file. 
-                  markets_available = ["germany","UK","italy","france"]
+                  markets_available = ["UK"]
                   market = st.selectbox('', markets_available)
                   
                   if market == "germany":
