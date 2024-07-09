@@ -221,98 +221,262 @@ def merged_options_media(df):
          return(category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
          
 
-
-
 # Equity_plot
-def Equity_plot(df,categories,time_frames,frameworks):
-         # creating the columns layout
-         left_column_1, left_column_2,right_column_1,right_column_2 = st.columns(4)
-         
-         with left_column_1:
-                  #getting the date
-                  start_date = st.date_input("Select start date",value=datetime(2020, 1, 1))
-                  end_date =  st.date_input("Select end date")
-                  #convert our dates
-                  ws = start_date.strftime('%Y-%m-%d')
-                  we = end_date.strftime('%Y-%m-%d')
-         # getting the parameters
-         with left_column_2:
-                  category = st.radio('Choose your category:', categories)
-         with right_column_1:
-                  time_frame = st.radio('Choose your time frame:', time_frames)
-         with right_column_2:
-                  framework = st.selectbox('Choose your framework:', frameworks)
-         
-         #filtering
-         df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
-         df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
-         
-         df_filtered = df_filtered.sort_values(by="time")
+def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
+    if sheet_name == "Average Smoothening":
+        name = "Average"
+    if sheet_name == "Total Unsmoothening":
+        name = "Absolute"
+    if sheet_name == "Weighted":
+        name = "Weighted"
+
+    st.subheader(f"Equity Metrics Plot - {name}")
+
+    # creating the columns for the app
+    right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
+    
+    with right_column_1:
+    #getting the date
+        start_date = st.date_input("Select start date",value=datetime(2020, 1, 1))
+        end_date =  st.date_input("Select end date")
+        #convert our dates
+        ws = start_date.strftime('%Y-%m-%d')
+        we = end_date.strftime('%Y-%m-%d')
+    # getting the parameters
+    with right_column_2:
+        category = st.radio('Choose your category:', categories)
+        
+    with left_column_1:    
+        time_frame = st.radio('Choose your time frame:', time_frames)
+    
+    with left_column_2:
+        framework = st.selectbox('Choose your framework:', frameworks)
+    
+    #filtering
+    df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
+    df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
+    
+    df_filtered = df_filtered.sort_values(by="time")
+    
+    
+    # color stuff
+    all_brands = [x for x in df["brand"].unique()]
+    colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
+
+    brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+    
+    fig = px.line(df_filtered, x="time", y=framework, color="brand", color_discrete_map=brand_color_mapping)
+
+    
+    if time_frame == "months":
+        unique_months = df_filtered['time'].dt.to_period('M').unique()
+
+        # Customize the x-axis tick labels to show one label per month
+        tickvals = [f"{m.start_time}" for m in unique_months]
+        ticktext = [m.strftime("%B %Y") for m in unique_months]
+
+        # Update x-axis ticks
+        fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+        
+        return fig
+
+    if time_frame == "quarters":
+
+        unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
+
+        # Customize the x-axis tick labels to show one label per quarter
+        tickvals = [f"{q.start_time}" for q in unique_quarters]
+        ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
+
+        fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+        
+        return fig
 
 
-         
-         all_brands = [x for x in df["brand"].unique()]
-         brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
-         
-         fig = px.line(df_filtered, x="time", y=framework, color="brand",color_discrete_map=brand_color_mapping)
+    if time_frame =="years":
+        # Extract unique years from the "time" column
+        unique_years = df_filtered['time'].dt.year.unique()
 
-         if time_frame == "months":
-                  unique_months = df_filtered['time'].dt.to_period('M').unique()
-                  
-                  # Customize the x-axis tick labels to show one label per month
-                  tickvals = [f"{m.start_time}" for m in unique_months]
-                  ticktext = [m.strftime("%B %Y") for m in unique_months]
-                  
-                  # Update x-axis ticks
-                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
-                  
-                  return fig 
-         
-         if time_frame == "quarters":
-                  unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
-                  
-                  # Customize the x-axis tick labels to show one label per quarter
-                  tickvals = [f"{q.start_time}" for q in unique_quarters]
-                  ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
-                  
-                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
-                  return fig
-                 
-         if time_frame =="years":
-                  # Extract unique years from the "time" column
-                  unique_years = df_filtered['time'].dt.year.unique()
-                  
-                  # Customize the x-axis tick labels to show only one label per year
-                  fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
-                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
-                  return fig
+        # Customize the x-axis tick labels to show only one label per year
+        fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
+        
+        return fig
 
-         
-         if time_frame =="weeks":
-                  # Extract unique weeks from the "time" column
-                  unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
-                  
-                  # Customize the x-axis tick labels to show the start date of each week
-                  tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
-                  ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
-                  
-                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
-                  return fig
-         if time_frame =="semiannual":
-       
-                  # Extract unique semiannual periods from the "time" column
-                  unique_periods = pd.date_range(start=ws, end=we, freq='6M').date
-                  
-                  # Customize the x-axis tick labels to show the start date of each semiannual period
-                  tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
-                  ticktext = [f"Semiannual {i} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
-                  
-                  fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
-                  fig.update_traces(hovertemplate='X: %{x}<br>Y: %{y:.2s}')
-                  return fig
+
+    if time_frame == "weeks":
+        # Extract unique weeks from the "time" column
+        unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
+
+        # Customize the x-axis tick labels to show the start date of each week
+        tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+        ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+
+        fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+
+        return fig
+
+    else:
+        # Extract unique semiannual periods from the "time" column
+        unique_periods = pd.date_range(start=ws, end=we, freq='6M').date
+
+        # Customize the x-axis tick labels to show the start date of each semiannual period
+        tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
+        ticktext = [f"Semiannual {i // 2 + 1} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
+
+        fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+
+        return fig
+
+
+#Used to comparing the Equity from different sheets
+def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks):
+    st.subheader(f"Comparing Frameworks (Average Vs Absolute Vs Weighted)")
+
+    # creating the columns for the app
+    right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
+    
+    with right_column_1:
+    #getting the date
+        start_date = st.date_input("Select start date",value=datetime(2020, 1, 1),key="test_1")
+        end_date =  st.date_input("Select end date",key='test_2')
+        #convert our dates
+        ws = start_date.strftime('%Y-%m-%d')
+        we = end_date.strftime('%Y-%m-%d')
+    # getting the parameters
+    with right_column_2:
+        category = st.radio('Choose your category:', categories,key="test_3")
+        
+    with left_column_1:    
+        time_frame = st.radio('Choose your time frame:', time_frames,key="test_4")
+    
+    with left_column_2:
+        framework = st.selectbox('Choose your framework:', frameworks,key="test_5")
+        my_brand = st.multiselect('Choose your brand',df.brand.unique())
+    
+    #filtering all the dataframes
+    #Average
+    df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
+    df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
+    df_filtered = df_filtered.sort_values(by="time")
+    df_filtered = df_filtered[df_filtered["brand"].isin(my_brand)]
+
+    
+    #Total Unsmoothening
+    df_filtered_uns =  df_total_uns[(df_total_uns["Category"] == category) & (df_total_uns["time_period"] == time_frame)]
+    df_filtered_uns = df_filtered_uns[(df_filtered_uns['time'] >= ws) & (df_filtered_uns['time'] <= we)]
+    df_filtered_uns = df_filtered_uns.sort_values(by="time")
+    df_filtered_uns = df_filtered_uns[df_filtered_uns["brand"].isin(my_brand)]
+
+    #Weighted
+    df_filtered_weighted =  weighted_df[(weighted_df["Category"] == category) & (weighted_df["time_period"] == time_frame)]
+    df_filtered_weighted = df_filtered_weighted[(df_filtered_weighted['time'] >= ws) & (df_filtered_weighted['time'] <= we)]
+    df_filtered_weighted = df_filtered_weighted.sort_values(by="time")
+    df_filtered_weighted = df_filtered_weighted[df_filtered_weighted["brand"].isin(my_brand)]
+    
+    # color stuff
+    all_brands = [x for x in df["brand"].unique()]
+    colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
+
+    brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+    
+    fig = px.line()
+
+    # Add traces for the first dataset (Average Smoothing)
+    for brand in df_filtered["brand"].unique():
+        brand_data = df_filtered[df_filtered["brand"] == brand]
+        fig.add_trace(go.Scatter(
+            x=brand_data["time"],
+            y=brand_data[framework],
+            mode="lines",
+            name=f"{brand} (Average)",
+            line=dict(color=brand_color_mapping[brand]),
+        ))
+
+    # Add traces for the second dataset (Total Unsmoothing)
+    for brand in df_filtered_uns["brand"].unique():
+        brand_data = df_filtered_uns[df_filtered_uns["brand"] == brand]
+        fig.add_trace(go.Scatter(
+            x=brand_data["time"],
+            y=brand_data[framework],
+            mode="lines",
+            name=f"{brand} (Absolute)",
+            line=dict(color=brand_color_mapping[brand], dash= "dot"),
+
+        ))
+
+    # Add traces for the third dataset (Weighted)
+    for brand in df_filtered_weighted["brand"].unique():
+        brand_data = df_filtered_weighted[df_filtered_weighted["brand"] == brand]
+        fig.add_trace(go.Scatter(
+            x=brand_data["time"],
+            y=brand_data[framework],
+            mode="markers",
+            name=f"{brand} (Weighted)",
+            line=dict(color=brand_color_mapping[brand]),
+
+        ))
+
+    
+    if time_frame == "months":
+        unique_months = df_filtered['time'].dt.to_period('M').unique()
+
+        # Customize the x-axis tick labels to show one label per month
+        tickvals = [f"{m.start_time}" for m in unique_months]
+        ticktext = [m.strftime("%B %Y") for m in unique_months]
+
+        # Update x-axis ticks
+        fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+        
+        return fig
+
+    if time_frame == "quarters":
+
+        unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
+
+        # Customize the x-axis tick labels to show one label per quarter
+        tickvals = [f"{q.start_time}" for q in unique_quarters]
+        ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
+
+        fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+        
+        return fig
+
+
+    if time_frame =="years":
+        # Extract unique years from the "time" column
+        unique_years = df_filtered['time'].dt.year.unique()
+
+        # Customize the x-axis tick labels to show only one label per year
+        fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
+        
+        return fig
+
+
+    if time_frame == "weeks":
+        # Extract unique weeks from the "time" column
+        unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
+
+        # Customize the x-axis tick labels to show the start date of each week
+        tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+        ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+
+        fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+
+        return fig
+
+    else:
+        # Extract unique semiannual periods from the "time" column
+        unique_periods = pd.date_range(start=ws, end=we, freq='6M').date
+
+        # Customize the x-axis tick labels to show the start date of each semiannual period
+        tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
+        ticktext = [f"Semiannual {i // 2 + 1} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
+
+        fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+
+        return fig
+
+
 
 
 
@@ -1070,7 +1234,7 @@ def main():
                   #None Global
 
                   # user input for equity and mmm file. 
-                  markets_available = ["UK"]
+                  markets_available = ["uk"]
                   market = st.selectbox('', markets_available)
                   
                   if market == "germany":
@@ -1081,10 +1245,10 @@ def main():
                            sheet_spend = "DE_Raw Spend"
          
                   
-                  if market == "UK":
+                  if market == "uk":
                            slang ="MMM_UK_"
-                           res_weighted = None
-                           market_weighted = "uk_equity_age_weighted"
+                           #res_weighted = None
+                           #market_weighted = "uk_equity_age_weighted"
                            mmm = None
                            sheet_week = "WeekMap_UK"
                            sheet_spend = "UK_Raw Spend"
@@ -1103,36 +1267,37 @@ def main():
                            mmm =None
          
          
-                      
                   # getting our equity    
-                  if res_weighted == "Yes":
-                     filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
-                     filepath_equity_weighted,year_equity_w,month_equity_w,day_equity_w,hour_equity_w,minute_equity_w,second_equity_w = equity_info(data,market_weighted)
-                  else:
-                     filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
+                  #if res_weighted == "Yes":
+                  #   filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
+                  #   filepath_equity_weighted,year_equity_w,month_equity_w,day_equity_w,hour_equity_w,minute_equity_w,second_equity_w = equity_info(data,market_weighted)
+                  #else:
+                  filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
                   
                   if mmm == None:
                      pass 
                   else:
                      filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm = mmm_info(data,slang)
                   
-                  if mmm == None:
+                  #if mmm == None:
                        st.write(f"""**Equity file version** {market} : {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity}""")
                      
-                  else:
-                     if res_weighted == "Yes":
-                         st.write(f"""**Equity file version** {market} : {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity} **Age weighted equity file version** {market_weighted}: {day_equity_w}/{month_equity_w}/{year_equity_w} - {hour_equity_w}: {minute_equity_w}: {second_equity_w} 
-                         **MMM data version** {market} : {day_mmm}/{month_mmm}/{year_mmm} - {hour_mmm}: {minute_mmm}: {second_mmm}""")
-                     if res_weighted == None or mmm == None:
-                         st.write(f"""**Equity file version** {market}: {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity} **MMM data version** {market} : {day_mmm}/{month_mmm}/{year_mmm}- {hour_mmm} - {minute_mmm}: {second_mmm}""")
+                  #else:
+                     #if res_weighted == "Yes":
+                     #    st.write(f"""**Equity file version** {market} : {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity} **Age weighted equity file version** {market_weighted}: {day_equity_w}/{month_equity_w}/{year_equity_w} - {hour_equity_w}: {minute_equity_w}: {second_equity_w} 
+                     #    **MMM data version** {market} : {day_mmm}/{month_mmm}/{year_mmm} - {hour_mmm}: {minute_mmm}: {second_mmm}""")
+                     #if res_weighted == None or mmm == None:
+                         #st.write(f"""**Equity file version** {market}: {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity} **MMM data version** {market} : {day_mmm}/{month_mmm}/{year_mmm}- {hour_mmm} - {minute_mmm}: {second_mmm}""")
          
          
                   # reading the equity file
-                  if res_weighted == "Yes":
-                     df = reading_df(filepath_equity)
-                     df_weighted = reading_df(filepath_equity_weighted)
-                  else:
-                     df = reading_df(filepath_equity)
+                  #if res_weighted == "Yes":
+                  #   df = reading_df(filepath_equity)
+                  #   df_weighted = reading_df(filepath_equity_weighted)
+                  #else:
+                  df = reading_df(filepath_equity,sheet_name="average_smoothened")
+                  df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
+
                   
                   # reading and processing the mmm file
                   if mmm == None:
@@ -1144,42 +1309,39 @@ def main():
                   if mmm == None:
                      pass
                   else:
-                     if res_weighted == "Yes":
-                         merged_df = merged_file(df,df_vol)
-                         merged_df_weighted = merged_file(df_weighted,df_vol)
-                     else:
-                         merged_df = merged_file(df,df_vol)
+                     #if res_weighted == "Yes":
+                     #    merged_df = merged_file(df,df_vol)
+                     #    merged_df_weighted = merged_file(df_weighted,df_vol)
+                     #else:
+                           merged_df = merged_file(df,df_vol)
                   
                    # creating the Media merged_df with options ! 
                   if mmm == None:
                            pass
                   else:
-                           if res_weighted == "Yes":
-                                    df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
-                                    merged_df_media_weighted = media_spend_processed(df_weighted,df_uk_spend,df_uk_weeks)
-                                    category_options_merged_media_w,time_period_options_merged_media_w,framework_options_media_w, framework_options_value_media_w= merged_options_media(merged_df_media_weighted)
+                           #if res_weighted == "Yes":
+                           #         df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
+                           #         merged_df_media_weighted = media_spend_processed(df_weighted,df_uk_spend,df_uk_weeks)
+                           #         category_options_merged_media_w,time_period_options_merged_media_w,framework_options_media_w, framework_options_value_media_w= merged_options_media(merged_df_media_weighted)
                            
-                                    df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
-                                    merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
-                                    category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
+                            #        df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
+                            #        merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
+                            #        category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
                   
-                           else:
-                                    df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
-                                    merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
-                                    category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
+                           #else:
+                           df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
+                           merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
+                           category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
          
                   
-         
-         
-                      
                   #Equity options
-                  if res_weighted == "Yes":
-                     category_options,time_period_options,framework_options = equity_options(df)
-                     category_options_w,time_period_options_w,framework_options_w = equity_options(df_weighted)
+                  #if res_weighted == "Yes":
+                  #   category_options,time_period_options,framework_options = equity_options(df)
+                  #   category_options_w,time_period_options_w,framework_options_w = equity_options(df_weighted)
                     
                   
-                  else:
-                     category_options,time_period_options,framework_options = equity_options(df)
+                  #else:
+                  category_options,time_period_options,framework_options = equity_options(df)
                   
                   
                   # Volume share options
@@ -1208,21 +1370,53 @@ def main():
                   else:
                      Brand_options = merged_df["brand"].unique()
                      framework_options_corr = ["Volume_share","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity","Price_change"]
+
+
                   
+                  #chosing the sheet name 
+                  sheet_name = st.selectbox("Select you sheet",["Average Smoothening","Total Unsmoothening", "Weighted"])
+                  
+                  #creating the weighted file
+                  weighted_avg = st.number_input("average weight", min_value=0.0, max_value=1.0, value=0.75, step=0.5, key="weighted_avg")
+                  weighted_total = 1 - weighted_avg
+                  df_weighted = get_weighted(df,df_total_uns,weighted_avg,weighted_total)
+                  
+
                   
                   #Equity plot
                   st.subheader("Equity Metrics Plot")
-                  if res_weighted == "Yes":
-                     res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"])
-                     if res_equity_weighted == "Weighted":
-                         fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options)
-                         st.plotly_chart(fig,use_container_width=True)
-                     else:
+                  #if res_weighted == "Yes":
+                  #   res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"])
+                  #   if res_equity_weighted == "Weighted":
+                  #       fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options)
+                  #       st.plotly_chart(fig,use_container_width=True)
+                  #   else:
                          fig = Equity_plot(df,category_options,time_period_options,framework_options)
-                         st.plotly_chart(fig,use_container_width=True)
-                  else: 
-                     fig = Equity_plot(df,category_options,time_period_options,framework_options)
-                     st.plotly_chart(fig,use_container_width=True)
+                  #       st.plotly_chart(fig,use_container_width=True)
+                  #else: 
+                  
+                  
+                  if sheet_name == "Average Smoothening":
+                           fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                           st.plotly_chart(fig,use_container_width=True)
+                  
+                  if sheet_name == "Total Unsmoothening":
+                           fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                           st.plotly_chart(fig,use_container_width=True)
+                  
+                  if sheet_name == "Weighted":
+                           fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                           st.plotly_chart(fig,use_container_width=True)
+                  
+                  # Comparing all the sheets
+                  fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options)
+                  st.plotly_chart(fig,use_container_width=True)
+
+                  
+
+
+
+
                   
                   # Comparing the weighted vs the unweighted
                   if mmm == None:
