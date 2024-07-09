@@ -90,8 +90,8 @@ media_data = r"data/Media_invest_all.xlsx"
 
 # equity file
 @st.cache_data() 
-def reading_df(filepath):
-    df = pd.read_excel(filepath)
+def reading_df(filepath,sheet_name):
+    df = pd.read_excel(filepath,sheet_name=sheet_name)
     return df
 
 #mmm file 
