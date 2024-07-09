@@ -1391,7 +1391,7 @@ def main():
                   #       fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options)
                   #       st.plotly_chart(fig,use_container_width=True)
                   #   else:
-                         fig = Equity_plot(df,category_options,time_period_options,framework_options)
+                  #         fig = Equity_plot(df,category_options,time_period_options,framework_options)
                   #       st.plotly_chart(fig,use_container_width=True)
                   #else: 
                   
