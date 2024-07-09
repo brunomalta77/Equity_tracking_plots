@@ -116,6 +116,96 @@ def media_plan(filepath,sheet_spend,sheet_week):
 
 
 
+@st.cache_data()
+def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
+    # drop any nan values
+    df.dropna(inplace=True)
+    df_total_uns.dropna(inplace=True)
+    
+    affinity_labels = ['AF_Entry_point', 'AF_Brand', 'AF_Adverts_Promo','AF_Prep_Meal','AF_Experience','AF_Value_for_Money']
+    
+    # Doing the percentual in total_unsmoothened
+    for aff in affinity_labels:
+        grouped = df_total_uns.groupby(["time","time_period"])[aff].transform("sum")
+        df_total_uns["total"] = grouped
+        df_total_uns[aff] = df_total_uns[aff] / df_total_uns['total'] * 100
+
+    # Let's join by time and brand
+    join_data = pd.merge(df,df_total_uns,on=["time","brand","time_period"],suffixes=("_average","_total"))
+
+    #splitting them 
+    
+    final_average = join_data[['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
+       'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
+       'AS_Usage_SoV_average', 'AS_Search_Index_average',
+       'AS_Brand_Centrality_average','AF_Entry_point_average', 'AF_Brand_average', 'AF_Adverts_Promo_average',
+                'AF_Prep_Meal_average','AF_Experience_average','AF_Value_for_Money_average',
+       'Framework_Awareness_average', 'Framework_Saliency_average',
+       'Framework_Affinity_average', 'Total_Equity_average',
+       'Category_average']]
+
+
+    final_total = join_data[['time', 'time_period', 'brand', 'AA_eSoV_total', 'AA_Reach_total',
+       'AA_Brand_Breadth_total', 'AS_Average_Engagement_total',
+       'AS_Usage_SoV_total', 'AS_Search_Index_total',
+       'AS_Brand_Centrality_total','AF_Entry_point_total', 'AF_Brand_total', 'AF_Adverts_Promo_total',
+                'AF_Prep_Meal_total','AF_Experience_total','AF_Value_for_Money_total',
+       'Framework_Awareness_total', 'Framework_Saliency_total',
+       'Framework_Affinity_total', 'Total_Equity_total', 'Category_total']]
+
+    
+    list_fix = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
+       'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
+       'AS_Usage_SoV_average', 'AS_Search_Index_average',
+       'AS_Brand_Centrality_average','Framework_Awareness_average', 'Framework_Saliency_average','Total_Equity_average',
+        'Category_average']
+            
+
+    #Getting first the fixed stuff
+    weighted_average_equity = final_average[list_fix]
+
+    for aff_pilar in affinity_labels:
+        weighted_average_equity["weighted_" + aff_pilar] = 0
+        for index,row in final_average.iterrows():
+            weighted_average_equity["weighted_" + aff_pilar][index] = round(((weighted_avg * final_average[aff_pilar + "_average"][index]) + (weighted_total * final_total[aff_pilar + "_total"][index])),2)
+        
+    #getting the new framework affinity
+    weighted_average_equity["weighted_Framework_Affinity"] = round((weighted_average_equity["weighted_AF_Entry_point"] + weighted_average_equity["weighted_AF_Brand"] + weighted_average_equity["weighted_AF_Adverts_Promo"] +weighted_average_equity["weighted_AF_Prep_Meal"] + weighted_average_equity["weighted_AF_Experience"] + weighted_average_equity["weighted_AF_Value_for_Money"]  )/6,2)
+
+    # getting the new total equity
+
+    weighted_average_equity["Total_Equity"] = round((weighted_average_equity["weighted_Framework_Affinity"] + weighted_average_equity["Framework_Awareness_average"] + weighted_average_equity["Framework_Saliency_average"])/3,2) 
+
+    #ordering
+    order = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
+       'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
+       'AS_Usage_SoV_average', 'AS_Search_Index_average',
+       'AS_Brand_Centrality_average','weighted_AF_Entry_point',
+       'weighted_AF_Brand',
+       'weighted_AF_Adverts_Promo',
+       'weighted_AF_Prep_Meal','weighted_AF_Experience','weighted_AF_Value_for_Money','Framework_Awareness_average',
+       'Framework_Saliency_average','weighted_Framework_Affinity','Total_Equity',"Category_average"]
+
+    weighted_average_equity = weighted_average_equity[order]
+
+    weighted_average_equity.rename(columns={'AA_eSoV_average':'AA_eSoV', 'AA_Reach_average':'AA_Reach',
+       'AA_Brand_Breadth_average':'AA_Brand_Breadth', 'AS_Average_Engagement_average':'AS_Average_Engagement',
+       'AS_Usage_SoV_average':'AS_Usage_SoV', 'AS_Search_Index_average':'AS_Search_Index',
+       'AS_Brand_Centrality_average':'AS_Brand_Centrality','weighted_AF_Entry_point':'AF_Entry_point',
+       'weighted_AF_Brand':'AF_Brand',
+       'weighted_AF_Adverts_Promo':'AF_Adverts_Promo',
+       'weighted_AF_Prep_Meal':'AF_Prep_Meal','weighted_AF_Experience':'AF_Experience',
+       'weighted_AF_Value_for_Money':'AF_Value_for_Money','Framework_Awareness_average':'Framework_Awareness',
+       'Framework_Saliency_average':'Framework_Saliency','weighted_Framework_Affinity':'Framework_Affinity','Category_average':'Category'},inplace=True)
+
+    return weighted_average_equity
+
+
+
+
+
+
+
 #merged file
 @st.cache_data() 
 def merged_file(df,df_vol):
