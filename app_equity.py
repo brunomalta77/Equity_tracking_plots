@@ -1369,8 +1369,8 @@ def main():
                   else:
                      filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm = mmm_info(data,slang)
                   
-                  if mmm == None:
-                           st.write(f"""**Equity file version** {market} : {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity}""")
+                  #if mmm == None:
+                  #         st.write(f"""**Equity file version** {market} : {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity}""")
                      
                   #else:
                      #if res_weighted == "Yes":
@@ -1475,7 +1475,6 @@ def main():
 
                   
                   #Equity plot
-                  st.subheader("Equity Metrics Plot")
                   #if res_weighted == "Yes":
                   #   res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"])
                   #   if res_equity_weighted == "Weighted":
