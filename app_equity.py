@@ -154,7 +154,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
                   'Framework_Awareness_total', 'Framework_Saliency_total',
                   'Framework_Affinity_total', 'Total_Equity_total', 'Category_total']]
 
-     list_fix = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
+    list_fix = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
                   'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
                   'AS_Usage_SoV_average', 'AS_Search_Index_average',
                   'AS_Brand_Centrality_average','Framework_Awareness_average', 'Framework_Saliency_average','Total_Equity_average',
