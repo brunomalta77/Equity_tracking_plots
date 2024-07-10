@@ -1463,14 +1463,15 @@ def main():
 
 
                   
-                  #chosing the sheet name 
-                  sheet_name = st.selectbox("Select you sheet",["Average Smoothening","Total Unsmoothening", "Weighted"])
+                 
                   
                   #creating the weighted file
                   weighted_avg = st.number_input("average weight", min_value=0.0, max_value=1.0, value=0.75, step=0.5, key="weighted_avg")
                   weighted_total = 1 - weighted_avg
                   df_weighted = get_weighted(df,df_total_uns,weighted_avg,weighted_total)
-                  
+                  # Comparing all the sheets
+                  fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options)
+                  st.plotly_chart(fig,use_container_width=True)
 
                   
                   #Equity plot
@@ -1485,6 +1486,15 @@ def main():
                   #       st.plotly_chart(fig,use_container_width=True)
                   #else: 
                   
+
+
+                   #chosing the sheet name 
+                  sheet_name = st.selectbox("Select you sheet",["Average","Absolute", "Weighted"])
+                  
+                  if sheet_name == "Average":
+                           sheet_name = "Average Smoothening"
+                  if sheet_name == "Absolute":
+                           sheet_name = "Total Unsmoothening"
                   
                   if sheet_name == "Average Smoothening":
                            fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
@@ -1497,16 +1507,6 @@ def main():
                   if sheet_name == "Weighted":
                            fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
                            st.plotly_chart(fig,use_container_width=True)
-                  
-                  # Comparing all the sheets
-                  fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options)
-                  st.plotly_chart(fig,use_container_width=True)
-
-                  
-
-
-
-
                   
                   # Comparing the weighted vs the unweighted
                   if mmm == None:
