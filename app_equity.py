@@ -122,7 +122,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
     df.dropna(inplace=True)
     df_total_uns.dropna(inplace=True)
     
-    affinity_labels = ['AF_Entry_point', 'AF_Brand', 'AF_Adverts_Promo','AF_Prep_Meal','AF_Experience','AF_Value_for_Money']
+    affinity_labels = ['AF_Entry_point','AF_Brand','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Pre_Milk','AF_Baby_exp']
     
     # Doing the percentual in total_unsmoothened
     for aff in affinity_labels:
