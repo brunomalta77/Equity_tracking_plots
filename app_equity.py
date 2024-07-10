@@ -134,31 +134,32 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
     join_data = pd.merge(df,df_total_uns,on=["time","brand","time_period"],suffixes=("_average","_total"))
 
     #splitting them 
+
+         final_average = join_data[['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
+                'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
+                'AS_Usage_SoV_average', 'AS_Search_Index_average',
+                'AS_Brand_Centrality_average','AF_Entry_point_average', 'AF_Brand_average', 'AF_Baby_Milk_average','AF_Adverts_Promo_average','AF_Value_for_Money_average','AF_Buying_Exp_average',
+                'AF_Pre_Milk_average','AF_Baby_exp_average',
+                'Framework_Awareness_average', 'Framework_Saliency_average',
+                'Framework_Affinity_average', 'Total_Equity_average',
+                'Category_average']]
+
+
+
+         final_total = join_data[['time', 'time_period', 'brand', 'AA_eSoV_total', 'AA_Reach_total',
+                  'AA_Brand_Breadth_total', 'AS_Average_Engagement_total',
+                  'AS_Usage_SoV_total', 'AS_Search_Index_total',
+                  'AS_Brand_Centrality_total','AF_Entry_point_total', 'AF_Brand_total', 'AF_Baby_Milk_total','AF_Adverts_Promo_total','AF_Value_for_Money_total','AF_Buying_Exp_total',
+                  'AF_Pre_Milk_total','AF_Baby_exp_total',
+                  'Framework_Awareness_total', 'Framework_Saliency_total',
+                  'Framework_Affinity_total', 'Total_Equity_total', 'Category_total']]
+
     
-    final_average = join_data[['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
-       'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
-       'AS_Usage_SoV_average', 'AS_Search_Index_average',
-       'AS_Brand_Centrality_average','AF_Entry_point_average', 'AF_Brand_average', 'AF_Adverts_Promo_average',
-                'AF_Prep_Meal_average','AF_Experience_average','AF_Value_for_Money_average',
-       'Framework_Awareness_average', 'Framework_Saliency_average',
-       'Framework_Affinity_average', 'Total_Equity_average',
-       'Category_average']]
-
-
-    final_total = join_data[['time', 'time_period', 'brand', 'AA_eSoV_total', 'AA_Reach_total',
-       'AA_Brand_Breadth_total', 'AS_Average_Engagement_total',
-       'AS_Usage_SoV_total', 'AS_Search_Index_total',
-       'AS_Brand_Centrality_total','AF_Entry_point_total', 'AF_Brand_total', 'AF_Adverts_Promo_total',
-                'AF_Prep_Meal_total','AF_Experience_total','AF_Value_for_Money_total',
-       'Framework_Awareness_total', 'Framework_Saliency_total',
-       'Framework_Affinity_total', 'Total_Equity_total', 'Category_total']]
-
-    
-    list_fix = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
-       'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
-       'AS_Usage_SoV_average', 'AS_Search_Index_average',
-       'AS_Brand_Centrality_average','Framework_Awareness_average', 'Framework_Saliency_average','Total_Equity_average',
-        'Category_average']
+         list_fix = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
+                  'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
+                  'AS_Usage_SoV_average', 'AS_Search_Index_average',
+                  'AS_Brand_Centrality_average','Framework_Awareness_average', 'Framework_Saliency_average','Total_Equity_average',
+                  'Category_average']
             
 
     #Getting first the fixed stuff
