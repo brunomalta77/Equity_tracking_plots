@@ -180,10 +180,9 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
     order = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
        'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
        'AS_Usage_SoV_average', 'AS_Search_Index_average',
-       'AS_Brand_Centrality_average','weighted_AF_Entry_point_total', 'weighted_AF_Brand_total', 'weighted_AF_Baby_Milk_total','weighted_AF_Adverts_Promo_total','weighted_AF_Value_for_Money_total','weighted_AF_Buying_Exp_total',
-                  'weighted_AF_Pre_Milk_total','weighted_AF_Baby_exp_total','Framework_Awareness_average',
+       'AS_Brand_Centrality_average','weighted_AF_Entry_point','weighted_AF_Baby_Milk','weighted_AF_Adverts_Promo','weighted_AF_Value_for_Money','weighted_AF_Buying_Exp','weighted_AF_Pre_Milk','weighted_AF_Baby_exp',
+        'Framework_Awareness_average',
        'Framework_Saliency_average','weighted_Framework_Affinity','Total_Equity',"Category_average"]
-
     weighted_average_equity = weighted_average_equity[order]
 
     weighted_average_equity.rename(columns={'AA_eSoV_average':'AA_eSoV', 'AA_Reach_average':'AA_Reach',
