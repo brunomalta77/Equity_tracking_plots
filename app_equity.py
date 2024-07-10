@@ -170,7 +170,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
             weighted_average_equity["weighted_" + aff_pilar][index] = round(((weighted_avg * final_average[aff_pilar + "_average"][index]) + (weighted_total * final_total[aff_pilar + "_total"][index])),2)
         
     #getting the new framework affinity
-    weighted_average_equity["weighted_Framework_Affinity"] = round((weighted_average_equity["weighted_AF_Entry_point"] + weighted_average_equity["weighted_AF_Brand"] + weighted_average_equity["weighted_AF_Adverts_Promo"] +weighted_average_equity["weighted_AF_Prep_Meal"] + weighted_average_equity["weighted_AF_Experience"] + weighted_average_equity["weighted_AF_Value_for_Money"]  )/6,2)
+    weighted_average_equity["weighted_Framework_Affinity"] = round((weighted_average_equity["weighted_AF_Entry_point"] + weighted_average_equity["weighted_AF_Brand"] + weighted_average_equity["weighted_AF_Baby_Milk"] +weighted_average_equity["weighted_AF_Adverts_Promo"] + weighted_average_equity["weighted_AF_Value_for_Money"] + weighted_average_equity["weighted_AF_Buying_Exp"] +  weighted_average_equity["weighted_AF_Pre_Milk"] + weighted_average_equity["weighted_AF_Baby_exp"]  )/8,2)
 
     # getting the new total equity
 
