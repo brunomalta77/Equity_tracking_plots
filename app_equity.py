@@ -198,10 +198,6 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
 
 
 
-
-
-
-
 #merged file
 @st.cache_data() 
 def merged_file(df,df_vol):
