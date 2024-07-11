@@ -145,7 +145,6 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
                 'Category_average']]
 
 
-
     final_total = join_data[['time', 'time_period', 'brand', 'AA_eSoV_total', 'AA_Reach_total',
                   'AA_Brand_Breadth_total', 'AS_Average_Engagement_total',
                   'AS_Usage_SoV_total', 'AS_Search_Index_total',
@@ -287,7 +286,7 @@ def media_spend_processed(df,df_spend,df_weeks):
 def equity_options(df):
     category_options = df["Category"].unique()
     time_period_options = df["time_period"].unique()
-    framework_options = ['AF_Entry_point','AF_Brand_Love','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Prep_Milk','AF_Baby_exp']
+    framework_options = ['AF_Entry_point','AF_Brand_Love','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Prep_Milk','AF_Baby_exp',"Framework_Awareness","Framework_Saliency","Framework_Affinity","Total_Equity"]
     return (category_options,time_period_options,framework_options)
 
 
