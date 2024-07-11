@@ -412,7 +412,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
 
 #Used to comparing the Equity from different sheets
 def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks):
-    st.subheader(f"Compare Average vs Absolute vs Weighted")
+    st.subheader(f"Compare Average vs Absolute vs Weighted Affinity")
 
     # creating the columns for the app
     right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
