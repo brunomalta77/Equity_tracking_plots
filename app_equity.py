@@ -189,9 +189,9 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
        'AA_Brand_Breadth_average':'AA_Brand_Breadth', 'AS_Average_Engagement_average':'AS_Average_Engagement',
        'AS_Usage_SoV_average':'AS_Usage_SoV', 'AS_Search_Index_average':'AS_Search_Index',
        'AS_Brand_Centrality_average':'AS_Brand_Centrality','weighted_AF_Entry_point':'AF_Entry_point',
-       'weighted_AF_Brand':'AF_Brand',
+       'weighted_AF_Brand':'AF_Brand','weighted_AF_Baby_Milk':'AF_Baby_Milk','weighted_AF_Buying_Exp':'AF_Buying_Exp','weighted_AF_Pre_Milk':'AF_Pre_Milk'
+       ,'weighted_AF_Baby_exp':'AF_Baby_exp',
        'weighted_AF_Adverts_Promo':'AF_Adverts_Promo',
-       'weighted_AF_Prep_Meal':'AF_Prep_Meal','weighted_AF_Experience':'AF_Experience',
        'weighted_AF_Value_for_Money':'AF_Value_for_Money','Framework_Awareness_average':'Framework_Awareness',
        'Framework_Saliency_average':'Framework_Saliency','weighted_Framework_Affinity':'Framework_Affinity','Category_average':'Category'},inplace=True)
 
