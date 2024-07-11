@@ -122,7 +122,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
     df.dropna(inplace=True)
     df_total_uns.dropna(inplace=True)
     
-    affinity_labels = ['AF_Entry_point','AF_Brand','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Pre_Milk','AF_Baby_exp']
+    affinity_labels = ['AF_Entry_point','AF_Brand_Love','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Prep_Milk','AF_Baby_exp']
     
     # Doing the percentual in total_unsmoothened
     for aff in affinity_labels:
@@ -138,8 +138,8 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
     final_average = join_data[['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
                 'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
                 'AS_Usage_SoV_average', 'AS_Search_Index_average',
-                'AS_Brand_Centrality_average','AF_Entry_point_average', 'AF_Brand_average', 'AF_Baby_Milk_average','AF_Adverts_Promo_average','AF_Value_for_Money_average','AF_Buying_Exp_average',
-                'AF_Pre_Milk_average','AF_Baby_exp_average',
+                'AS_Brand_Centrality_average','AF_Entry_point_average', 'AF_Brand_Love_average', 'AF_Baby_Milk_average','AF_Adverts_Promo_average','AF_Value_for_Money_average','AF_Buying_Exp_average',
+                'AF_Prep_Milk_average','AF_Baby_exp_average',
                 'Framework_Awareness_average', 'Framework_Saliency_average',
                 'Framework_Affinity_average', 'Total_Equity_average',
                 'Category_average']]
@@ -149,8 +149,8 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
     final_total = join_data[['time', 'time_period', 'brand', 'AA_eSoV_total', 'AA_Reach_total',
                   'AA_Brand_Breadth_total', 'AS_Average_Engagement_total',
                   'AS_Usage_SoV_total', 'AS_Search_Index_total',
-                  'AS_Brand_Centrality_total','AF_Entry_point_total', 'AF_Brand_total', 'AF_Baby_Milk_total','AF_Adverts_Promo_total','AF_Value_for_Money_total','AF_Buying_Exp_total',
-                  'AF_Pre_Milk_total','AF_Baby_exp_total',
+                  'AS_Brand_Centrality_total','AF_Entry_point_total', 'AF_Brand_Love_total', 'AF_Baby_Milk_total','AF_Adverts_Promo_total','AF_Value_for_Money_total','AF_Buying_Exp_total',
+                  'AF_Prep_Milk_total','AF_Baby_exp_total',
                   'Framework_Awareness_total', 'Framework_Saliency_total',
                   'Framework_Affinity_total', 'Total_Equity_total', 'Category_total']]
 
@@ -170,7 +170,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
             weighted_average_equity["weighted_" + aff_pilar][index] = round(((weighted_avg * final_average[aff_pilar + "_average"][index]) + (weighted_total * final_total[aff_pilar + "_total"][index])),2)
         
     #getting the new framework affinity
-    weighted_average_equity["weighted_Framework_Affinity"] = round((weighted_average_equity["weighted_AF_Entry_point"] + weighted_average_equity["weighted_AF_Brand"] + weighted_average_equity["weighted_AF_Baby_Milk"] +weighted_average_equity["weighted_AF_Adverts_Promo"] + weighted_average_equity["weighted_AF_Value_for_Money"] + weighted_average_equity["weighted_AF_Buying_Exp"] +  weighted_average_equity["weighted_AF_Pre_Milk"] + weighted_average_equity["weighted_AF_Baby_exp"]  )/8,2)
+    weighted_average_equity["weighted_Framework_Affinity"] = round((weighted_average_equity["weighted_AF_Entry_point"] + weighted_average_equity["weighted_AF_Brand_Love"] + weighted_average_equity["weighted_AF_Baby_Milk"] +weighted_average_equity["weighted_AF_Adverts_Promo"] + weighted_average_equity["weighted_AF_Value_for_Money"] + weighted_average_equity["weighted_AF_Buying_Exp"] +  weighted_average_equity["weighted_AF_Prep_Milk"] + weighted_average_equity["weighted_AF_Baby_exp"]  )/8,2)
 
     # getting the new total equity
 
@@ -180,7 +180,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
     order = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
        'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
        'AS_Usage_SoV_average', 'AS_Search_Index_average',
-       'AS_Brand_Centrality_average','weighted_AF_Entry_point','weighted_AF_Brand','weighted_AF_Baby_Milk','weighted_AF_Adverts_Promo','weighted_AF_Value_for_Money','weighted_AF_Buying_Exp','weighted_AF_Pre_Milk','weighted_AF_Baby_exp',
+       'AS_Brand_Centrality_average','weighted_AF_Entry_point','weighted_AF_Brand_Love','weighted_AF_Baby_Milk','weighted_AF_Adverts_Promo','weighted_AF_Value_for_Money','weighted_AF_Buying_Exp','weighted_AF_Prep_Milk','weighted_AF_Baby_exp',
         'Framework_Awareness_average',
        'Framework_Saliency_average','weighted_Framework_Affinity','Total_Equity',"Category_average"]
     weighted_average_equity = weighted_average_equity[order]
@@ -188,8 +188,8 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
     weighted_average_equity.rename(columns={'AA_eSoV_average':'AA_eSoV', 'AA_Reach_average':'AA_Reach',
        'AA_Brand_Breadth_average':'AA_Brand_Breadth', 'AS_Average_Engagement_average':'AS_Average_Engagement',
        'AS_Usage_SoV_average':'AS_Usage_SoV', 'AS_Search_Index_average':'AS_Search_Index',
-       'AS_Brand_Centrality_average':'AS_Brand_Centrality','weighted_AF_Entry_point':'AF_Entry_point','weighted_AF_Brand':'AF_Brand',
-       'weighted_AF_Brand':'AF_Brand','weighted_AF_Baby_Milk':'AF_Baby_Milk','weighted_AF_Buying_Exp':'AF_Buying_Exp','weighted_AF_Pre_Milk':'AF_Pre_Milk'
+       'AS_Brand_Centrality_average':'AS_Brand_Centrality','weighted_AF_Entry_point':'AF_Entry_point','weighted_AF_Brand_Love':'AF_Brand_Love',
+       'weighted_AF_Brand_Love':'AF_Brand_Love','weighted_AF_Baby_Milk':'AF_Baby_Milk','weighted_AF_Buying_Exp':'AF_Buying_Exp','weighted_AF_Prep_Milk':'AF_Prep_Milk'
        ,'weighted_AF_Baby_exp':'AF_Baby_exp',
        'weighted_AF_Adverts_Promo':'AF_Adverts_Promo',
        'weighted_AF_Value_for_Money':'AF_Value_for_Money','Framework_Awareness_average':'Framework_Awareness',
@@ -287,7 +287,7 @@ def media_spend_processed(df,df_spend,df_weeks):
 def equity_options(df):
     category_options = df["Category"].unique()
     time_period_options = df["time_period"].unique()
-    framework_options = ['AF_Entry_point','AF_Brand','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Pre_Milk','AF_Baby_exp']
+    framework_options = ['AF_Entry_point','AF_Brand_Love','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Prep_Milk','AF_Baby_exp']
     return (category_options,time_period_options,framework_options)
 
 
@@ -295,7 +295,7 @@ def equity_options(df):
 def merged_options(df):
     category_options_merged = df["Category"].unique()
     time_period_options_merged = df["time_period"].unique()
-    framework_options_merged = ['AF_Entry_point', 'AF_Brand', 'AF_Adverts_Promo','AF_Prep_Meal','AF_Experience','AF_Value_for_Money', "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
+    framework_options_merged = ['AF_Entry_point', 'AF_Brand_Love', 'AF_Adverts_Promo','AF_Prep_Meal','AF_Experience','AF_Value_for_Money', "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
     framework_options_value = ["Volume_share","Price_change"]
     return(category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
 
@@ -303,7 +303,7 @@ def merged_options(df):
 def merged_options_media(df):
          category_options_merged_media = df["Category"].unique()
          time_period_options_merged_media = df["time_period_x"].unique()
-         framework_options_media = ['AF_Entry_point', 'AF_Brand', 'AF_Adverts_Promo','AF_Prep_Meal','AF_Experience','AF_Value_for_Money', "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
+         framework_options_media = ['AF_Entry_point', 'AF_Brand_Love', 'AF_Adverts_Promo','AF_Prep_Meal','AF_Experience','AF_Value_for_Money', "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
          framework_options_value_media = ["value"]
          return(category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
          
