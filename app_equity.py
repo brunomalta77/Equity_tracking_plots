@@ -287,7 +287,7 @@ def media_spend_processed(df,df_spend,df_weeks):
 def equity_options(df):
     category_options = df["Category"].unique()
     time_period_options = df["time_period"].unique()
-    framework_options = ['AF_Entry_point', 'AF_Brand', 'AF_Adverts_Promo','AF_Prep_Meal','AF_Experience','AF_Value_for_Money', "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
+    framework_options = ['AF_Entry_point','AF_Brand','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Pre_Milk','AF_Baby_exp']
     return (category_options,time_period_options,framework_options)
 
 
