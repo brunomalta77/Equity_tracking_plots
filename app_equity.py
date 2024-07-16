@@ -1642,20 +1642,42 @@ def main():
 
 
                   st.subheader(f"Equity Metrics Plot - Market Share Weighted Average")
-                  col1,col2,col3 = st.columns([4,4,8])
+                  col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
                   # creating the average_weighted 
                   weights_values_for_average = {"aptamil":0 , "cow&gate": 0, "sma": 0, "kendamil": 0, "hipp_organic": 0}
                   with col1:
-                     for x in list(weights_values_for_average.keys())[:3]:
-                         number = st.number_input(f"Weight for the {x}", min_value=0, max_value=100, value=10)
+                     for x in list(weights_values_for_average.keys())[0]:
+                         number = st.number_input(f"{x}", min_value=0, max_value=100, value=10)
                          number = number/100
                          weights_values_for_average[x]=number
                   
                   with col2:
-                     for x in list(weights_values_for_average.keys())[3:5]:
-                         number = st.number_input(f"Weight for the {x}", min_value=0, max_value=100, value=10)
+                     for x in list(weights_values_for_average.keys())[1]:
+                         number = st.number_input(f"{x}", min_value=0, max_value=100, value=10)
                          number = number/100
                          weights_values_for_average[x]=number
+
+                  with col3:
+                     for x in list(weights_values_for_average.keys())[2]:
+                         number = st.number_input(f"{x}", min_value=0, max_value=100, value=10)
+                         number = number/100
+                         weights_values_for_average[x]=number
+
+                  with col4:
+                     for x in list(weights_values_for_average.keys())[3]:
+                         number = st.number_input(f"{x}", min_value=0, max_value=100, value=10)
+                         number = number/100
+                         weights_values_for_average[x]=number
+
+                  
+                  with col5:
+                     for x in list(weights_values_for_average.keys())[4]:
+                         number = st.number_input(f"{x}", min_value=0, max_value=100, value=10)
+                         number = number/100
+                         weights_values_for_average[x]=number
+
+                  
+
                   
                   #creating the market_share_weighted
                   value_columns  = [ 'AA_eSoV', 'AA_Reach',
