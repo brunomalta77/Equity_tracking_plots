@@ -445,6 +445,112 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
         return fig
 
 
+#-----------------------------------------------------------------------------------------------//
+
+
+# Equity_plot for market share weighted average
+def Equity_plot_market_share_(df,categories,time_frames,frameworks,sheet_name):
+    # creating the columns for the app
+    right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
+    
+    with right_column_1:
+    #getting the date
+        start_date = st.date_input("Select start date",value=datetime(2020, 1, 1),key='start_date')
+        end_date =  st.date_input("Select end date",key='test1')
+        #convert our dates
+        ws = start_date.strftime('%Y-%m-%d')
+        we = end_date.strftime('%Y-%m-%d')
+    # getting the parameters
+    with right_column_2:
+        category = st.radio('Choose your category:', categories,key='test3')
+        
+    with left_column_1:    
+        time_frame = st.radio('Choose your time frame:', time_frames,key='test4')
+    
+    with left_column_2:
+        framework = st.selectbox('Choose your framework:', frameworks,key='test5')
+    
+    #filtering
+    df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
+    df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
+    
+    df_filtered = df_filtered.sort_values(by="time")
+    
+    
+    # color stuff
+    all_brands = [x for x in df["brand"].unique()]
+    colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
+
+    brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+    
+    fig = px.line(df_filtered, x="time", y=framework, color="brand", color_discrete_map=brand_color_mapping)
+
+    
+    if time_frame == "months":
+        unique_months = df_filtered['time'].dt.to_period('M').unique()
+
+        # Customize the x-axis tick labels to show one label per month
+        tickvals = [f"{m.start_time}" for m in unique_months]
+        ticktext = [m.strftime("%B %Y") for m in unique_months]
+
+        # Update x-axis ticks
+        fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+        
+        return fig
+
+    if time_frame == "quarters":
+
+        unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
+
+        # Customize the x-axis tick labels to show one label per quarter
+        tickvals = [f"{q.start_time}" for q in unique_quarters]
+        ticktext = [f"Q{q.quarter} {q.year}" for q in unique_quarters]
+
+        fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+        
+        return fig
+
+
+    if time_frame =="years":
+        # Extract unique years from the "time" column
+        unique_years = df_filtered['time'].dt.year.unique()
+
+        # Customize the x-axis tick labels to show only one label per year
+        fig.update_xaxes(tickvals=[f"{year}-01-01" for year in unique_years], ticktext=unique_years, tickangle=45)
+        
+        return fig
+
+
+    if time_frame == "weeks":
+        # Extract unique weeks from the "time" column
+        unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
+
+        # Customize the x-axis tick labels to show the start date of each week
+        tickvals = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+        ticktext = [week.strftime('%Y-%m-%d') for i, week in enumerate(unique_weeks) if i % 4 == 0]
+
+        fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+
+        return fig
+
+    else:
+        # Extract unique semiannual periods from the "time" column
+        unique_periods = pd.date_range(start=ws, end=we, freq='6M').date
+
+        # Customize the x-axis tick labels to show the start date of each semiannual period
+        tickvals = [period.strftime('%Y-%m-%d') for period in unique_periods]
+        ticktext = [f"Semiannual {i // 2 + 1} - {period.strftime('%Y')}" for i, period in enumerate(unique_periods)]
+
+        fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
+
+        return fig
+#-----------------------------------------------------------------------------------------------//--------------------------------------
+
+
+
+
+
+
 #Used to comparing the Equity from different sheets
 def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks):
     st.subheader(f"Compare Average vs Absolute vs Weighted Affinity")
