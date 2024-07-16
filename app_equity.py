@@ -1646,35 +1646,30 @@ def main():
                   # creating the average_weighted 
                   weights_values_for_average = {"aptamil":0 , "cow&gate": 0, "sma": 0, "kendamil": 0, "hipp_organic": 0}
                   with col1:
-                     for x in list(weights_values_for_average.keys())[0]:
-                         number = st.number_input(f"{x}", min_value=0, max_value=100, value=10)
+                         number = st.number_input("aptamil", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average[x]=number
+                         weights_values_for_average["aptamil"]=number
                   
                   with col2:
-                     for x in list(weights_values_for_average.keys())[1]:
-                         number = st.number_input(f"{x}", min_value=0, max_value=100, value=10)
+                         number = st.number_input("cow&gate", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average[x]=number
+                         weights_values_for_average["cow&gate"]=number
 
                   with col3:
-                     for x in list(weights_values_for_average.keys())[2]:
-                         number = st.number_input(f"{x}", min_value=0, max_value=100, value=10)
+                         number = st.number_input(f"sma", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average[x]=number
+                         weights_values_for_average["sma"]=number
 
                   with col4:
-                     for x in list(weights_values_for_average.keys())[3]:
-                         number = st.number_input(f"{x}", min_value=0, max_value=100, value=10)
+                         number = st.number_input(f"kendamil", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average[x]=number
+                         weights_values_for_average["kendamil"]=number
 
                   
                   with col5:
-                     for x in list(weights_values_for_average.keys())[4]:
-                         number = st.number_input(f"{x}", min_value=0, max_value=100, value=10)
+                         number = st.number_input(f"hipp_organic", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average[x]=number
+                         weights_values_for_average["hipp_organic"]=number
 
                   
 
