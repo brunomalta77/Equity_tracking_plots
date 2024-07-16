@@ -197,6 +197,41 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
     return weighted_average_equity
 
 
+#---------------------------------------------------------------------------------------////------------------------------------------------------------------------
+
+# Market_share_weighted_average
+def weighted_brand_calculation(df, weights, value_columns):
+    # Ensure brand names in the dataframe match the keys in the weights dictionary
+    df['brand'] = df['brand'].str.lower()
+    
+    # Convert value columns to numeric, replacing non-numeric values with NaN
+    for col in value_columns:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+    
+    # Apply weights to each brand
+    for brand, weight in weights.items():
+        mask = (df['brand'] == brand)
+        df.loc[mask, value_columns] = df.loc[mask, value_columns].multiply(weight)
+    
+    # Group by time_period and time, then normalize
+    def normalize_group(group):
+        totals = group[value_columns].sum()
+        for col in value_columns:
+            if totals[col] == 0:
+                group[col] = 0
+            else:
+                group[col] = round((group[col] / totals[col]) * 100,2)
+        return group
+
+    result_df = df.groupby(['time_period', 'time']).apply(normalize_group).reset_index(drop=True)
+    
+    return result_df
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
 
 #merged file
 @st.cache_data() 
@@ -1498,6 +1533,48 @@ def main():
                   if sheet_name == "Weighted":
                            fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
                            st.plotly_chart(fig,use_container_width=True)
+
+
+                 st.subheader(f"Equity Metrics Plot - Market Share Weighted Average")
+                 col1,col2,col3 = st.columns([4,4,8])
+                 # creating the average_weighted 
+                 weights_values_for_average = {"aptamil":0 , "cow&gate": 0, "sma": 0, "kendamil": 0, "hipp_organic": 0}
+                 with col1:
+                     for x in list(weights_values_for_average.keys())[:3]:
+                         number = st.number_input(f"Weight for the {x}", min_value=0, max_value=100, value=10)
+                         number = number/100
+                         weights_values_for_average[x]=number
+                 
+                 with col2:
+                     for x in list(weights_values_for_average.keys())[3:5]:
+                         number = st.number_input(f"Weight for the {x}", min_value=0, max_value=100, value=10)
+                         number = number/100
+                         weights_values_for_average[x]=number
+                
+                 #creating the market_share_weighted
+                 value_columns  = [ 'AA_eSoV', 'AA_Reach',
+                'AA_Brand_Breadth', 'AS_Average_Engagement', 'AS_Usage_SoV',
+                'AS_Search_Index', 'AS_Brand_Centrality', 'AF_Entry_point',
+                'AF_Brand_Love', 'AF_Baby_Milk', 'AF_Adverts_Promo',
+                'AF_Value_for_Money', 'AF_Buying_Exp', 'AF_Prep_Milk', 'AF_Baby_exp',
+                'Framework_Awareness', 'Framework_Saliency', 'Framework_Affinity',
+                'Total_Equity']
+                 market_share_weighted =  weighted_brand_calculation(df, weights_values_for_average, value_columns)
+                 sheet_name = "Market Share Weighted Average"
+                 fig = Equity_plot_market_share_(market_share_weighted,category_options,time_period_options,value_columns,sheet_name=sheet_name)
+                 st.plotly_chart(fig,use_container_width=True)
+
+
+
+
+
+
+
+
+
+
+
+
                   
                   # Comparing the weighted vs the unweighted
                   if mmm == None:
