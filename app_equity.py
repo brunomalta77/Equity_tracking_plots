@@ -1517,7 +1517,7 @@ def main():
                   #None Global
 
                   # user input for equity and mmm file. 
-                  markets_available = ["uk"]
+                  markets_available = ["UK"]
                   market = st.selectbox('', markets_available)
                   market = market.lower()
                   
