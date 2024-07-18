@@ -581,6 +581,9 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     brand_replacement = {"aptamil":"Aptamil","kendamil":"Kendamil","cow&gate":"Cow&Gate","sma":"Sma","hipp_organic":"Hipp_organic"}
 
     df.brand = df.brand.replace(brand_replacement)
+    
+    df.rename(columns={'Total_Equity':'Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+
     ################################################################## df_total_uns ####################################################################################################
 
     df_total_uns.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
@@ -596,6 +599,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
 
     df_total_uns["Category"] = df_total_uns["Category"].replace("baby_milk","Baby milk")
 
+    df_total_uns.rename(columns={'Total_Equity':'Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
 
     ################################################################## weighted_df ####################################################################################################
 
@@ -606,7 +610,9 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     brand_replacement = {"aptamil":"Aptamil","kendamil":"Kendamil","cow&gate":"Cow&Gate","sma":"Sma","hipp_organic":"Hipp_organic"}
 
     weighted_df.brand = weighted_df.brand.replace(brand_replacement)
-    
+
+    weighted_df.rename(columns={'Total_Equity':'Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+
     #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     # creating the columns for the app
