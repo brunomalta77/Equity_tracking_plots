@@ -371,7 +371,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
     
     with right_column_1:
     #getting the date
-        start_date = st.date_input("Select start date",value=datetime(2021, 1, 1))
+        start_date = st.date_input("Select start date",value=datetime(2021, 2, 15))
         end_date =  st.date_input("Select end date")
         #convert our dates
         ws = start_date.strftime('%Y-%m-%d')
