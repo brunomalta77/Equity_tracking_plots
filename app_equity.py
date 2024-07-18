@@ -1710,28 +1710,28 @@ def main():
                   with col1:
                          number = st.number_input("Aptamil", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["Aptamil"]=number
+                         weights_values_for_average["aptamil"]=number
                   
                   with col2:
                          number = st.number_input("Cow&Gate", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["Cow&Gate"]=number
+                         weights_values_for_average["cow&gate"]=number
 
                   with col3:
                          number = st.number_input(f"Sma", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["Sma"]=number
+                         weights_values_for_average["sma"]=number
 
                   with col4:
                          number = st.number_input(f"Kendamil", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["Kendamil"]=number
+                         weights_values_for_average["kendamil"]=number
 
                   
                   with col5:
                          number = st.number_input(f"Hipp_organic", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["Hipp_organic"]=number
+                         weights_values_for_average["hipp_organic"]=number
 
                   
 
