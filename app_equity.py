@@ -1660,7 +1660,8 @@ def main():
                  
                   
                   #creating the weighted file
-                  weighted_avg = st.number_input("average weight", min_value=0.0, max_value=1.0, value=0.75, step=0.5, key="weighted_avg")
+                  weighted_avg = st.number_input("average weight % ", min_value=0, max_value=1000, value=75, step=5, key="weighted_avg")
+                  weighted_avg = weighted_avg/100
                   weighted_total = 1 - weighted_avg
                   df_weighted = get_weighted(df,df_total_uns,weighted_avg,weighted_total)
                   # Comparing all the sheets
