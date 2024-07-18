@@ -384,7 +384,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
         time_frame = st.radio('Choose your time frame:', time_frames)
     
     with left_column_2:
-        framework = st.selectbox('Choose your framework:', frameworks)
+        framework = st.selectbox('Choose your metric:', frameworks)
     
     #filtering
     df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
@@ -471,7 +471,7 @@ def Equity_plot_market_share_(df,categories,time_frames,frameworks,sheet_name):
     # creating the columns for the app
     right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
     
-    brand_replacement = {"aptamil":"Aptamil","kendamil":"Kendamil","cow&gate":"Cow&Gate","sma":"Sma","hipp_organic":"Hipp_organic"}
+    brand_replacement = {"aptamil":"APTAMIL","kendamil":"KENDAMIL","cow&gate":"COW&GATE","sma":"SMA","hipp_organic":"HIPP_ORGANIC"}
     df.brand = df.brand.replace(brand_replacement)
     
     with right_column_1:
@@ -489,7 +489,7 @@ def Equity_plot_market_share_(df,categories,time_frames,frameworks,sheet_name):
         time_frame = st.radio('Choose your time frame:', time_frames,key='test4')
     
     with left_column_2:
-        framework = st.selectbox('Choose your framework:', frameworks,key='test5')
+        framework = st.selectbox('Choose your metric:', frameworks,key='test5')
     
     #filtering
     df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
@@ -582,7 +582,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
 
     df.brand = df.brand.replace(brand_replacement)
     
-    df.rename(columns={'Total_Equity':'Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+    df.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
 
     ################################################################## df_total_uns ####################################################################################################
 
@@ -599,7 +599,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
 
     df_total_uns["Category"] = df_total_uns["Category"].replace("baby_milk","Baby milk")
 
-    df_total_uns.rename(columns={'Total_Equity':'Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+    df_total_uns.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
 
     ################################################################## weighted_df ####################################################################################################
 
@@ -611,7 +611,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
 
     weighted_df.brand = weighted_df.brand.replace(brand_replacement)
 
-    weighted_df.rename(columns={'Total_Equity':'Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+    weighted_df.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
 
     #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
@@ -633,7 +633,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
         time_frame = st.radio('Choose your time frame:', time_frames,key="test_4")
     
     with left_column_2:
-        framework = st.selectbox('Choose your framework:', frameworks,key="test_5")
+        framework = st.selectbox('Choose your metric:', frameworks,key="test_5")
         my_brand = st.multiselect('Choose your brand',df.brand.unique())
     
     #filtering all the dataframes
