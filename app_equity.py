@@ -327,7 +327,7 @@ def equity_options(df):
     df["time_period"] = df["time_period"].replace(replacements)
     time_period_options = df["time_period"].unique()
 
-    framework_options = ["Equity","Awareness","Saliency","Affinity",'Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+    framework_options = ["Total Equity","Awareness","Saliency","Affinity",'Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
                                 'Buying Experience','Preparing Milk','Baby Experience']
     return (category_options,time_period_options,framework_options)
 
