@@ -476,7 +476,7 @@ def Equity_plot_market_share_(df,categories,time_frames,frameworks,sheet_name):
     
     with right_column_1:
     #getting the date
-        start_date = st.date_input("Select start date",value=datetime(2021, 1, 1),key='start_date')
+        start_date = st.date_input("Select start date",value=datetime(2021, 2, 15),key='start_date')
         end_date =  st.date_input("Select end date",key='test1')
         #convert our dates
         ws = start_date.strftime('%Y-%m-%d')
@@ -620,7 +620,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     
     with right_column_1:
     #getting the date
-        start_date = st.date_input("Select start date",value=datetime(2021, 1, 1),key="test_1")
+        start_date = st.date_input("Select start date",value=datetime(2021, 2, 15),key="test_1")
         end_date =  st.date_input("Select end date",key='test_2')
         #convert our dates
         ws = start_date.strftime('%Y-%m-%d')
