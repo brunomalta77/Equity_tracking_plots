@@ -1699,32 +1699,33 @@ def main():
                   st.subheader(f"Equity Metrics Plot - Market Share Weighted Average")
                   col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
                   # creating the average_weighted 
-                  weights_values_for_average = {"aptamil":0 , "cow&gate": 0, "sma": 0, "kendamil": 0, "hipp_organic": 0}
+                  weights_values_for_average = {"Aptamil":0 , "Cow&Gate": 0, "Sma": 0, "Kendamil": 0, "Hipp_organic": 0}
+                  
                   with col1:
-                         number = st.number_input("aptamil", min_value=0, max_value=100, value=10)
+                         number = st.number_input("Aptamil", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["aptamil"]=number
+                         weights_values_for_average["Aptamil"]=number
                   
                   with col2:
-                         number = st.number_input("cow&gate", min_value=0, max_value=100, value=10)
+                         number = st.number_input("Cow&Gate", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["cow&gate"]=number
+                         weights_values_for_average["Cow&Gate"]=number
 
                   with col3:
-                         number = st.number_input(f"sma", min_value=0, max_value=100, value=10)
+                         number = st.number_input(f"Sma", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["sma"]=number
+                         weights_values_for_average["Sma"]=number
 
                   with col4:
-                         number = st.number_input(f"kendamil", min_value=0, max_value=100, value=10)
+                         number = st.number_input(f"Kendamil", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["kendamil"]=number
+                         weights_values_for_average["Kendamil"]=number
 
                   
                   with col5:
-                         number = st.number_input(f"hipp_organic", min_value=0, max_value=100, value=10)
+                         number = st.number_input(f"Hipp_organic", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["hipp_organic"]=number
+                         weights_values_for_average["Hipp_organic"]=number
 
                   
 
