@@ -121,6 +121,9 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
     # drop any nan values
     df.dropna(inplace=True)
     df_total_uns.dropna(inplace=True)
+
+    replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
+    df_total_uns["time_period"] = df_total_uns["time_period"].replace(replacements)
     
     affinity_labels = ['AF_Entry_point','AF_Brand_Love','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Prep_Milk','AF_Baby_exp']
     
@@ -201,6 +204,13 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
 
 # Market_share_weighted_average
 def weighted_brand_calculation(df, weights, value_columns):
+    
+     df.rename(columns={'Total_Equity':'Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
+       'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
+       'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality'},inplace=True)
+    
+    
+    
     # Ensure brand names in the dataframe match the keys in the weights dictionary
     df['brand'] = df['brand'].str.lower()
     
@@ -227,11 +237,6 @@ def weighted_brand_calculation(df, weights, value_columns):
     
     return result_df
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
 
 #merged file
 @st.cache_data() 
@@ -315,10 +320,17 @@ def media_spend_processed(df,df_spend,df_weeks):
 
 
 def equity_options(df):
+    df["Category"] = df["Category"].replace("baby_milk","Baby milk")
     category_options = df["Category"].unique()
+
+    replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
+    df["time_period"] = df["time_period"].replace(replacements)
     time_period_options = df["time_period"].unique()
-    framework_options = ['AF_Entry_point','AF_Brand_Love','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Prep_Milk','AF_Baby_exp',"Framework_Awareness","Framework_Saliency","Framework_Affinity","Total_Equity"]
+
+    framework_options = ["Equity","Awareness","Saliency","Affinity",'Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+                                'Buying Experience','Preparing Milk','Baby Experience']
     return (category_options,time_period_options,framework_options)
+
 
 
 
@@ -337,7 +349,7 @@ def merged_options_media(df):
          framework_options_value_media = ["value"]
          return(category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
          
-
+#-----------------------------------------------------------------------------------------------------//-----------------------------------------------------------------------------------------
 # Equity_plot
 def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
     if sheet_name == "Average Smoothening":
@@ -347,6 +359,11 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
     if sheet_name == "Weighted":
         name = "Weighted"
 
+    df.rename(columns={'Total_Equity':'Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
+       'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
+       'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality'},inplace=True)
+
+    
     st.subheader(f"Equity Metrics Plot - {name}")
 
     # creating the columns for the app
@@ -354,7 +371,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
     
     with right_column_1:
     #getting the date
-        start_date = st.date_input("Select start date",value=datetime(2020, 1, 1))
+        start_date = st.date_input("Select start date",value=datetime(2021, 2, 16))
         end_date =  st.date_input("Select end date")
         #convert our dates
         ws = start_date.strftime('%Y-%m-%d')
@@ -385,7 +402,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
     fig = px.line(df_filtered, x="time", y=framework, color="brand", color_discrete_map=brand_color_mapping)
 
     
-    if time_frame == "months":
+    if time_frame == "Months":
         unique_months = df_filtered['time'].dt.to_period('M').unique()
 
         # Customize the x-axis tick labels to show one label per month
@@ -397,7 +414,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
         
         return fig
 
-    if time_frame == "quarters":
+    if time_frame == "Quarters":
 
         unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
 
@@ -410,7 +427,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
         return fig
 
 
-    if time_frame =="years":
+    if time_frame =="Years":
         # Extract unique years from the "time" column
         unique_years = df_filtered['time'].dt.year.unique()
 
@@ -420,7 +437,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
         return fig
 
 
-    if time_frame == "weeks":
+    if time_frame == "Weeks":
         # Extract unique weeks from the "time" column
         unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
 
@@ -445,17 +462,21 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
         return fig
 
 
-#-----------------------------------------------------------------------------------------------//
+#-----------------------------------------------------------------------------------------------//----------------------------------------------------------------------------------------------
 
 
 # Equity_plot for market share weighted average
+
 def Equity_plot_market_share_(df,categories,time_frames,frameworks,sheet_name):
     # creating the columns for the app
     right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
     
+    brand_replacement = {"aptamil":"Aptamil","kendamil":"Kendamil","cow&gate":"Cow&Gate","sma":"Sma","hipp_organic":"Hipp_organic"}
+    df.brand = df.brand.replace(brand_replacement)
+    
     with right_column_1:
     #getting the date
-        start_date = st.date_input("Select start date",value=datetime(2020, 1, 1),key='start_date')
+        start_date = st.date_input("Select start date",value=datetime(2021, 2, 16),key='start_date')
         end_date =  st.date_input("Select end date",key='test1')
         #convert our dates
         ws = start_date.strftime('%Y-%m-%d')
@@ -486,7 +507,7 @@ def Equity_plot_market_share_(df,categories,time_frames,frameworks,sheet_name):
     fig = px.line(df_filtered, x="time", y=framework, color="brand", color_discrete_map=brand_color_mapping)
 
     
-    if time_frame == "months":
+    if time_frame == "Months":
         unique_months = df_filtered['time'].dt.to_period('M').unique()
 
         # Customize the x-axis tick labels to show one label per month
@@ -498,7 +519,7 @@ def Equity_plot_market_share_(df,categories,time_frames,frameworks,sheet_name):
         
         return fig
 
-    if time_frame == "quarters":
+    if time_frame == "Quarters":
 
         unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
 
@@ -511,7 +532,7 @@ def Equity_plot_market_share_(df,categories,time_frames,frameworks,sheet_name):
         return fig
 
 
-    if time_frame =="years":
+    if time_frame =="Years":
         # Extract unique years from the "time" column
         unique_years = df_filtered['time'].dt.year.unique()
 
@@ -521,7 +542,7 @@ def Equity_plot_market_share_(df,categories,time_frames,frameworks,sheet_name):
         return fig
 
 
-    if time_frame == "weeks":
+    if time_frame == "Weeks":
         # Extract unique weeks from the "time" column
         unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
 
@@ -544,23 +565,56 @@ def Equity_plot_market_share_(df,categories,time_frames,frameworks,sheet_name):
         fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
 
         return fig
-#-----------------------------------------------------------------------------------------------//--------------------------------------
-
-
-
-
+#-----------------------------------------------------------------------------------------------//----------------------------------------------------------------------------------------------
 
 
 #Used to comparing the Equity from different sheets
 def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks):
     st.subheader(f"Compare Average vs Absolute vs Weighted Affinity")
+    
+    # ------------------------------------------------------------------------------------------------Aesthetic changes-------------------------------------------------------------------------
+    #changing the names of the filtered  columns
+    ################################################################## df ####################################################################################################
+    df.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
+                                'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
 
+    brand_replacement = {"aptamil":"Aptamil","kendamil":"Kendamil","cow&gate":"Cow&Gate","sma":"Sma","hipp_organic":"Hipp_organic"}
+
+    df.brand = df.brand.replace(brand_replacement)
+    ################################################################## df_total_uns ####################################################################################################
+
+    df_total_uns.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
+                                'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+
+    brand_replacement = {"aptamil":"Aptamil","kendamil":"Kendamil","cow&gate":"Cow&Gate","sma":"Sma","hipp_organic":"Hipp_organic"}
+
+    df_total_uns.brand = df_total_uns.brand.replace(brand_replacement)
+
+    replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
+    df_total_uns["time_period"] = df_total_uns["time_period"].replace(replacements)
+
+
+    df_total_uns["Category"] = df_total_uns["Category"].replace("baby_milk","Baby milk")
+
+
+    ################################################################## weighted_df ####################################################################################################
+
+
+    weighted_df.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
+                                'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+
+    brand_replacement = {"aptamil":"Aptamil","kendamil":"Kendamil","cow&gate":"Cow&Gate","sma":"Sma","hipp_organic":"Hipp_organic"}
+
+    weighted_df.brand = weighted_df.brand.replace(brand_replacement)
+    
+    #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
     # creating the columns for the app
     right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
     
     with right_column_1:
     #getting the date
-        start_date = st.date_input("Select start date",value=datetime(2020, 1, 1),key="test_1")
+        start_date = st.date_input("Select start date",value=datetime(2021, 2, 16),key="test_1")
         end_date =  st.date_input("Select end date",key='test_2')
         #convert our dates
         ws = start_date.strftime('%Y-%m-%d')
@@ -640,7 +694,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
         ))
 
     
-    if time_frame == "months":
+    if time_frame == "Months":
         unique_months = df_filtered['time'].dt.to_period('M').unique()
 
         # Customize the x-axis tick labels to show one label per month
@@ -652,7 +706,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
         
         return fig
 
-    if time_frame == "quarters":
+    if time_frame == "Quarters":
 
         unique_quarters = df_filtered['time'].dt.to_period('Q').unique()
 
@@ -665,7 +719,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
         return fig
 
 
-    if time_frame =="years":
+    if time_frame =="Years":
         # Extract unique years from the "time" column
         unique_years = df_filtered['time'].dt.year.unique()
 
@@ -675,7 +729,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
         return fig
 
 
-    if time_frame == "weeks":
+    if time_frame == "Weeks":
         # Extract unique weeks from the "time" column
         unique_weeks = pd.date_range(start=ws, end=we, freq='W').date
 
@@ -1426,7 +1480,7 @@ def correlation_plot(df,brands):
     return fig_spearman
 
 
-#------------------------------------------------------------------------app------------------------------------------------------------------------------#
+#------------------------------------------------------------------------app---------------------------------------------------------------------------------------------------------------------#
 def main():
          
          #logout_container = st.container()
@@ -1459,6 +1513,7 @@ def main():
                   # user input for equity and mmm file. 
                   markets_available = ["uk"]
                   market = st.selectbox('', markets_available)
+                  market = market.lower()
                   
                   if market == "germany":
                            slang = "MMM_DE_"
@@ -1675,13 +1730,12 @@ def main():
 
                   
                   #creating the market_share_weighted
-                  value_columns  = [ 'AA_eSoV', 'AA_Reach',
-                  'AA_Brand_Breadth', 'AS_Average_Engagement', 'AS_Usage_SoV',
-                  'AS_Search_Index', 'AS_Brand_Centrality', 'AF_Entry_point',
-                  'AF_Brand_Love', 'AF_Baby_Milk', 'AF_Adverts_Promo',
-                  'AF_Value_for_Money', 'AF_Buying_Exp', 'AF_Prep_Milk', 'AF_Baby_exp',
-                  'Framework_Awareness', 'Framework_Saliency', 'Framework_Affinity',
-                  'Total_Equity']
+                    value_columns  = [ 'Equity','Awareness', 'Saliency', 'Affinity',
+                                           'eSoV', 'Reach',
+                                           'Brand Breadth', 'Average Engagement', 'Usage SoV',
+                                           'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+                                                  'Buying Experience','Preparing Milk','Baby Experience']
+                                                  
                   market_share_weighted =  weighted_brand_calculation(df, weights_values_for_average, value_columns)
                   sheet_name = "Market Share Weighted Average"
                   fig = Equity_plot_market_share_(market_share_weighted,category_options,time_period_options,value_columns,sheet_name=sheet_name)
@@ -1690,15 +1744,6 @@ def main():
 
 
 
-
-
-
-
-
-
-
-
-                  
                   # Comparing the weighted vs the unweighted
                   if mmm == None:
                      pass
