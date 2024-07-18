@@ -205,7 +205,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
 # Market_share_weighted_average
 def weighted_brand_calculation(df, weights, value_columns):
     
-    df.rename(columns={'Total_Equity':'Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
+    df.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
        'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
        'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality'},inplace=True)
     
