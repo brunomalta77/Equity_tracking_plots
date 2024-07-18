@@ -578,7 +578,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     df.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
 
-    brand_replacement = {"aptamil":"Aptamil","kendamil":"Kendamil","cow&gate":"Cow&Gate","sma":"Sma","hipp_organic":"Hipp_organic"}
+    brand_replacement = {"aptamil":"APTAMIL","kendamil":"KENDAMILL","cow&gate":"COW&GATE","sma":"SMA","hipp_organic":"HIPP_ORGANIC"}
 
     df.brand = df.brand.replace(brand_replacement)
     
@@ -589,7 +589,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     df_total_uns.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
 
-    brand_replacement = {"aptamil":"Aptamil","kendamil":"Kendamil","cow&gate":"Cow&Gate","sma":"Sma","hipp_organic":"Hipp_organic"}
+    brand_replacement = {"aptamil":"APTAMIL","kendamil":"KENDAMILL","cow&gate":"COW&GATE","sma":"SMA","hipp_organic":"HIPP_ORGANIC"}
 
     df_total_uns.brand = df_total_uns.brand.replace(brand_replacement)
 
@@ -607,7 +607,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     weighted_df.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
 
-    brand_replacement = {"aptamil":"Aptamil","kendamil":"Kendamil","cow&gate":"Cow&Gate","sma":"Sma","hipp_organic":"Hipp_organic"}
+    brand_replacement = {"aptamil":"APTAMIL","kendamil":"KENDAMILL","cow&gate":"COW&GATE","sma":"SMA","hipp_organic":"HIPP_ORGANIC"}
 
     weighted_df.brand = weighted_df.brand.replace(brand_replacement)
 
@@ -1706,31 +1706,31 @@ def main():
                   st.subheader(f"Equity Metrics Plot - Market Share Weighted Average")
                   col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
                   # creating the average_weighted 
-                  weights_values_for_average = {"Aptamil":0 , "Cow&Gate": 0, "Sma": 0, "Kendamil": 0, "Hipp_organic": 0}
+                  weights_values_for_average = {"APTAMIL":0 , "COW&GATE": 0, "SMA": 0, "KENDAMILL": 0, "HIPP_ORGANIC": 0}
                   
                   with col1:
-                         number = st.number_input("Aptamil", min_value=0, max_value=100, value=10)
+                         number = st.number_input("APTAMIL", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["aptamil"]=number
+                         weights_values_for_average["APTAMIL"]=number
                   
                   with col2:
-                         number = st.number_input("Cow&Gate", min_value=0, max_value=100, value=10)
+                         number = st.number_input("COW&GATE", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["cow&gate"]=number
+                         weights_values_for_average["COW&GATE"]=number
 
                   with col3:
-                         number = st.number_input(f"Sma", min_value=0, max_value=100, value=10)
+                         number = st.number_input(f"SMA", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["sma"]=number
+                         weights_values_for_average["SMA"]=number
 
                   with col4:
-                         number = st.number_input(f"Kendamil", min_value=0, max_value=100, value=10)
+                         number = st.number_input(f"KENDAMILL", min_value=0, max_value=100, value=10)
                          number = number/100
-                         weights_values_for_average["kendamil"]=number
+                         weights_values_for_average["KENDAMILL"]=number
 
                   
                   with col5:
-                         number = st.number_input(f"Hipp_organic", min_value=0, max_value=100, value=10)
+                         number = st.number_input(f"HIPP_ORGANIC", min_value=0, max_value=100, value=10)
                          number = number/100
                          weights_values_for_average["hipp_organic"]=number
 
