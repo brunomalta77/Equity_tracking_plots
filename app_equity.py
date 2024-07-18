@@ -1735,18 +1735,18 @@ def main():
 
                   
 
-                  
-                  #creating the market_share_weighted
-                  value_columns  = [ 'Equity','Awareness', 'Saliency', 'Affinity',
-                                           'eSoV', 'Reach',
-                                           'Brand Breadth', 'Average Engagement', 'Usage SoV',
-                                           'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
-                                                  'Buying Experience','Preparing Milk','Baby Experience']
-                                                  
-                  market_share_weighted =  weighted_brand_calculation(df, weights_values_for_average, value_columns)
-                  sheet_name = "Market Share Weighted Average"
-                  fig = Equity_plot_market_share_(market_share_weighted,category_options,time_period_options,value_columns,sheet_name=sheet_name)
-                  st.plotly_chart(fig,use_container_width=True)
+                  if st.button("Run!"):
+                           #creating the market_share_weighted
+                           value_columns  = [ 'Equity','Awareness', 'Saliency', 'Affinity',
+                                                    'eSoV', 'Reach',
+                                                    'Brand Breadth', 'Average Engagement', 'Usage SoV',
+                                                    'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+                                                           'Buying Experience','Preparing Milk','Baby Experience']
+                                                           
+                           market_share_weighted =  weighted_brand_calculation(df, weights_values_for_average, value_columns)
+                           sheet_name = "Market Share Weighted Average"
+                           fig = Equity_plot_market_share_(market_share_weighted,category_options,time_period_options,value_columns,sheet_name=sheet_name)
+                           st.plotly_chart(fig,use_container_width=True)
 
 
 
