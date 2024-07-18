@@ -1730,7 +1730,7 @@ def main():
 
                   
                   #creating the market_share_weighted
-                    value_columns  = [ 'Equity','Awareness', 'Saliency', 'Affinity',
+                  value_columns  = [ 'Equity','Awareness', 'Saliency', 'Affinity',
                                            'eSoV', 'Reach',
                                            'Brand Breadth', 'Average Engagement', 'Usage SoV',
                                            'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
