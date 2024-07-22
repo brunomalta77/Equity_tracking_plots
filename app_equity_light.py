@@ -744,33 +744,33 @@ def main():
                   tab1,tab2,tab3,tab4 = st.tabs(["📝 General info","📈 Market Share Weighted","🔍 Comparing Frameworks","📕 Equity Metrics Plot"])
 
 
-         #logout_container = st.container()
-         #st.title("Streamlit App with Microsoft SSO")
+         logout_container = st.container()
+         st.title("Microsoft SSO")
          #Global variables
          # Initialize session state variables
 
 
          # Initialize session state variables
-         #if 'access' not in st.session_state:
-         #         st.session_state.access = False
+         if 'access' not in st.session_state:
+                  st.session_state.access = False
                   
-         #if 'login_clicked' not in st.session_state:
-         #         st.session_state.login_clicked = False
+         if 'login_clicked' not in st.session_state:
+                  st.session_state.login_clicked = False
 
-         #if not st.session_state.access:                  
-                                    #login()
+         if not st.session_state.access:                  
+                                    login()
                                     # Check for authorization code in URL
-                                    #params = st.experimental_get_query_params()
-                                    #if "code" in params:
-                                             #code = params["code"][0]
-                                             #token = get_token_from_code(code)
-                                             #if token:
-                                                      #st.session_state.access_token = token
-                                                      #st.experimental_set_query_params()
+                                    params = st.experimental_get_query_params()
+                                    if "code" in params:
+                                             code = params["code"][0]
+                                             token = get_token_from_code(code)
+                                             if token:
+                                                      st.session_state.access_token = token
+                                                      st.experimental_set_query_params()
                                              
-         with st.container():
+     
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
-   
+         with st.container():
                   with tab1:
                            brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
 
