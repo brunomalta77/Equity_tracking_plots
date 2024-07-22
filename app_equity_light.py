@@ -1294,7 +1294,7 @@ def main():
                                  if st.button("Logout", key="small_button", type="secondary", use_container_width=False, 
                                                  help="Click to logout", kwargs={"class": "small_button"}):
                                      st.markdown("""
-                                     <meta http-equiv="refresh" content="0; url='https://mmmfrontend.azurewebsites.net/'" />
+                                     <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-htlo3cszeveuzxmsa7raar.streamlit.app/'" />
                                      """, unsafe_allow_html=True)
                                                
 if __name__=="__main__":
