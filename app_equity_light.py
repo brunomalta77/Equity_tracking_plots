@@ -122,6 +122,8 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total):
     df.dropna(inplace=True)
     df_total_uns.dropna(inplace=True)
 
+    df_total_uns.brand = df_total_uns.brand.replace(brand_replacement)
+
     replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
     df_total_uns["time_period"] = df_total_uns["time_period"].replace(replacements)
     
