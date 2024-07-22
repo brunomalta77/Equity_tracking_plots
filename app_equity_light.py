@@ -606,7 +606,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
         time_frame = st.radio('Choose  time frame:', time_frames,key="test_4")
     
     with left_column_2:
-        framework = st.selectbox('Choose  metric:', frameworks,key="test_5")
+        framework = st.selectbox('Choose  framework:', frameworks,key="test_5")
         my_brand = st.multiselect('Choose  brand',df.brand.unique())
     
     #filtering all the dataframes
