@@ -384,7 +384,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
        'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality'},inplace=True)
 
     
-    st.subheader(f"Equity Metrics Plot - {name}")
+    st.subheader(f"Final Equity plot - {name}")
 
     # creating the columns for the app
     right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
@@ -568,7 +568,7 @@ def Equity_plot_market_share_(df,category,time_frame,framework,ws,we):
 
 #Used to comparing the Equity from different sheets
 def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks,brand_replacement):
-    st.subheader(f"Comparing Frameworks (Average Vs Absolute Vs Weighted)")
+    st.subheader(f"Combine Average and Absolute")
     
     # ------------------------------------------------------------------------------------------------Aesthetic changes-------------------------------------------------------------------------
     #changing the names of the filtered  columns
@@ -779,7 +779,7 @@ def main():
 
          
          with st.container():
-                  tab0,tab1,tab2,tab3,tab4 = st.tabs(["🔽 Microsoft SSO","📝 General info","📈 Market Share Weighted","🔍 Comparing Frameworks","📕 Equity Metrics Plot"])
+                  tab0,tab1,tab2,tab3,tab4 = st.tabs(["🔽 Microsoft SSO","📝 General info","📈 Market Share Weighted","🔍Combine Average and Absolute","📕 Final Equity plots"])
 
          with tab0:
                   if not st.session_state.access:                  
