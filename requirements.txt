@@ -1,4 +1,6 @@
 pandas
+xlsxwriter 
+openpyxl
 numpy
 seaborn 
 streamlit 
