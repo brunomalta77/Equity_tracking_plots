@@ -210,12 +210,7 @@ def weighted_brand_calculation(df, weights, value_columns):
     df.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
        'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
        'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality'},inplace=True)
-    
-    
-    
-    # Ensure brand names in the dataframe match the keys in the weights dictionary
-    df['brand'] = df['brand'].str.lower()
-    
+  
     # Convert value columns to numeric, replacing non-numeric values with NaN
     for col in value_columns:
         df[col] = pd.to_numeric(df[col], errors='coerce')
