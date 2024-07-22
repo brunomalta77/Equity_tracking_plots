@@ -811,11 +811,6 @@ def main():
                            # getting our equity    
                            filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
                            
-                           if mmm == None:
-                              pass 
-                           else:
-                              filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm = mmm_info(data,slang)
-                  
                   
                            # reading the equity file
                            df = reading_df(filepath_equity,sheet_name="average_smoothened")
