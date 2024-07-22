@@ -791,7 +791,7 @@ def main():
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
                            with st.container():
                                     tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Combine Average and Absolute","📕 Final Equity plots"])
-                           with st.sidebar():
+                           with st.sidebar:
                                     st.header("📝 General info")
                                     brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
          
@@ -1033,7 +1033,7 @@ def main():
 
          #if logged in
          else:
-                  with st.sidebar():
+                  with st.sidebar:
                            st.header("📝 General info")
                            brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
                            
