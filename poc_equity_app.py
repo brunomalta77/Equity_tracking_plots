@@ -775,13 +775,6 @@ def main():
          if 'user_email' not in st.session_state:
                   st.session_state.user_email = None
          
-
-
-         
-         with st.container():
-                  tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Combine Average and Absolute","📕 Final Equity plots"])
-
-    
          if not st.session_state.access:                  
                   login()
                   # Check for authorization code in URL
@@ -796,6 +789,8 @@ def main():
                            
                                     
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
+                           with st.container():
+                                    tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Combine Average and Absolute","📕 Final Equity plots"])
                            with st.sidebar():
                                     st.header("📝 General info")
                                     brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
