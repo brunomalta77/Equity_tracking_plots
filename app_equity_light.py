@@ -15,7 +15,7 @@ import plotly.graph_objects as go
 import os 
 from PIL import Image
 import msal
-
+import io
 
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
