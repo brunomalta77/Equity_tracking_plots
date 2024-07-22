@@ -781,8 +781,11 @@ def main():
 
                            # user input for equity and mmm file. 
                            markets_available = ["UK"]
-                           market = st.selectbox('', markets_available)
-                           market = market.lower()
+                           column_1,_,_,_ = st.columns(4)
+            
+                           with column_1:
+                                    market = st.selectbox('Markets', markets_available)
+                                    market = market.lower()
                                     
                            if market == "uk":
                                     slang ="MMM_UK_"
