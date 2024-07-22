@@ -472,30 +472,8 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
 
 # Equity_plot for market share weighted average
 
-def Equity_plot_market_share_(df,categories,time_frames,frameworks,sheet_name):
-    # creating the columns for the app
-    right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
-    
-    brand_replacement = {"aptamil":"APTAMIL","kendamil":"KENDAMIL","cow&gate":"COW&GATE","sma":"SMA","hipp_organic":"HIPP_ORGANIC"}
-    df.brand = df.brand.replace(brand_replacement)
-    
-    with right_column_1:
-    #getting the date
-        start_date = st.date_input("Select start date",value=datetime(2021, 2, 15),key='start_date')
-        end_date =  st.date_input("Select end date",key='test1')
-        #convert our dates
-        ws = start_date.strftime('%Y-%m-%d')
-        we = end_date.strftime('%Y-%m-%d')
-    # getting the parameters
-    with right_column_2:
-        category = st.radio('Choose  category:', categories,key='test3')
-        
-    with left_column_1:    
-        time_frame = st.radio('Choose  time frame:', time_frames,key='test4')
-    
-    with left_column_2:
-        framework = st.selectbox('Choose  metric:', frameworks,key='test5')
-    
+def Equity_plot_market_share_(df,category,time_frame,framework,ws,we):
+   
     #filtering
     df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
     df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
