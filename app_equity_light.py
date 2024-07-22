@@ -905,7 +905,7 @@ def main():
                            with col2:
                                   number = st.number_input("COW&GATE", min_value=0, max_value=100, value=10)
                                   number = number/100
-                                  weights_values_for_average["COW&GATE"]=number
+                                  weights_values_for_average["COW & GATE"]=number
                   
                            with col3:
                                   number = st.number_input(f"SMA", min_value=0, max_value=100, value=10)
@@ -913,15 +913,15 @@ def main():
                                   weights_values_for_average["SMA"]=number
                   
                            with col4:
-                                  number = st.number_input(f"KENDAMILL", min_value=0, max_value=100, value=10)
+                                  number = st.number_input(f"KENDAMIL", min_value=0, max_value=100, value=10)
                                   number = number/100
-                                  weights_values_for_average["KENDAMILL"]=number
+                                  weights_values_for_average["KENDAMIL"]=number
                   
                            
                            with col5:
-                                  number = st.number_input(f"HIPP_ORGANIC", min_value=0, max_value=100, value=10)
+                                  number = st.number_input(f"HIPP ORGANIC", min_value=0, max_value=100, value=10)
                                   number = number/100
-                                  weights_values_for_average["hipp_organic"]=number
+                                  weights_values_for_average["HIPP ORGANIC"]=number
                   
                            
                            #creating the market_share_weighted
