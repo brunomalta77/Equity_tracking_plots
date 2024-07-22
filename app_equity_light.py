@@ -778,7 +778,7 @@ def main():
                                              st.query_params.clear()
               
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
-                                    with st.container():
+                                    #with st.container():
                                              with tab1:
                                                       brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
                            
