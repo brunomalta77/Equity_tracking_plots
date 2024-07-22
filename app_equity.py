@@ -1488,7 +1488,16 @@ def correlation_plot(df,brands):
 
 #------------------------------------------------------------------------app---------------------------------------------------------------------------------------------------------------------#
 def main():
+         if 'button' not in st.session_state:
+                  st.session_state.button = False
          
+         if 'fig' not in st.session_state:
+                  st.session_state.fig = False
+         
+         with st.container():
+                  tab1,tab2,tab3,tab4 = st.tabs(["📝 General info","📈 Market Share Weighted","🔍 Comparing Frameworks","📕 Equity Metrics Plot"])
+
+
          #logout_container = st.container()
          #st.title("Streamlit App with Microsoft SSO")
          #Global variables
@@ -1514,176 +1523,230 @@ def main():
                                                       #st.experimental_set_query_params()
                                              
          with st.container():
-                  #None Global
-
-                  # user input for equity and mmm file. 
-                  markets_available = ["UK"]
-                  market = st.selectbox('', markets_available)
-                  market = market.lower()
+#---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
+   
+                  with tab1:
+                           # user input for equity and mmm file. 
+                           markets_available = ["UK"]
+                           market = st.selectbox('', markets_available)
+                           market = market.lower()
+                                    
+                           if market == "uk":
+                                    slang ="MMM_UK_"
+                                    #res_weighted = None
+                                    #market_weighted = "uk_equity_age_weighted"
+                                    mmm = None
+                                    sheet_week = "WeekMap_UK"
+                                    sheet_spend = "UK_Raw Spend"
+                               
                   
-                  if market == "germany":
-                           slang = "MMM_DE_"
-                           res_weighted = None
-                           mmm = "Yes"
-                           sheet_week = "WeekMap_DE"
-                           sheet_spend = "DE_Raw Spend"
-         
-                  
-                  if market == "uk":
-                           slang ="MMM_UK_"
-                           #res_weighted = None
-                           #market_weighted = "uk_equity_age_weighted"
-                           mmm = None
-                           sheet_week = "WeekMap_UK"
-                           sheet_spend = "UK_Raw Spend"
-                      
-                  if market =="italy":
-                           slang ="MMM_IT"
-                           res_weighted = None
-                           mmm = "Yes"
-                           sheet_week = "WeekMap_IT"
-                           sheet_spend = "IT_Raw Spend"
-         
-                      
-                  if market =="france":
-                           slang = "MMM_FR"
-                           res_weighted = None
-                           mmm =None
-         
-         
-                  # getting our equity    
-                  #if res_weighted == "Yes":
-                  #   filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
-                  #   filepath_equity_weighted,year_equity_w,month_equity_w,day_equity_w,hour_equity_w,minute_equity_w,second_equity_w = equity_info(data,market_weighted)
-                  #else:
-                  filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
-                  
-                  if mmm == None:
-                     pass 
-                  else:
-                     filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm = mmm_info(data,slang)
-                  
-                  #if mmm == None:
-                  #         st.write(f"""**Equity file version** {market} : {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity}""")
-                     
-                  #else:
-                     #if res_weighted == "Yes":
-                     #    st.write(f"""**Equity file version** {market} : {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity} **Age weighted equity file version** {market_weighted}: {day_equity_w}/{month_equity_w}/{year_equity_w} - {hour_equity_w}: {minute_equity_w}: {second_equity_w} 
-                     #    **MMM data version** {market} : {day_mmm}/{month_mmm}/{year_mmm} - {hour_mmm}: {minute_mmm}: {second_mmm}""")
-                     #if res_weighted == None or mmm == None:
-                         #st.write(f"""**Equity file version** {market}: {day_equity}/{month_equity}/{year_equity} - {hour_equity}: {minute_equity}: {second_equity} **MMM data version** {market} : {day_mmm}/{month_mmm}/{year_mmm}- {hour_mmm} - {minute_mmm}: {second_mmm}""")
-         
-         
-                  # reading the equity file
-                  #if res_weighted == "Yes":
-                  #   df = reading_df(filepath_equity)
-                  #   df_weighted = reading_df(filepath_equity_weighted)
-                  #else:
-                  df = reading_df(filepath_equity,sheet_name="average_smoothened")
-                  df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
-
-                  
-                  # reading and processing the mmm file
-                  if mmm == None:
-                     pass
-                  else:
-                     df_vol = processing_mmm(filepath_mmm)
-                  
-                  #creating the merged df 
-                  if mmm == None:
-                     pass
-                  else:
-                     #if res_weighted == "Yes":
-                     #    merged_df = merged_file(df,df_vol)
-                     #    merged_df_weighted = merged_file(df_weighted,df_vol)
-                     #else:
-                           merged_df = merged_file(df,df_vol)
-                  
-                   # creating the Media merged_df with options ! 
-                  if mmm == None:
-                           pass
-                  else:
-                           #if res_weighted == "Yes":
-                           #         df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
-                           #         merged_df_media_weighted = media_spend_processed(df_weighted,df_uk_spend,df_uk_weeks)
-                           #         category_options_merged_media_w,time_period_options_merged_media_w,framework_options_media_w, framework_options_value_media_w= merged_options_media(merged_df_media_weighted)
+                           # getting our equity    
+                           filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
                            
-                            #        df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
-                            #        merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
-                            #        category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
+                           if mmm == None:
+                              pass 
+                           else:
+                              filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm = mmm_info(data,slang)
                   
-                           #else:
-                           df_uk_spend,df_uk_weeks = media_plan(media_data,sheet_spend,sheet_week)
-                           merged_df_media = media_spend_processed(df,df_uk_spend,df_uk_weeks)
-                           category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media= merged_options_media(merged_df_media)
+                  
+                           # reading the equity file
+                           df = reading_df(filepath_equity,sheet_name="average_smoothened")
+                           df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
+                           df_total_smooth = reading_df(filepath_equity,sheet_name="total_smoothened")
+                           df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
+                           df_significance = reading_df(filepath_equity,sheet_name="significance")
+                           df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
+                  
+                           
+                           #Equity options
+                           category_options,time_period_options,framework_options = equity_options(df,brand_mapping)
+                           
+                             #creating the market_share_weighted
+                           value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
+                          'Brand Breadth', 'Average Engagement', 'Usage SoV',
+                          'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+                           'Buying Experience','Preparing Milk','Baby Experience']
          
-                  
-                  #Equity options
-                  #if res_weighted == "Yes":
-                  #   category_options,time_period_options,framework_options = equity_options(df)
-                  #   category_options_w,time_period_options_w,framework_options_w = equity_options(df_weighted)
-                    
-                  
-                  #else:
-                  category_options,time_period_options,framework_options = equity_options(df)
-                  
-                  
-                  # Volume share options
-                  if mmm== None:
-                     pass
-                  else:
-                     category_options_vol_share = df_vol["Category"].unique()
-                  
-                  #Merged options
-                  if mmm== None:
-                     pass
-                  else:
-                     category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value = merged_options(merged_df)
-                  
-                  # Significance options
-                  if mmm== None:
-                     pass
-                  else:
-                     Brand_options = merged_df["brand"].unique()
-                     framework_options_sig = ["Volume_share","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity","Price_change"]
-                     lower,upper = calculate_confidence_intervals(merged_df["Framework_Awareness"])
-                  
-                  # Correlation options
-                  if mmm== None:
-                     pass
-                  else:
-                     Brand_options = merged_df["brand"].unique()
-                     framework_options_corr = ["Volume_share","AF_Value_for_Money", "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity","Price_change"]
+#--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
+                           #creating a copy of our dataframes.
+                           df_copy = df.copy()
+                           df_total_uns_copy = df_total_uns.copy()
+                           # Aesthetic changes --------------------------------------------------------------------------------------------------
+                           #changing the names of the filtered  columns
+                           ################################################################## df ####################################################################################################
+                           df_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
+                                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                           
+                           
+                           
+                           df_copy.brand = df_copy.brand.replace(brand_mapping)
+                           
+                           df_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                           
+                           ################################################################## df_total_uns ####################################################################################################
+                           
+                           df_total_uns_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
+                                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                           
+                           
+                           df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
+                           
+                           replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
+                           df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
+                           
+                           
+                           df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
+                           
+                           
+                           df_total_uns_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
 
-
-                  
+    ################################################################## ##################################################################################################################
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    #--------------------------------------------------------------------------------------// Market Share Weighted----------------------------------------------------------------------------------
+                   with tab2:
+                            #chosing the sheet name 
+                           column_1,_,_,_ = st.columns(4)
+                           with column_1:
+                                    sheet_name = st.selectbox("Select sheet",["Average","Absolute"])
+                           
+                           st.subheader(f"Equity Metrics Plot - Market Share Weighted {sheet_name}")
+         
+         
+                           if sheet_name == "Average":
+                                    sheet_name = "Average Smoothening"
+                                    sheet_name_download = 'average'
+                                    df_for_weighted = df_copy
+                           if sheet_name == "Absolute":
+                                    sheet_name = "Total Unsmoothening"
+                                    sheet_name_download = "total"
+                                    df_for_weighted = df_total_uns_copy
+                           
+         
+                           col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
+                           # creating the average_weighted 
+                           weights_values_for_average = {"APTAMIL":0 , "COW&GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP_ORGANIC": 0}
+                           
+                           with col1:
+                                  number = st.number_input("APTAMIL", min_value=0, max_value=100, value=10)
+                                  number = number/100
+                                  weights_values_for_average["APTAMIL"]=number
+                           
+                           with col2:
+                                  number = st.number_input("COW&GATE", min_value=0, max_value=100, value=10)
+                                  number = number/100
+                                  weights_values_for_average["COW&GATE"]=number
+         
+                           with col3:
+                                  number = st.number_input(f"SMA", min_value=0, max_value=100, value=10)
+                                  number = number/100
+                                  weights_values_for_average["SMA"]=number
+         
+                           with col4:
+                                  number = st.number_input(f"KENDAMILL", min_value=0, max_value=100, value=10)
+                                  number = number/100
+                                  weights_values_for_average["KENDAMILL"]=number
+         
+                           
+                           with col5:
+                                  number = st.number_input(f"HIPP_ORGANIC", min_value=0, max_value=100, value=10)
+                                  number = number/100
+                                  weights_values_for_average["hipp_organic"]=number
+         
+                           
+                           #creating the market_share_weighted
+                           market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns)
+                           
+                           # creating the columns for the app
+                           right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
+                           
+                           with right_column_1:
+                           #getting the date
+                           start_date = st.date_input("Select start date",value=datetime(2021, 2, 16),key='start_date')
+                           end_date =  st.date_input("Select end date",key='test1')
+                           # getting the parameters
+                           with right_column_2:
+                           st.session_state.category = st.radio('Choose  category:', category_options,key='test3')
+                           
+                           with left_column_1:    
+                           st.session_state.time_frame = st.radio('Choose  time frame:', time_period_options,key='test4')
+                           
+                           with left_column_2:
+                           framework = st.selectbox('Choose  framework:', value_columns,key='test5')
+                           
+                           
+                           if st.session_state.button == False:
+                                    if st.button("Run!"):
+                                             #convert our dates
+                                             ws = start_date.strftime('%Y-%m-%d')
+                                             we = end_date.strftime('%Y-%m-%d')
+                                             
+                                             st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
+                                             st.session_state.button = True
+                           else:
+                                    if st.button("Run!"):
+                                             #convert our dates
+                                             ws = start_date.strftime('%Y-%m-%d')
+                                             we = end_date.strftime('%Y-%m-%d')
+                                             
+                                             st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
+                                    
+                           
+                           
+                           if st.session_state.button == False:
+                                    pass
+                           else:
+                                    st.plotly_chart(st.session_state.fig,use_container_width=True)
+                           
+                           
+                           buffer = io.BytesIO()
+                           with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                                    df.to_excel(writer, sheet_name='average_smoothened', index=False)
+                                    
+                                    df_avg_unsmooth.to_excel(writer, sheet_name='average_unsmoothened', index=False)
+                                    
+                                    df_total_uns.to_excel(writer, sheet_name='total_unsmoothened', index=False)
+                                    
+                                    df_total_smooth.to_excel(writer, sheet_name='total_smoothened', index=False)
+                                    
+                                    market_share_weighted.to_excel(writer,sheet_name=f'market_share_{sheet_name_download}',index=False)
+                                    
+                                    df_significance.to_excel(writer,sheet_name='significance',index=False)
+                                    
+                                    df_perc_changes.to_excel(writer,sheet_name='perc_changes',index=False)
+                           
+                           
+                           st.download_button(
+                                    label="📤",
+                                    data=buffer,
+                                    file_name=f"Equity_danone_{market}_{datetime.today()}.xlsx",
+                                    mime="application/vnd.ms-excel")
                  
-                  
-                  #creating the weighted file
-                  weighted_avg = st.number_input("average weight % ", min_value=0, max_value=1000, value=75, step=5, key="weighted_avg")
-                  weighted_avg = weighted_avg/100
-                  weighted_total = 1 - weighted_avg
-                  df_weighted = get_weighted(df,df_total_uns,weighted_avg,weighted_total)
-                  # Comparing all the sheets
-                  fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options)
-                  st.plotly_chart(fig,use_container_width=True)
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
-                  
-                  #Equity plot
-                  #if res_weighted == "Yes":
-                  #   res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"])
-                  #   if res_equity_weighted == "Weighted":
-                  #       fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options)
-                  #       st.plotly_chart(fig,use_container_width=True)
-                  #   else:
-                  #         fig = Equity_plot(df,category_options,time_period_options,framework_options)
-                  #       st.plotly_chart(fig,use_container_width=True)
-                  #else: 
-                  
+#-------------------------------------------------------------------------------------------------------------// Compare plot//------------------------------------------------------------------------------------
+                  with tab3:
+                           #creating the weighted file and the plot  
+                           
+                           column_1,_,_,_ = st.columns(4)
+                           with column_1:
+                                    weighted_avg = st.number_input("Average Weight (%)", min_value=0, max_value=100, value=75, step=5, key="weighted_avg")
+                           
+                           weighted_avg = weighted_avg/100
+                           weighted_total = 1 - weighted_avg
+                           
+                           
+                           df_weighted = get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_mapping)
+                           # Comparing all the sheets
+                           fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping)
+                           st.plotly_chart(fig,use_container_width=True)
 
-
-                   #chosing the sheet name 
-                  sheet_name = st.selectbox("Select you sheet",["Average","Absolute", "Weighted"])
+#--------------------------------------------------------------------------------------// Equity plot //----------------------------------------------------------------------------------
+                  with tab4:
+                  #chosing the sheet name 
+                  column_1,_,_,_ = st.columns(4)
+                  with column_1:
+                           sheet_name = st.selectbox("Select sheet",["Average","Absolute", "Weighted"])
                   
                   if sheet_name == "Average":
                            sheet_name = "Average Smoothening"
@@ -1701,161 +1764,12 @@ def main():
                   if sheet_name == "Weighted":
                            fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
                            st.plotly_chart(fig,use_container_width=True)
-
-
-                  st.subheader(f"Equity Metrics Plot - Market Share Weighted Average")
-                  col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
-                  # creating the average_weighted 
-                  weights_values_for_average = {"APTAMIL":0 , "COW&GATE": 0, "SMA": 0, "KENDAMILL": 0, "HIPP_ORGANIC": 0}
-                  
-                  with col1:
-                         number = st.number_input("APTAMIL", min_value=0, max_value=100, value=10)
-                         number = number/100
-                         weights_values_for_average["APTAMIL"]=number
-                  
-                  with col2:
-                         number = st.number_input("COW&GATE", min_value=0, max_value=100, value=10)
-                         number = number/100
-                         weights_values_for_average["COW&GATE"]=number
-
-                  with col3:
-                         number = st.number_input(f"SMA", min_value=0, max_value=100, value=10)
-                         number = number/100
-                         weights_values_for_average["SMA"]=number
-
-                  with col4:
-                         number = st.number_input(f"KENDAMILL", min_value=0, max_value=100, value=10)
-                         number = number/100
-                         weights_values_for_average["KENDAMILL"]=number
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
                   
-                  with col5:
-                         number = st.number_input(f"HIPP_ORGANIC", min_value=0, max_value=100, value=10)
-                         number = number/100
-                         weights_values_for_average["hipp_organic"]=number
-
                   
 
-                  #if st.button("Run!"):
-                  #creating the market_share_weighted
-                  value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity',
-                                           'eSoV', 'Reach',
-                                           'Brand Breadth', 'Average Engagement', 'Usage SoV',
-                                           'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
-                                                  'Buying Experience','Preparing Milk','Baby Experience']
-                                                  
-                  market_share_weighted =  weighted_brand_calculation(df, weights_values_for_average, value_columns)
-                  sheet_name = "Market Share Weighted Average"
-                  fig = Equity_plot_market_share_(market_share_weighted,category_options,time_period_options,value_columns,sheet_name=sheet_name)
-                  st.plotly_chart(fig,use_container_width=True)
-
-
-
-
-                  # Comparing the weighted vs the unweighted
-                  if mmm == None:
-                     pass
-                  else:
-                     st.subheader("Weighted vs Unweighted")
-                     if res_weighted == "Yes":
-                         fig_weigheted_vs_un = sub_plots_w(df,df_weighted,category_options,time_period_options,framework_options)
-                         st.plotly_chart(fig_weigheted_vs_un,use_container_width=True)
-                  
-                  #Market share Plot 
-                  if mmm ==None:
-                     pass
-                  else:
-                     st.subheader("Agreggated Volume Share by Brand Plot")
-                     fig_market_share = market_share_plot(df_vol,category_options_vol_share)
-                     st.plotly_chart(fig_market_share,use_container_width=True)
-                  
-                  #Buble plot
-                  if mmm ==None:
-                     pass
-                  else:
-                     st.subheader("Equity vs Volume Share (Bubble plot)")
-                     if res_weighted == "Yes":
-                         res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="44")
-                         if res_equity_weighted == "Weighted":
-                             fig_buble= buble_plot(merged_df_weighted,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
-                             st.plotly_chart(fig_buble,use_container_width=True)
-                         else:
-                             fig_buble= buble_plot(merged_df,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
-                             st.plotly_chart(fig_buble,use_container_width=True)
-                     else:
-                         fig_buble= buble_plot(merged_df,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
-                         st.plotly_chart(fig_buble,use_container_width=True)
-                  
-                  #Sub_plots
-                  if mmm ==None:
-                     pass
-                  else:
-                     st.subheader("Equity vs Volume Share  (histogram)")
-                     if res_weighted == "Yes":
-                         res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="45")
-                         if res_equity_weighted == "Weighted":
-                             fig_sub = sub_plots(merged_df_weighted,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
-                             st.plotly_chart(fig_sub,use_container_width=True)
-                         else:
-                             fig_sub = sub_plots(merged_df,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
-                             st.plotly_chart(fig_sub,use_container_width=True)
-                     else:
-                         fig_sub = sub_plots(merged_df,category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
-                         st.plotly_chart(fig_sub,use_container_width=True)
-                  
-                  # Media_spend sub-plot. 
-                  if mmm== None:
-                     pass
-                  else:
-                     if res_weighted == "Yes":
-                         res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="00")
-                         if res_equity_weighted == "Weighted":
-                             fig_media = sub_plots_media(merged_df_media_weighted,category_options_merged_media_w,time_period_options_merged_media_w,framework_options_media_w, framework_options_value_media_w)
-                             st.plotly_chart(fig_media,use_container_width=True)
-                         else:
-                             fig_media = sub_plots_media(merged_df_media,category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
-                             st.plotly_chart(fig_media,use_container_width=True)
-                     else:
-                         fig_media = sub_plots_media(merged_df_media,category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
-                         st.plotly_chart(fig_media,use_container_width=True)
-                  
-                  
-                  # Significance Plot
-                  if mmm ==None:
-                     pass
-                  else:
-                     st.subheader("Equity Plot w/ Significance (90% confidence interval)")
-                     if res_weighted == "Yes":
-                         res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="50")
-                         if res_equity_weighted == "Weighted":
-                             fig_significance = Significance_plot(merged_df_weighted, Brand_options,framework_options_sig)
-                             st.plotly_chart(fig_significance,use_container_width=True)
-                         else:
-                             fig_significance = Significance_plot(merged_df, Brand_options,framework_options_sig)
-                             st.plotly_chart(fig_significance,use_container_width=True)
-                     
-                     else:
-                         fig_significance = Significance_plot(merged_df, Brand_options,framework_options_sig)
-                         st.plotly_chart(fig_significance,use_container_width=True)
-                  
-                  # Correlation Plot
-                  if mmm ==None:
-                     pass
-                  else:
-                     st.subheader("Correlation Plot between Equity Metrics and Aggregated Sales Volume ")
-                     if res_weighted == "Yes":
-                         res_equity_weighted = st.radio("What type do you want to see?", ["Unweighted","Weighted"],key="47")
-                         if res_equity_weighted == "Weighted":
-                             fig_corr = correlation_plot(merged_df_weighted,Brand_options)
-                             st.plotly_chart(fig_corr,use_container_width=True)
-                         else:
-                             fig_corr = correlation_plot(merged_df,Brand_options)
-                             st.plotly_chart(fig_corr,use_container_width=True) 
-                     else:   
-                         fig_corr = correlation_plot(merged_df,Brand_options)
-                         st.plotly_chart(fig_corr,use_container_width=True)
-         
-                  
+           
 if __name__=="__main__":
     main()   
 
