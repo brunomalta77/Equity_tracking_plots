@@ -930,17 +930,17 @@ def main():
                            
                            with right_column_1:
                            #getting the date
-                           start_date = st.date_input("Select start date",value=datetime(2021, 2, 16),key='start_date')
-                           end_date =  st.date_input("Select end date",key='test1')
+                                    start_date = st.date_input("Select start date",value=datetime(2021, 2, 16),key='start_date')
+                                    end_date =  st.date_input("Select end date",key='test1')
                            # getting the parameters
                            with right_column_2:
-                           st.session_state.category = st.radio('Choose  category:', category_options,key='test3')
+                                    st.session_state.category = st.radio('Choose  category:', category_options,key='test3')
                            
                            with left_column_1:    
-                           st.session_state.time_frame = st.radio('Choose  time frame:', time_period_options,key='test4')
+                                    st.session_state.time_frame = st.radio('Choose  time frame:', time_period_options,key='test4')
                            
                            with left_column_2:
-                           framework = st.selectbox('Choose  framework:', value_columns,key='test5')
+                                    framework = st.selectbox('Choose  framework:', value_columns,key='test5')
                            
                            
                            if st.session_state.button == False:
