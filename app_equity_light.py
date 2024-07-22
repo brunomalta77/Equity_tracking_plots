@@ -45,29 +45,33 @@ def get_auth_url():
     return app.get_authorization_request_url(SCOPE, redirect_uri=REDIRECT_URI)
 
 def get_token_from_code(code):
-    result = app.acquire_token_by_authorization_code(code, SCOPE, redirect_uri=REDIRECT_URI)
-    return result.get("access_token")
+    try:
+        result = app.acquire_token_by_authorization_code(code, SCOPE, redirect_uri=REDIRECT_URI)
+        if "access_token" in result:
+            return result["access_token"]
+        else:
+            st.error(f"Failed to acquire token. Error: {result.get('error')}")
+            st.error(f"Error description: {result.get('error_description')}")
+            return None
+    except Exception as e:
+        st.error(f"An exception occurred: {str(e)}")
+        return None
 
-def get_user_info(access_token):
-    headers = {'Authorization': f'Bearer {access_token}'}
-    response = requests.get('https://graph.microsoft.com/v1.0/me', headers=headers)
-    return response.json()
+#def get_user_info(access_token):
+#    headers = {'Authorization': f'Bearer {access_token}'}
+#    response = requests.get('https://graph.microsoft.com/v1.0/me', headers=headers)
+#    return response.json()
 
 def login():
          auth_url = get_auth_url()
-         #st.image(image_microsoft, width=20)
-         #st.markdown(f'[Log in with microsoft]({auth_url})')
+         st.markdown(f'[Login with Microsoft]({auth_url})')
 
-         html_string = f"""
-         <a href="{auth_url}">
-             <img src="{logo_microsoft_path}" style="width: 20px; height: 20px; vertical-align: middle;">
-                Log in with Microsoft
-         </a>
-         """
 
-         # Use st.markdown to render the HTML
-         st.markdown(html_string, unsafe_allow_html=True)
-
+def get_user_info(access_token):
+       headers = {'Authorization': f'Bearer {access_token}'}
+       response = requests.get('https://graph.microsoft.com/v1.0/me', headers=headers)
+       user_info = response.json()
+       return user_info.get('mail') or user_info.get('userPrincipalName')
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -744,273 +748,550 @@ def main():
                   tab0,tab1,tab2,tab3,tab4 = st.tabs(["🔽 Microsoft SSO","📝 General info","📈 Market Share Weighted","🔍 Comparing Frameworks","📕 Equity Metrics Plot"])
 
          with tab0:
+                # Initialize session state if not already initialized
                   logout_container = st.container()
-                  st.title("Microsoft SSO")
-                  #Global variables
-                  # Initialize session state variables
-         
-         
+                  if "inputs" not in st.session_state:
+                           st.session_state.inputs = {}
+                  # it starts here the SSO Login
                   # Initialize session state variables
                   if 'access' not in st.session_state:
                            st.session_state.access = False
-                           
+                  
                   if 'login_clicked' not in st.session_state:
                            st.session_state.login_clicked = False
-         
+                  
+                  if 'user_email' not in st.session_state:
+                           st.session_state.user_email = None
+                  
                   if not st.session_state.access:                  
-                                             login()
-                                             # Check for authorization code in URL
-                                             params = st.query_params
-                                             if "code" in params:
-                                                      code = params["code"][0]
-                                                      token = get_token_from_code(code)
-                                                      if token:
-                                                               st.session_state.access_token = token
-                                                               st.experimental_set_query_params()
-                                                      
-     
+                           login()
+                           # Check for authorization code in URL
+                           params = st.query_params
+                           if "code" in params:
+                                    code = params["code"]
+                                    token = get_token_from_code(code)
+                                    if token:
+                                             st.session_state.access_token = token
+                                             st.session_state.user_email = get_user_info(st.session_state.access_token)
+                                             st.query_params.clear()
+              
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
-         with st.container():
-                  with tab1:
-                           brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
-
-                           # user input for equity and mmm file. 
-                           markets_available = ["UK"]
-                           column_1,_,_,_ = st.columns(4)
-            
-                           with column_1:
-                                    market = st.selectbox('Markets', markets_available)
-                                    market = market.lower()
+                                    with st.container():
+                                             with tab1:
+                                                      brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
+                           
+                                                      # user input for equity and mmm file. 
+                                                      markets_available = ["UK"]
+                                                      column_1,_,_,_ = st.columns(4)
+                                       
+                                                      with column_1:
+                                                               market = st.selectbox('Markets', markets_available)
+                                                               market = market.lower()
+                                                               
+                                                      if market == "uk":
+                                                               slang ="MMM_UK_"
+                                                          
+                                             
+                                                      # getting our equity    
+                                                      filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
+                                                      
+                                             
+                                                      # reading the equity file
+                                                      df = reading_df(filepath_equity,sheet_name="average_smoothened")
+                                                      df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
+                                                      df_total_smooth = reading_df(filepath_equity,sheet_name="total_smoothened")
+                                                      df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
+                                                      df_significance = reading_df(filepath_equity,sheet_name="significance")
+                                                      df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
+                                             
+                                                      
+                                                      #Equity options
+                                                      category_options,time_period_options,framework_options = equity_options(df,brand_mapping)
+                                                      
+                                                        #creating the market_share_weighted
+                                                      value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
+                                                     'Brand Breadth', 'Average Engagement', 'Usage SoV',
+                                                     'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+                                                      'Buying Experience','Preparing Milk','Baby Experience']
                                     
-                           if market == "uk":
-                                    slang ="MMM_UK_"
-                               
-                  
-                           # getting our equity    
-                           filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
-                           
-                  
-                           # reading the equity file
-                           df = reading_df(filepath_equity,sheet_name="average_smoothened")
-                           df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
-                           df_total_smooth = reading_df(filepath_equity,sheet_name="total_smoothened")
-                           df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
-                           df_significance = reading_df(filepath_equity,sheet_name="significance")
-                           df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
-                  
-                           
-                           #Equity options
-                           category_options,time_period_options,framework_options = equity_options(df,brand_mapping)
-                           
-                             #creating the market_share_weighted
-                           value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
-                          'Brand Breadth', 'Average Engagement', 'Usage SoV',
-                          'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
-                           'Buying Experience','Preparing Milk','Baby Experience']
-         
 #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
-                           #creating a copy of our dataframes.
-                           df_copy = df.copy()
-                           df_total_uns_copy = df_total_uns.copy()
-                           # Aesthetic changes --------------------------------------------------------------------------------------------------
-                           #changing the names of the filtered  columns
-                           ################################################################## df ####################################################################################################
-                           df_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
-                           
-                           
-                           
-                           df_copy.brand = df_copy.brand.replace(brand_mapping)
-                           
-                           df_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
-                           
-                           ################################################################## df_total_uns ####################################################################################################
-                           
-                           df_total_uns_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
-                           
-                           
-                           df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
-                           
-                           replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
-                           df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
-                           
-                           
-                           df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
-                           
-                           
-                           df_total_uns_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                                                      #creating a copy of our dataframes.
+                                                      df_copy = df.copy()
+                                                      df_total_uns_copy = df_total_uns.copy()
+                                                      # Aesthetic changes --------------------------------------------------------------------------------------------------
+                                                      #changing the names of the filtered  columns
+                                                      ################################################################## df ####################################################################################################
+                                                      df_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
+                                                                            'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                                                      
+                                                      
+                                                      
+                                                      df_copy.brand = df_copy.brand.replace(brand_mapping)
+                                                      
+                                                      df_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                                                      
+                                                      ################################################################## df_total_uns ####################################################################################################
+                                                      
+                                                      df_total_uns_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
+                                                                            'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                                                      
+                                                      
+                                                      df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
+                                                      
+                                                      replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
+                                                      df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
+                                                      
+                                                      
+                                                      df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
+                                                      
+                                                      
+                                                      df_total_uns_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
 
     ################################################################## ##################################################################################################################
     #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     #--------------------------------------------------------------------------------------// Market Share Weighted----------------------------------------------------------------------------------
-                  with tab2:
-                            #chosing the sheet name 
-                           column_1,_,_,_ = st.columns(4)
-                           with column_1:
-                                    sheet_name = st.selectbox("Select sheet",["Average","Absolute"])
-                           
-                           st.subheader(f"Equity Metrics Plot - Market Share Weighted {sheet_name}")
-                  
-                  
-                           if sheet_name == "Average":
-                                    sheet_name = "Average Smoothening"
-                                    sheet_name_download = 'average'
-                                    df_for_weighted = df_copy
-                           if sheet_name == "Absolute":
-                                    sheet_name = "Total Unsmoothening"
-                                    sheet_name_download = "total"
-                                    df_for_weighted = df_total_uns_copy
-                           
-                  
-                           col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
-                           # creating the average_weighted 
-                           weights_values_for_average = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
-                           
-                           with col1:
-                                  number = st.number_input("APTAMIL", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["APTAMIL"]=number
-                           
-                           with col2:
-                                  number = st.number_input("COW & GATE", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["COW & GATE"]=number
-                  
-                           with col3:
-                                  number = st.number_input(f"SMA", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["SMA"]=number
-                  
-                           with col4:
-                                  number = st.number_input(f"KENDAMIL", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["KENDAMIL"]=number
-                  
-                           
-                           with col5:
-                                  number = st.number_input(f"HIPP ORGANIC", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["HIPP ORGANIC"]=number
-                  
-                           
-                           #creating the market_share_weighted
-                           market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns)
-                           
-                           # creating the columns for the app
-                           right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
-                           
-                           with right_column_1:
-                           #getting the date
-                                    start_date = st.date_input("Select start date",value=datetime(2021, 2, 16),key='start_date')
-                                    end_date =  st.date_input("Select end date",key='test1')
-                           # getting the parameters
-                           with right_column_2:
-                                    st.session_state.category = st.radio('Choose  category:', category_options,key='test3')
-                           
-                           with left_column_1:    
-                                    st.session_state.time_frame = st.radio('Choose  time frame:', time_period_options,key='test4')
-                           
-                           with left_column_2:
-                                    framework = st.selectbox('Choose  framework:', value_columns,key='test5')
-                           
-                           
-                           if st.session_state.button == False:
-                                    if st.button("Run!"):
-                                             #convert our dates
-                                             ws = start_date.strftime('%Y-%m-%d')
-                                             we = end_date.strftime('%Y-%m-%d')
+                                             with tab2:
+                                                       #chosing the sheet name 
+                                                      column_1,_,_,_ = st.columns(4)
+                                                      with column_1:
+                                                               sheet_name = st.selectbox("Select sheet",["Average","Absolute"])
+                                                      
+                                                      st.subheader(f"Equity Metrics Plot - Market Share Weighted {sheet_name}")
                                              
-                                             st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
-                                             st.session_state.button = True
-                           else:
-                                    if st.button("Run!"):
-                                             #convert our dates
-                                             ws = start_date.strftime('%Y-%m-%d')
-                                             we = end_date.strftime('%Y-%m-%d')
                                              
-                                             st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
-                                    
-                           
-                           
-                           if st.session_state.button == False:
-                                    pass
-                           else:
-                                    st.plotly_chart(st.session_state.fig,use_container_width=True)
-                           
-                           
-                           buffer = io.BytesIO()
-                           with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
-                                    df.to_excel(writer, sheet_name='average_smoothened', index=False)
-                                    
-                                    df_avg_unsmooth.to_excel(writer, sheet_name='average_unsmoothened', index=False)
-                                    
-                                    df_total_uns.to_excel(writer, sheet_name='total_unsmoothened', index=False)
-                                    
-                                    df_total_smooth.to_excel(writer, sheet_name='total_smoothened', index=False)
-                                    
-                                    market_share_weighted.to_excel(writer,sheet_name=f'market_share_{sheet_name_download}',index=False)
-                                    
-                                    df_significance.to_excel(writer,sheet_name='significance',index=False)
-                                    
-                                    df_perc_changes.to_excel(writer,sheet_name='perc_changes',index=False)
-                           
-                           
-                           st.download_button(
-                                    label="📤",
-                                    data=buffer,
-                                    file_name=f"Equity_danone_{market}_{datetime.today()}.xlsx",
-                                    mime="application/vnd.ms-excel")
-                 
+                                                      if sheet_name == "Average":
+                                                               sheet_name = "Average Smoothening"
+                                                               sheet_name_download = 'average'
+                                                               df_for_weighted = df_copy
+                                                      if sheet_name == "Absolute":
+                                                               sheet_name = "Total Unsmoothening"
+                                                               sheet_name_download = "total"
+                                                               df_for_weighted = df_total_uns_copy
+                                                      
+                                             
+                                                      col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
+                                                      # creating the average_weighted 
+                                                      weights_values_for_average = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                                      
+                                                      with col1:
+                                                             number = st.number_input("APTAMIL", min_value=0, max_value=100, value=10)
+                                                             number = number/100
+                                                             weights_values_for_average["APTAMIL"]=number
+                                                      
+                                                      with col2:
+                                                             number = st.number_input("COW & GATE", min_value=0, max_value=100, value=10)
+                                                             number = number/100
+                                                             weights_values_for_average["COW & GATE"]=number
+                                             
+                                                      with col3:
+                                                             number = st.number_input(f"SMA", min_value=0, max_value=100, value=10)
+                                                             number = number/100
+                                                             weights_values_for_average["SMA"]=number
+                                             
+                                                      with col4:
+                                                             number = st.number_input(f"KENDAMIL", min_value=0, max_value=100, value=10)
+                                                             number = number/100
+                                                             weights_values_for_average["KENDAMIL"]=number
+                                             
+                                                      
+                                                      with col5:
+                                                             number = st.number_input(f"HIPP ORGANIC", min_value=0, max_value=100, value=10)
+                                                             number = number/100
+                                                             weights_values_for_average["HIPP ORGANIC"]=number
+                                             
+                                                      
+                                                      #creating the market_share_weighted
+                                                      market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns)
+                                                      
+                                                      # creating the columns for the app
+                                                      right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
+                                                      
+                                                      with right_column_1:
+                                                      #getting the date
+                                                               start_date = st.date_input("Select start date",value=datetime(2021, 2, 16),key='start_date')
+                                                               end_date =  st.date_input("Select end date",key='test1')
+                                                      # getting the parameters
+                                                      with right_column_2:
+                                                               st.session_state.category = st.radio('Choose  category:', category_options,key='test3')
+                                                      
+                                                      with left_column_1:    
+                                                               st.session_state.time_frame = st.radio('Choose  time frame:', time_period_options,key='test4')
+                                                      
+                                                      with left_column_2:
+                                                               framework = st.selectbox('Choose  framework:', value_columns,key='test5')
+                                                      
+                                                      
+                                                      if st.session_state.button == False:
+                                                               if st.button("Run!"):
+                                                                        #convert our dates
+                                                                        ws = start_date.strftime('%Y-%m-%d')
+                                                                        we = end_date.strftime('%Y-%m-%d')
+                                                                        
+                                                                        st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
+                                                                        st.session_state.button = True
+                                                      else:
+                                                               if st.button("Run!"):
+                                                                        #convert our dates
+                                                                        ws = start_date.strftime('%Y-%m-%d')
+                                                                        we = end_date.strftime('%Y-%m-%d')
+                                                                        
+                                                                        st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
+                                                               
+                                                      
+                                                      
+                                                      if st.session_state.button == False:
+                                                               pass
+                                                      else:
+                                                               st.plotly_chart(st.session_state.fig,use_container_width=True)
+                                                      
+                                                      
+                                                      buffer = io.BytesIO()
+                                                      with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                                                               df.to_excel(writer, sheet_name='average_smoothened', index=False)
+                                                               
+                                                               df_avg_unsmooth.to_excel(writer, sheet_name='average_unsmoothened', index=False)
+                                                               
+                                                               df_total_uns.to_excel(writer, sheet_name='total_unsmoothened', index=False)
+                                                               
+                                                               df_total_smooth.to_excel(writer, sheet_name='total_smoothened', index=False)
+                                                               
+                                                               market_share_weighted.to_excel(writer,sheet_name=f'market_share_{sheet_name_download}',index=False)
+                                                               
+                                                               df_significance.to_excel(writer,sheet_name='significance',index=False)
+                                                               
+                                                               df_perc_changes.to_excel(writer,sheet_name='perc_changes',index=False)
+                                                      
+                                                      
+                                                      st.download_button(
+                                                               label="📤",
+                                                               data=buffer,
+                                                               file_name=f"Equity_danone_{market}_{datetime.today()}.xlsx",
+                                                               mime="application/vnd.ms-excel")
+                                            
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-
+                           
 #-------------------------------------------------------------------------------------------------------------// Compare plot//------------------------------------------------------------------------------------
-                  with tab3:
-                           #creating the weighted file and the plot  
+                                             with tab3:
+                                                      #creating the weighted file and the plot  
+                                                      
+                                                      column_1,_,_,_ = st.columns(4)
+                                                      with column_1:
+                                                               weighted_avg = st.number_input("Average Weight (%)", min_value=0, max_value=100, value=75, step=5, key="weighted_avg")
+                                                      
+                                                      weighted_avg = weighted_avg/100
+                                                      weighted_total = 1 - weighted_avg
+                                                      
+                                                      
+                                                      df_weighted = get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_mapping)
+                                                      # Comparing all the sheets
+                                                      fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping)
+                                                      st.plotly_chart(fig,use_container_width=True)
                            
-                           column_1,_,_,_ = st.columns(4)
-                           with column_1:
-                                    weighted_avg = st.number_input("Average Weight (%)", min_value=0, max_value=100, value=75, step=5, key="weighted_avg")
-                           
-                           weighted_avg = weighted_avg/100
-                           weighted_total = 1 - weighted_avg
-                           
-                           
-                           df_weighted = get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_mapping)
-                           # Comparing all the sheets
-                           fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping)
-                           st.plotly_chart(fig,use_container_width=True)
-
 #--------------------------------------------------------------------------------------// Equity plot //----------------------------------------------------------------------------------
-                  with tab4:
-                           #chosing the sheet name 
-                           column_1,_,_,_ = st.columns(4)
-                           with column_1:
-                                    sheet_name = st.selectbox("Select sheet",["Average","Absolute", "Weighted"])
-                           
-                           if sheet_name == "Average":
-                                    sheet_name = "Average Smoothening"
-                           if sheet_name == "Absolute":
-                                    sheet_name = "Total Unsmoothening"
-                           
-                           if sheet_name == "Average Smoothening":
-                                    fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
-                                    st.plotly_chart(fig,use_container_width=True)
-                           
-                           if sheet_name == "Total Unsmoothening":
-                                    fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name=sheet_name)
-                                    st.plotly_chart(fig,use_container_width=True)
-                           
-                           if sheet_name == "Weighted":
-                                    fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
-                                    st.plotly_chart(fig,use_container_width=True)
+                                             with tab4:
+                                                      #chosing the sheet name 
+                                                      column_1,_,_,_ = st.columns(4)
+                                                      with column_1:
+                                                               sheet_name = st.selectbox("Select sheet",["Average","Absolute", "Weighted"])
+                                                      
+                                                      if sheet_name == "Average":
+                                                               sheet_name = "Average Smoothening"
+                                                      if sheet_name == "Absolute":
+                                                               sheet_name = "Total Unsmoothening"
+                                                      
+                                                      if sheet_name == "Average Smoothening":
+                                                               fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                                               st.plotly_chart(fig,use_container_width=True)
+                                                      
+                                                      if sheet_name == "Total Unsmoothening":
+                                                               fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                                               st.plotly_chart(fig,use_container_width=True)
+                                                      
+                                                      if sheet_name == "Weighted":
+                                                               fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                                               st.plotly_chart(fig,use_container_width=True)
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
-                  
-                  
+                                    st.session_state.access = True
+                                    st.experimental_rerun()
 
-           
+                           #if logged in
+                           else:
+                                    with st.container():
+                                             with tab1:
+                                                      brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
+                           
+                                                      # user input for equity and mmm file. 
+                                                      markets_available = ["UK"]
+                                                      column_1,_,_,_ = st.columns(4)
+                                       
+                                                      with column_1:
+                                                               market = st.selectbox('Markets', markets_available)
+                                                               market = market.lower()
+                                                               
+                                                      if market == "uk":
+                                                               slang ="MMM_UK_"
+                                                          
+                                             
+                                                      # getting our equity    
+                                                      filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
+                                                      
+                                             
+                                                      # reading the equity file
+                                                      df = reading_df(filepath_equity,sheet_name="average_smoothened")
+                                                      df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
+                                                      df_total_smooth = reading_df(filepath_equity,sheet_name="total_smoothened")
+                                                      df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
+                                                      df_significance = reading_df(filepath_equity,sheet_name="significance")
+                                                      df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
+                                             
+                                                      
+                                                      #Equity options
+                                                      category_options,time_period_options,framework_options = equity_options(df,brand_mapping)
+                                                      
+                                                        #creating the market_share_weighted
+                                                      value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
+                                                     'Brand Breadth', 'Average Engagement', 'Usage SoV',
+                                                     'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+                                                      'Buying Experience','Preparing Milk','Baby Experience']
+                                    
+#--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
+                                                      #creating a copy of our dataframes.
+                                                      df_copy = df.copy()
+                                                      df_total_uns_copy = df_total_uns.copy()
+                                                      # Aesthetic changes --------------------------------------------------------------------------------------------------
+                                                      #changing the names of the filtered  columns
+                                                      ################################################################## df ####################################################################################################
+                                                      df_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
+                                                                            'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                                                      
+                                                      
+                                                      
+                                                      df_copy.brand = df_copy.brand.replace(brand_mapping)
+                                                      
+                                                      df_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                                                      
+                                                      ################################################################## df_total_uns ####################################################################################################
+                                                      
+                                                      df_total_uns_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
+                                                                            'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                                                      
+                                                      
+                                                      df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
+                                                      
+                                                      replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
+                                                      df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
+                                                      
+                                                      
+                                                      df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
+                                                      
+                                                      
+                                                      df_total_uns_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+
+    ################################################################## ##################################################################################################################
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    #--------------------------------------------------------------------------------------// Market Share Weighted----------------------------------------------------------------------------------
+                                             with tab2:
+                                                       #chosing the sheet name 
+                                                      column_1,_,_,_ = st.columns(4)
+                                                      with column_1:
+                                                               sheet_name = st.selectbox("Select sheet",["Average","Absolute"])
+                                                      
+                                                      st.subheader(f"Equity Metrics Plot - Market Share Weighted {sheet_name}")
+                                             
+                                             
+                                                      if sheet_name == "Average":
+                                                               sheet_name = "Average Smoothening"
+                                                               sheet_name_download = 'average'
+                                                               df_for_weighted = df_copy
+                                                      if sheet_name == "Absolute":
+                                                               sheet_name = "Total Unsmoothening"
+                                                               sheet_name_download = "total"
+                                                               df_for_weighted = df_total_uns_copy
+                                                      
+                                             
+                                                      col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
+                                                      # creating the average_weighted 
+                                                      weights_values_for_average = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                                      
+                                                      with col1:
+                                                             number = st.number_input("APTAMIL", min_value=0, max_value=100, value=10)
+                                                             number = number/100
+                                                             weights_values_for_average["APTAMIL"]=number
+                                                      
+                                                      with col2:
+                                                             number = st.number_input("COW & GATE", min_value=0, max_value=100, value=10)
+                                                             number = number/100
+                                                             weights_values_for_average["COW & GATE"]=number
+                                             
+                                                      with col3:
+                                                             number = st.number_input(f"SMA", min_value=0, max_value=100, value=10)
+                                                             number = number/100
+                                                             weights_values_for_average["SMA"]=number
+                                             
+                                                      with col4:
+                                                             number = st.number_input(f"KENDAMIL", min_value=0, max_value=100, value=10)
+                                                             number = number/100
+                                                             weights_values_for_average["KENDAMIL"]=number
+                                             
+                                                      
+                                                      with col5:
+                                                             number = st.number_input(f"HIPP ORGANIC", min_value=0, max_value=100, value=10)
+                                                             number = number/100
+                                                             weights_values_for_average["HIPP ORGANIC"]=number
+                                             
+                                                      
+                                                      #creating the market_share_weighted
+                                                      market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns)
+                                                      
+                                                      # creating the columns for the app
+                                                      right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
+                                                      
+                                                      with right_column_1:
+                                                      #getting the date
+                                                               start_date = st.date_input("Select start date",value=datetime(2021, 2, 16),key='start_date')
+                                                               end_date =  st.date_input("Select end date",key='test1')
+                                                      # getting the parameters
+                                                      with right_column_2:
+                                                               st.session_state.category = st.radio('Choose  category:', category_options,key='test3')
+                                                      
+                                                      with left_column_1:    
+                                                               st.session_state.time_frame = st.radio('Choose  time frame:', time_period_options,key='test4')
+                                                      
+                                                      with left_column_2:
+                                                               framework = st.selectbox('Choose  framework:', value_columns,key='test5')
+                                                      
+                                                      
+                                                      if st.session_state.button == False:
+                                                               if st.button("Run!"):
+                                                                        #convert our dates
+                                                                        ws = start_date.strftime('%Y-%m-%d')
+                                                                        we = end_date.strftime('%Y-%m-%d')
+                                                                        
+                                                                        st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
+                                                                        st.session_state.button = True
+                                                      else:
+                                                               if st.button("Run!"):
+                                                                        #convert our dates
+                                                                        ws = start_date.strftime('%Y-%m-%d')
+                                                                        we = end_date.strftime('%Y-%m-%d')
+                                                                        
+                                                                        st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
+                                                               
+                                                      
+                                                      
+                                                      if st.session_state.button == False:
+                                                               pass
+                                                      else:
+                                                               st.plotly_chart(st.session_state.fig,use_container_width=True)
+                                                      
+                                                      
+                                                      buffer = io.BytesIO()
+                                                      with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                                                               df.to_excel(writer, sheet_name='average_smoothened', index=False)
+                                                               
+                                                               df_avg_unsmooth.to_excel(writer, sheet_name='average_unsmoothened', index=False)
+                                                               
+                                                               df_total_uns.to_excel(writer, sheet_name='total_unsmoothened', index=False)
+                                                               
+                                                               df_total_smooth.to_excel(writer, sheet_name='total_smoothened', index=False)
+                                                               
+                                                               market_share_weighted.to_excel(writer,sheet_name=f'market_share_{sheet_name_download}',index=False)
+                                                               
+                                                               df_significance.to_excel(writer,sheet_name='significance',index=False)
+                                                               
+                                                               df_perc_changes.to_excel(writer,sheet_name='perc_changes',index=False)
+                                                      
+                                                      
+                                                      st.download_button(
+                                                               label="📤",
+                                                               data=buffer,
+                                                               file_name=f"Equity_danone_{market}_{datetime.today()}.xlsx",
+                                                               mime="application/vnd.ms-excel")
+                                            
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+                           
+#-------------------------------------------------------------------------------------------------------------// Compare plot//------------------------------------------------------------------------------------
+                                             with tab3:
+                                                      #creating the weighted file and the plot  
+                                                      
+                                                      column_1,_,_,_ = st.columns(4)
+                                                      with column_1:
+                                                               weighted_avg = st.number_input("Average Weight (%)", min_value=0, max_value=100, value=75, step=5, key="weighted_avg")
+                                                      
+                                                      weighted_avg = weighted_avg/100
+                                                      weighted_total = 1 - weighted_avg
+                                                      
+                                                      
+                                                      df_weighted = get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_mapping)
+                                                      # Comparing all the sheets
+                                                      fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping)
+                                                      st.plotly_chart(fig,use_container_width=True)
+                           
+#--------------------------------------------------------------------------------------// Equity plot //----------------------------------------------------------------------------------
+                                             with tab4:
+                                                      #chosing the sheet name 
+                                                      column_1,_,_,_ = st.columns(4)
+                                                      with column_1:
+                                                               sheet_name = st.selectbox("Select sheet",["Average","Absolute", "Weighted"])
+                                                      
+                                                      if sheet_name == "Average":
+                                                               sheet_name = "Average Smoothening"
+                                                      if sheet_name == "Absolute":
+                                                               sheet_name = "Total Unsmoothening"
+                                                      
+                                                      if sheet_name == "Average Smoothening":
+                                                               fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                                               st.plotly_chart(fig,use_container_width=True)
+                                                      
+                                                      if sheet_name == "Total Unsmoothening":
+                                                               fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                                               st.plotly_chart(fig,use_container_width=True)
+                                                      
+                                                      if sheet_name == "Weighted":
+                                                               fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                                               st.plotly_chart(fig,use_container_width=True)
+
+
+                           
+                                    # Custom CSS to push the logout button to the right and style it
+                                    # Custom CSS
+                                    st.markdown("""
+                                    <style>
+                                    #root > div:nth-child(1) > div > div > div > div > section > div {padding-top: 2rem;}
+                                    .stButton > button.logout-button {
+                                      padding: 0.25rem 0.5rem !important;
+                                      font-size: 0.1rem !important;
+                                      min-height: 0px !important;
+                                      height: auto !important;
+                                      line-height: normal !important;
+                                    }
+                                    </style>
+                                    """, unsafe_allow_html=True)
+                                    
+                                    # Custom HTML for spacing
+                                    html_code = """
+                                    <div style="margin-left: 20px;">
+                                    </div>
+                                    """
+                                    
+                                    with logout_container:
+                                             col1, col2, col3 = st.columns([6,1,1])
+                                    with col2:
+                                      components.html(html_code, height=3)
+                                      st.markdown(f'<p style="font-size:12px;">{st.session_state.user_email}</p>', unsafe_allow_html=True)
+                                    
+                                    with col3:
+                                      components.html(html_code, height=3)
+                                      if st.session_state.get('access', False):
+                                          if st.button("Logout", key="small_button", type="secondary", use_container_width=False, 
+                                                          help="Click to logout", kwargs={"class": "small_button"}):
+                                              st.markdown("""
+                                              <meta http-equiv="refresh" content="0; url='https://mmmfrontend.azurewebsites.net/'" />
+                                              """, unsafe_allow_html=True)
+                                               
 if __name__=="__main__":
     main()   
 
