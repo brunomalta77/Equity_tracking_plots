@@ -895,7 +895,7 @@ def main():
                   
                            col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
                            # creating the average_weighted 
-                           weights_values_for_average = {"APTAMIL":0 , "COW&GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP_ORGANIC": 0}
+                           weights_values_for_average = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
                            
                            with col1:
                                   number = st.number_input("APTAMIL", min_value=0, max_value=100, value=10)
