@@ -22,7 +22,7 @@ import requests
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
 logo_path = r"data/brand_logo.png"
-logo_microsoft_path =   r"data/microsoft.png"
+logo_microsoft_path = r"https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vecteezy.com%2Ffree-png%2Fmicrosoft-logo&psig=AOvVaw2cg5m4ujoN7sHWKMBLwyTU&ust=1721742649309000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCNjYsqrluocDFQAAAAAdAAAAABBk"
 image = Image.open(logo_path)
 image_microsoft = Image.open(logo_microsoft_path)
 #image_microsoft = Image.open(logo_microsoft_path)
