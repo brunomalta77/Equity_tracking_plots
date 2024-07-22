@@ -741,33 +741,33 @@ def main():
                   st.session_state.fig = False
          
          with st.container():
-                  tab1,tab2,tab3,tab4 = st.tabs(["📝 General info","📈 Market Share Weighted","🔍 Comparing Frameworks","📕 Equity Metrics Plot"])
+                  tab0,tab1,tab2,tab3,tab4 = st.tabs(["🔽 Microsoft SSO","📝 General info","📈 Market Share Weighted","🔍 Comparing Frameworks","📕 Equity Metrics Plot"])
 
-
-         logout_container = st.container()
-         st.title("Microsoft SSO")
-         #Global variables
-         # Initialize session state variables
-
-
-         # Initialize session state variables
-         if 'access' not in st.session_state:
-                  st.session_state.access = False
-                  
-         if 'login_clicked' not in st.session_state:
-                  st.session_state.login_clicked = False
-
-         if not st.session_state.access:                  
-                                    login()
-                                    # Check for authorization code in URL
-                                    params = st.experimental_get_query_params()
-                                    if "code" in params:
-                                             code = params["code"][0]
-                                             token = get_token_from_code(code)
-                                             if token:
-                                                      st.session_state.access_token = token
-                                                      st.experimental_set_query_params()
-                                             
+         with tab0:
+                  logout_container = st.container()
+                  st.title("Microsoft SSO")
+                  #Global variables
+                  # Initialize session state variables
+         
+         
+                  # Initialize session state variables
+                  if 'access' not in st.session_state:
+                           st.session_state.access = False
+                           
+                  if 'login_clicked' not in st.session_state:
+                           st.session_state.login_clicked = False
+         
+                  if not st.session_state.access:                  
+                                             login()
+                                             # Check for authorization code in URL
+                                             params = st.query_params
+                                             if "code" in params:
+                                                      code = params["code"][0]
+                                                      token = get_token_from_code(code)
+                                                      if token:
+                                                               st.session_state.access_token = token
+                                                               st.experimental_set_query_params()
+                                                      
      
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
          with st.container():
