@@ -383,13 +383,13 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
         we = end_date.strftime('%Y-%m-%d')
     # getting the parameters
     with right_column_2:
-        category = st.radio('Choose your category:', categories)
+        category = st.radio('Choose  category:', categories)
         
     with left_column_1:    
-        time_frame = st.radio('Choose your time frame:', time_frames)
+        time_frame = st.radio('Choose  time frame:', time_frames)
     
     with left_column_2:
-        framework = st.selectbox('Choose your metric:', frameworks)
+        framework = st.selectbox('Choose  metric:', frameworks)
     
     #filtering
     df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
