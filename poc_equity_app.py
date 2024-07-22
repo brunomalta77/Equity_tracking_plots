@@ -798,7 +798,7 @@ def main():
          
                                     # user input for equity and mmm file. 
                                     markets_available = ["UK"]
-                                    column_1,_,_,_ = st.columns(4)
+                                    column_1,_ = st.columns(2)
                      
                                     with column_1:
                                              market = st.selectbox('Markets', markets_available)
@@ -1040,7 +1040,7 @@ def main():
                            
                            # user input for equity and mmm file. 
                            markets_available = ["UK"]
-                           column_1,_,_,_ = st.columns(4)
+                           column_1,_ = st.columns(2)
                            
                            with column_1:
                                     market = st.selectbox('Markets', markets_available)
