@@ -799,6 +799,8 @@ def main():
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
    
                   with tab1:
+                           brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
+
                            # user input for equity and mmm file. 
                            markets_available = ["UK"]
                            market = st.selectbox('', markets_available)
