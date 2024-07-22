@@ -548,7 +548,7 @@ def Equity_plot_market_share_(df,category,time_frame,framework,ws,we):
 
 #Used to comparing the Equity from different sheets
 def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks,brand_mapping):
-    st.subheader(f"Compare Average vs Absolute vs Weighted Affinity")
+    st.subheader(f"Comparing Frameworks (Average Vs Absolute Vs Weighted)")
     
     # ------------------------------------------------------------------------------------------------Aesthetic changes-------------------------------------------------------------------------
     #changing the names of the filtered  columns
