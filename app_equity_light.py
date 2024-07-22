@@ -22,7 +22,9 @@ import requests
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
 logo_path = r"data/brand_logo.png"
-logo_microsoft_path = r"https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vecteezy.com%2Ffree-png%2Fmicrosoft-logo&psig=AOvVaw2cg5m4ujoN7sHWKMBLwyTU&ust=1721742649309000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCNjYsqrluocDFQAAAAAdAAAAABBk"
+logo_microsoft_path =  r"https://www.shareicon.net/data/256x256/2015/09/15/101518_microsoft_512x512.png"
+
+
 image = Image.open(logo_path)
 image_microsoft = Image.open(logo_microsoft_path)
 #image_microsoft = Image.open(logo_microsoft_path)
@@ -67,8 +69,21 @@ def get_token_from_code(code):
 
 def login():
          auth_url = get_auth_url()
-         st.image(image_microsoft)
-         st.markdown(f'[Login with Microsoft]({auth_url})')
+         #st.markdown(f'[Login with Microsoft]({auth_url})')
+         html_string = f"""
+         <a href="{auth_url}">
+             <img src="{logo_microsoft_path}" style="width: 20px; height: 20px; vertical-align: middle;">
+                Log in with Microsoft
+         </a>
+         """
+
+         # Use st.markdown to render the HTML
+         st.markdown(html_string, unsafe_allow_html=True)
+
+
+
+
+
 
 
 def get_user_info(access_token):
