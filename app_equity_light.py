@@ -765,7 +765,7 @@ def main():
 
          
          with st.container():
-                  tab0 = st.tabs(["🔽 Microsoft SSO"])
+                  tab0,tab1,tab2,tab3,tab4 = st.tabs(["🔽 Microsoft SSO","📝 General info","📈 Market Share Weighted","🔍 Comparing Frameworks","📕 Equity Metrics Plot"])
 
          with tab0:
                   if not st.session_state.access:                  
@@ -780,9 +780,7 @@ def main():
                                              st.session_state.user_email = get_user_info(st.session_state.access_token)
                                              st.query_params.clear()
                                     
-                                    with st.container():
-                                             tab1,tab2,tab3,tab4 = st.tabs(["📝 General info","📈 Market Share Weighted","🔍 Comparing Frameworks","📕 Equity Metrics Plot"])
-
+                                    
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
                                     with tab1:
                                              brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
