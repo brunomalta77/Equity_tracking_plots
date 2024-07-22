@@ -488,13 +488,13 @@ def Equity_plot_market_share_(df,categories,time_frames,frameworks,sheet_name):
         we = end_date.strftime('%Y-%m-%d')
     # getting the parameters
     with right_column_2:
-        category = st.radio('Choose your category:', categories,key='test3')
+        category = st.radio('Choose  category:', categories,key='test3')
         
     with left_column_1:    
-        time_frame = st.radio('Choose your time frame:', time_frames,key='test4')
+        time_frame = st.radio('Choose  time frame:', time_frames,key='test4')
     
     with left_column_2:
-        framework = st.selectbox('Choose your metric:', frameworks,key='test5')
+        framework = st.selectbox('Choose  metric:', frameworks,key='test5')
     
     #filtering
     df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
@@ -632,14 +632,14 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
         we = end_date.strftime('%Y-%m-%d')
     # getting the parameters
     with right_column_2:
-        category = st.radio('Choose your category:', categories,key="test_3")
+        category = st.radio('Choose category:', categories,key="test_3")
         
     with left_column_1:    
-        time_frame = st.radio('Choose your time frame:', time_frames,key="test_4")
+        time_frame = st.radio('Choose  time frame:', time_frames,key="test_4")
     
     with left_column_2:
-        framework = st.selectbox('Choose your metric:', frameworks,key="test_5")
-        my_brand = st.multiselect('Choose your brand',df.brand.unique())
+        framework = st.selectbox('Choose  metric:', frameworks,key="test_5")
+        my_brand = st.multiselect('Choose  brand',df.brand.unique())
     
     #filtering all the dataframes
     #Average
