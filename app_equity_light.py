@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import streamlit.components.v1 as components
 import re
 import time
 import string
