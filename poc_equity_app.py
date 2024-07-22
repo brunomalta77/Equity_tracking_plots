@@ -1040,74 +1040,74 @@ def main():
                   else:
                            with st.sidebar():
                                     st.header("📝 General info")
-                           brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
-                           
-                           # user input for equity and mmm file. 
-                           markets_available = ["UK"]
-                           column_1,_,_,_ = st.columns(4)
-                           
-                           with column_1:
-                                    market = st.selectbox('Markets', markets_available)
-                                    market = market.lower()
+                                    brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
                                     
-                           if market == "uk":
-                                    slang ="MMM_UK_"
-                               
-                           
-                           # getting our equity    
-                           filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
-                           
-                           
-                           # reading the equity file
-                           df = reading_df(filepath_equity,sheet_name="average_smoothened")
-                           df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
-                           df_total_smooth = reading_df(filepath_equity,sheet_name="total_smoothened")
-                           df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
-                           df_significance = reading_df(filepath_equity,sheet_name="significance")
-                           df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
-                           
-                           
-                           #Equity options
-                           category_options,time_period_options,framework_options = equity_options(df,brand_mapping)
-                           
-                             #creating the market_share_weighted
-                           value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
-                           'Brand Breadth', 'Average Engagement', 'Usage SoV',
-                           'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
-                           'Buying Experience','Preparing Milk','Baby Experience']
-                           
-                           #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
-                           #creating a copy of our dataframes.
-                           df_copy = df.copy()
-                           df_total_uns_copy = df_total_uns.copy()
-                           # Aesthetic changes --------------------------------------------------------------------------------------------------
-                           #changing the names of the filtered  columns
-                           ################################################################## df ####################################################################################################
-                           df_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
-                           
-                           
-                           
-                           df_copy.brand = df_copy.brand.replace(brand_mapping)
-                           
-                           df_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
-                           
-                           ################################################################## df_total_uns ####################################################################################################
-                           
-                           df_total_uns_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
-                           
-                           
-                           df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
-                           
-                           replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
-                           df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
-                           
-                           
-                           df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
-                           
-                           
-                           df_total_uns_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                                    # user input for equity and mmm file. 
+                                    markets_available = ["UK"]
+                                    column_1,_,_,_ = st.columns(4)
+                                    
+                                    with column_1:
+                                             market = st.selectbox('Markets', markets_available)
+                                             market = market.lower()
+                                             
+                                    if market == "uk":
+                                             slang ="MMM_UK_"
+                                        
+                                    
+                                    # getting our equity    
+                                    filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
+                                    
+                                    
+                                    # reading the equity file
+                                    df = reading_df(filepath_equity,sheet_name="average_smoothened")
+                                    df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
+                                    df_total_smooth = reading_df(filepath_equity,sheet_name="total_smoothened")
+                                    df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
+                                    df_significance = reading_df(filepath_equity,sheet_name="significance")
+                                    df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
+                                    
+                                    
+                                    #Equity options
+                                    category_options,time_period_options,framework_options = equity_options(df,brand_mapping)
+                                    
+                                      #creating the market_share_weighted
+                                    value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
+                                    'Brand Breadth', 'Average Engagement', 'Usage SoV',
+                                    'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+                                    'Buying Experience','Preparing Milk','Baby Experience']
+                                    
+                                    #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
+                                    #creating a copy of our dataframes.
+                                    df_copy = df.copy()
+                                    df_total_uns_copy = df_total_uns.copy()
+                                    # Aesthetic changes --------------------------------------------------------------------------------------------------
+                                    #changing the names of the filtered  columns
+                                    ################################################################## df ####################################################################################################
+                                    df_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
+                                                          'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                                    
+                                    
+                                    
+                                    df_copy.brand = df_copy.brand.replace(brand_mapping)
+                                    
+                                    df_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                                    
+                                    ################################################################## df_total_uns ####################################################################################################
+                                    
+                                    df_total_uns_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
+                                                          'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                                    
+                                    
+                                    df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
+                                    
+                                    replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
+                                    df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
+                                    
+                                    
+                                    df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
+                                    
+                                    
+                                    df_total_uns_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
 
 ################################################################## ##################################################################################################################
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
