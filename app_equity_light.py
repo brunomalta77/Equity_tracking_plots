@@ -16,6 +16,7 @@ import os
 from PIL import Image
 import msal
 import io
+import requests
 
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
