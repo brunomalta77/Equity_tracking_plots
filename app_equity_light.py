@@ -547,7 +547,7 @@ def Equity_plot_market_share_(df,category,time_frame,framework,ws,we):
 
 
 #Used to comparing the Equity from different sheets
-def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks,brand_mapping):
+def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks,brand_replacement):
     st.subheader(f"Comparing Frameworks (Average Vs Absolute Vs Weighted)")
     
     # ------------------------------------------------------------------------------------------------Aesthetic changes-------------------------------------------------------------------------
@@ -555,8 +555,6 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     ################################################################## df ####################################################################################################
     df.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
-
-    brand_replacement = {"aptamil":"APTAMIL","kendamil":"KENDAMILL","cow&gate":"COW&GATE","sma":"SMA","hipp_organic":"HIPP_ORGANIC"}
 
     df.brand = df.brand.replace(brand_replacement)
     
@@ -567,7 +565,6 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     df_total_uns.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
 
-    brand_replacement = {"aptamil":"APTAMIL","kendamil":"KENDAMILL","cow&gate":"COW&GATE","sma":"SMA","hipp_organic":"HIPP_ORGANIC"}
 
     df_total_uns.brand = df_total_uns.brand.replace(brand_replacement)
 
@@ -584,8 +581,6 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
 
     weighted_df.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
-
-    brand_replacement = {"aptamil":"APTAMIL","kendamil":"KENDAMILL","cow&gate":"COW&GATE","sma":"SMA","hipp_organic":"HIPP_ORGANIC"}
 
     weighted_df.brand = weighted_df.brand.replace(brand_replacement)
 
