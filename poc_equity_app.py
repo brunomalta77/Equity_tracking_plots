@@ -36,7 +36,7 @@ CLIENT_ID = "baa3d4a8-3aa7-45bd-9245-93e8610b2b84"
 CLIENT_SECRET = "RBm8Q~fsy.iJ1_afdMITcNIgGe~n~mDmAx9cSaBO"
 AUTHORITY = "https://login.microsoftonline.com/68421f43-a2e1-4c77-90f4-e12a5c7e0dbc"
 SCOPE = ["User.Read"]
-REDIRECT_URI = "https://equitytrackingplots-htlo3cszeveuzxmsa7raar.streamlit.app/" # This should match your Azure AD app configuration
+REDIRECT_URI = "https://equitytrackingplots-q3rybijps3bkvpydcwwmpp.streamlit.app/" # This should match your Azure AD app configuration
 
 # Initialize MSAL application
 app = msal.ConfidentialClientApplication(
@@ -1304,7 +1304,7 @@ def main():
                         if st.button("Logout", key="small_button", type="secondary", use_container_width=False, 
                                         help="Click to logout", kwargs={"class": "small_button"}):
                             st.markdown("""
-                            <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-htlo3cszeveuzxmsa7raar.streamlit.app/'" />
+                            <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-q3rybijps3bkvpydcwwmpp.streamlit.app/'" />
                             """, unsafe_allow_html=True)
                                                
 if __name__=="__main__":
