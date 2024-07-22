@@ -1011,27 +1011,27 @@ def main():
 
 #--------------------------------------------------------------------------------------// Equity plot //----------------------------------------------------------------------------------
                   with tab4:
-                  #chosing the sheet name 
-                  column_1,_,_,_ = st.columns(4)
-                  with column_1:
-                           sheet_name = st.selectbox("Select sheet",["Average","Absolute", "Weighted"])
-                  
-                  if sheet_name == "Average":
-                           sheet_name = "Average Smoothening"
-                  if sheet_name == "Absolute":
-                           sheet_name = "Total Unsmoothening"
-                  
-                  if sheet_name == "Average Smoothening":
-                           fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
-                           st.plotly_chart(fig,use_container_width=True)
-                  
-                  if sheet_name == "Total Unsmoothening":
-                           fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name=sheet_name)
-                           st.plotly_chart(fig,use_container_width=True)
-                  
-                  if sheet_name == "Weighted":
-                           fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
-                           st.plotly_chart(fig,use_container_width=True)
+                           #chosing the sheet name 
+                           column_1,_,_,_ = st.columns(4)
+                           with column_1:
+                                    sheet_name = st.selectbox("Select sheet",["Average","Absolute", "Weighted"])
+                           
+                           if sheet_name == "Average":
+                                    sheet_name = "Average Smoothening"
+                           if sheet_name == "Absolute":
+                                    sheet_name = "Total Unsmoothening"
+                           
+                           if sheet_name == "Average Smoothening":
+                                    fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                    st.plotly_chart(fig,use_container_width=True)
+                           
+                           if sheet_name == "Total Unsmoothening":
+                                    fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                    st.plotly_chart(fig,use_container_width=True)
+                           
+                           if sheet_name == "Weighted":
+                                    fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                    st.plotly_chart(fig,use_container_width=True)
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
                   
