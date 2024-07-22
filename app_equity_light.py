@@ -876,7 +876,7 @@ def main():
                                   weights_values_for_average["APTAMIL"]=number
                            
                            with col2:
-                                  number = st.number_input("COW&GATE", min_value=0, max_value=100, value=10)
+                                  number = st.number_input("COW & GATE", min_value=0, max_value=100, value=10)
                                   number = number/100
                                   weights_values_for_average["COW & GATE"]=number
                   
