@@ -319,17 +319,20 @@ def media_spend_processed(df,df_spend,df_weeks):
 
 
 
-def equity_options(df):
-    df["Category"] = df["Category"].replace("baby_milk","Baby milk")
-    category_options = df["Category"].unique()
-
-    replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
-    df["time_period"] = df["time_period"].replace(replacements)
-    time_period_options = df["time_period"].unique()
-
-    framework_options = ["Total Equity","Awareness","Saliency","Affinity",'Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+def equity_options(df,brand_mapping):
+         df.brand = df.brand.replace(brand_mapping)
+         
+         
+         df["Category"] = df["Category"].replace("baby_milk","Baby milk")
+         category_options = df["Category"].unique()
+         
+         replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
+         df["time_period"] = df["time_period"].replace(replacements)
+         time_period_options = df["time_period"].unique()
+         
+         framework_options = ["Total Equity","Awareness","Saliency","Affinity",'Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
                                 'Buying Experience','Preparing Milk','Baby Experience']
-    return (category_options,time_period_options,framework_options)
+         return (category_options,time_period_options,framework_options)
 
 
 
