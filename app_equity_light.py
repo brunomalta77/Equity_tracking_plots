@@ -745,26 +745,29 @@ def main():
          
          if 'fig' not in st.session_state:
                   st.session_state.fig = False
+
+         # Initialize session state if not already initialized
+         logout_container = st.container()
+         if "inputs" not in st.session_state:
+                  st.session_state.inputs = {}
+
+         # Initialize session state variables
+         if 'access' not in st.session_state:
+                  st.session_state.access = False
+         
+         if 'login_clicked' not in st.session_state:
+                  st.session_state.login_clicked = False
+         
+         if 'user_email' not in st.session_state:
+                  st.session_state.user_email = None
+         
+
+
          
          with st.container():
                   tab0,tab1,tab2,tab3,tab4 = st.tabs(["🔽 Microsoft SSO","📝 General info","📈 Market Share Weighted","🔍 Comparing Frameworks","📕 Equity Metrics Plot"])
 
          with tab0:
-                # Initialize session state if not already initialized
-                  logout_container = st.container()
-                  if "inputs" not in st.session_state:
-                           st.session_state.inputs = {}
-                  # it starts here the SSO Login
-                  # Initialize session state variables
-                  if 'access' not in st.session_state:
-                           st.session_state.access = False
-                  
-                  if 'login_clicked' not in st.session_state:
-                           st.session_state.login_clicked = False
-                  
-                  if 'user_email' not in st.session_state:
-                           st.session_state.user_email = None
-                  
                   if not st.session_state.access:                  
                            login()
                            # Check for authorization code in URL
@@ -778,7 +781,7 @@ def main():
                                              st.query_params.clear()
               
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
-                                    #with st.container():
+                                    with st.container():
                                              with tab1:
                                                       brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
                            
