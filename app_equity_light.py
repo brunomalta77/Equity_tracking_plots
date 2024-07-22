@@ -67,7 +67,7 @@ def get_token_from_code(code):
 def login():
          auth_url = get_auth_url()
          response = requests.get('https://graph.microsoft.com/v1.0/me', headers=headers)
-         st.markdown(response)
+         st.markdown(response.json()
          st.markdown(f'[Login with Microsoft]({auth_url})')
 
 
