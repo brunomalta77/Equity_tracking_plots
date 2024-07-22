@@ -23,11 +23,8 @@ import requests
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
 logo_path = r"data/brand_logo.png"
 logo_microsoft_path =  r"https://www.shareicon.net/data/256x256/2015/09/15/101518_microsoft_512x512.png"
-
-
 image = Image.open(logo_path)
-image_microsoft = Image.open(logo_microsoft_path)
-#image_microsoft = Image.open(logo_microsoft_path)
+
 #colors used for the plots
 colors = ["blue", "green", "red", "purple", "orange","teal","black","paleturquoise","indigo","darkseagreen","gold","darkviolet","firebrick","navy","deeppink",
          "orangered"]
