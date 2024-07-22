@@ -779,7 +779,7 @@ def main():
 
          
          with st.container():
-                  tab0,tab1,tab2,tab3,tab4 = st.tabs(["🔽 Microsoft SSO","📝 General info","📈 Market Share Weighted","🔍Combine Average and Absolute","📕 Final Equity plots"])
+                  tab0,tab2,tab3,tab4 = st.tabs(["🔽 Microsoft SSO","📈 Market Share Weighted","🔍Combine Average and Absolute","📕 Final Equity plots"])
 
          with tab0:
                   if not st.session_state.access:                  
@@ -796,7 +796,8 @@ def main():
                                     
                                     
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
-                                    with tab1:
+                                    with st.sidebar("📝 General info"):
+                                             st.header(
                                              brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
                   
                                              # user input for equity and mmm file. 
