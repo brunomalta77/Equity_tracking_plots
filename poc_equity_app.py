@@ -1059,8 +1059,14 @@ def main():
                                     
                                     if sheet_name == "Average":
                                              sheet_name = "Average Smoothening"
+                                    
                                     if sheet_name == "Absolute":
                                              sheet_name = "Total Unsmoothening"
+
+                                    if sheet_name =="Market Share Weighted":
+                                             sheet_name = "Weighted"
+                           
+
                                     
                                     if sheet_name == "Average Smoothening":
                                              fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
@@ -1344,6 +1350,9 @@ def main():
                                     sheet_name = "Average Smoothening"
                            if sheet_name == "Absolute":
                                     sheet_name = "Total Unsmoothening"
+
+                           if sheet_name =="Market Share Weighted":
+                                    sheet_name = "Weighted"
                            
                            if sheet_name == "Average Smoothening":
                                     fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
