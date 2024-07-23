@@ -986,9 +986,9 @@ def main():
                                              
                                              market_share_weighted.to_excel(writer,sheet_name=f'market_share_{sheet_name_download}',index=False)
                                              
-                                             df_significance.to_excel(writer,sheet_name='significance',index=False)
+                                             #df_significance.to_excel(writer,sheet_name='significance',index=False)
                                              
-                                             df_perc_changes.to_excel(writer,sheet_name='perc_changes',index=False)
+                                             #df_perc_changes.to_excel(writer,sheet_name='perc_changes',index=False)
                                     
                                     
                                     st.download_button(
@@ -1274,9 +1274,9 @@ def main():
                                     
                                     market_share_weighted.to_excel(writer,sheet_name=f'market_share_{sheet_name_download}',index=False)
                                     
-                                    df_significance.to_excel(writer,sheet_name='significance',index=False)
+                                    #df_significance.to_excel(writer,sheet_name='significance',index=False)
                                     
-                                    df_perc_changes.to_excel(writer,sheet_name='perc_changes',index=False)
+                                    #df_perc_changes.to_excel(writer,sheet_name='perc_changes',index=False)
                            
                            
                            st.download_button(
