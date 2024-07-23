@@ -1285,7 +1285,7 @@ def main():
                                     df_weighted.to_excel(writer, sheet_name=f'weighted_combined', index=False)
                            
                            
-                           new_file_name = f"{sheet_name_1}_{sheet_name_2}_weighted_{datetime.today()}.xlsx"
+                           #new_file_name = f"{sheet_name_1}_{sheet_name_2}_weighted_{datetime.today()}.xlsx"
                            
                            st.download_button(
                            label="📤",
