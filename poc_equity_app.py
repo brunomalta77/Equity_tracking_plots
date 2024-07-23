@@ -95,7 +95,7 @@ col1, col2 = st.columns([4, 1])  # Adjust the width ratios as needed
 
 # Title on the right
 with col1:
-    st.title("Danone - Equity Tracking Plots")
+    st.title("POC-BAT - Equity Tracking Plots")
 
 
 # getting the excel file first by user input
