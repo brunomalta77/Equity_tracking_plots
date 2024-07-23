@@ -133,6 +133,21 @@ def media_plan(filepath,sheet_spend,sheet_week):
 
 @st.cache_data()
 def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement):
+    #------------------------------------------------------------------------------------------------------------------------------------------------------
+    df.rename(columns={'Entry points & Key Moments':'AF_Entry_point','Brand Prestige & Love':'AF_Brand_Love','Baby Milk':'AF_Baby_Milk','Adverts and Promotions':'AF_Adverts_Promo','Value For Money':'AF_Value_for_Money',
+               'Buying Experience': 'AF_Buying_Exp','Preparing Milk':'AF_Prep_Milk','Baby Experience':'AF_Baby_exp','Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
+'Brand Breadth': 'AA_Brand_Breadth', 'Average Engagement':'AS_Average_Engagement', 'Usage SoV':'AS_Usage_SoV',
+'Search Index': 'AS_Search_Index', 'Brand Centrality':'AS_Brand_Centrality'},inplace=True)
+
+    df_total_uns.rename(columns={'Entry points & Key Moments':'AF_Entry_point','Brand Prestige & Love':'AF_Brand_Love','Baby Milk':'AF_Baby_Milk','Adverts and Promotions':'AF_Adverts_Promo','Value For Money':'AF_Value_for_Money',
+               'Buying Experience': 'AF_Buying_Exp','Preparing Milk':'AF_Prep_Milk','Baby Experience':'AF_Baby_exp','Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
+'Brand Breadth': 'AA_Brand_Breadth', 'Average Engagement':'AS_Average_Engagement', 'Usage SoV':'AS_Usage_SoV',
+'Search Index': 'AS_Search_Index', 'Brand Centrality':'AS_Brand_Centrality'},inplace=True)
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     # drop any nan values
     df.dropna(inplace=True)
     df_total_uns.dropna(inplace=True)
