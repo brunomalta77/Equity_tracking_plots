@@ -91,7 +91,7 @@ col1, col2 = st.columns([4, 1])  # Adjust the width ratios as needed
 
 # Logo on the left
 with col2:
-    st.image(image)  # Adjust the width as needed
+    #st.image(image)  # Adjust the width as needed
 
 # Title on the right
 with col1:
@@ -803,7 +803,7 @@ def main():
                                     tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Average, absolute and market share weighted","📕 Final Equity plots"])
                            
                            with st.sidebar:
-                                    st.header("📝 General info")
+                                    st.image(image)
                                     brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
          
                                     # user input for equity and mmm file. 
