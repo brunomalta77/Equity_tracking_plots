@@ -1142,7 +1142,7 @@ def main():
 #--------------------------------------------------------------------------------------// Market Share Weighted----------------------------------------------------------------------------------
                   
                   with st.container():
-                           tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Combine Average and Absolute","📕 Final Equity plots"])
+                           tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Average, absolute and market share weighted","📕 Final Equity plots"])
                   with tab2:
                             #chosing the sheet name 
                            column_1,_,_,_ = st.columns(4)
@@ -1266,26 +1266,50 @@ def main():
 #-------------------------------------------------------------------------------------------------------------// Compare plot//------------------------------------------------------------------------------------
                   with tab3:
                            #creating the weighted file and the plot  
-                           
-                           column_1,_,_,_ = st.columns(4)
+                           column_1,column_2 = st.columns([1,1])
                            with column_1:
-                                    weighted_avg = st.number_input("Average Weight (%)", min_value=0, max_value=100, value=75, step=5, key="weighted_avg")
+                                    sheet_name_1 = st.selectbox("Select sheet 1",["Average","Absolute", "Market Share weighted"])
+                           with column_2:
+                                    sheet_name_2 = st.selectbox("Select sheet 2",["Absolute","Average", "Market Share weighted"])
                            
-                           weighted_avg = weighted_avg/100
-                           weighted_total = 1 - weighted_avg
+                           if sheet_name_1 == "Average":
+                                    sheet_1 = df
+                           if sheet_name_1 == "Absolute":
+                                    sheet_1 = df_total_uns
+                           if sheet_name_1 == "Market Share weighted":
+                                    sheet_1 = market_share_weighted
+                           
+                           if sheet_name_2 == "Average":
+                                    sheet_2 = df
+                           if sheet_name_2 == "Absolute":
+                                    sheet_2 = df_total_uns
+                           if sheet_name_2 == "Market Share weighted":
+                                    sheet_2 = market_share_weighted
+                           
+                           column_1,column_2 = st.columns([1,1])
+                           with column_1:
+                                    weighted_1_page = st.number_input("sheet 1 weight (%)", min_value=0, max_value=100, value=75, step=5, key="sheet 1")
+                           with column_2:
+                                    weighted_2_page = st.number_input("sheet 2 weight (%)", min_value=0, max_value=100, value=75, step=5, key="sheet 2")
+                           
+                           if weighted_1_page + weighted_2_page != 100:
+                                    st.warning("The values of the weights need to be equal to 100 %")
+                           else:
+                                    weighted_1_page = weighted_1_page/100
+                                    weighted_2_page = weighted_2_page/100
                            
                            
-                           df_weighted = get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_mapping)
+                           df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping)
                            # Comparing all the sheets
                            fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping)
                            st.plotly_chart(fig,use_container_width=True)
-
+                           
                            buffer = io.BytesIO()
                            with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
                                     df_weighted.to_excel(writer, sheet_name=f'weighted_combined', index=False)
                            
                            
-                           #new_file_name = f"{sheet_name_1}_{sheet_name_2}_weighted_{datetime.today()}.xlsx"
+                           new_file_name = f"{sheet_name_1}_{sheet_name_2}_weighted_{datetime.today()}.xlsx"
                            
                            st.download_button(
                            label="📤",
