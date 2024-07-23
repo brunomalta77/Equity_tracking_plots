@@ -386,8 +386,8 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
         name = "Average"
     if sheet_name == "Total Unsmoothening":
         name = "Absolute"
-    if sheet_name == "Weighted":
-        name = "Weighted"
+    if sheet_name == "Market Share Weighted":
+        name = "Market Share Weighted"
 
     df.rename(columns={'Total_Equity':'Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
        'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
@@ -1064,7 +1064,7 @@ def main():
                                              sheet_name = "Total Unsmoothening"
 
                                     if sheet_name =="Market Share Weighted":
-                                             sheet_name = "Weighted"
+                                             sheet_name = "Market Share Weighted"
                            
 
                                     
@@ -1352,7 +1352,7 @@ def main():
                                     sheet_name = "Total Unsmoothening"
 
                            if sheet_name =="Market Share Weighted":
-                                    sheet_name = "Weighted"
+                                    sheet_name = "Market Share Weighted"
                            
                            if sheet_name == "Average Smoothening":
                                     fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
