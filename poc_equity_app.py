@@ -134,14 +134,14 @@ def media_plan(filepath,sheet_spend,sheet_week):
 @st.cache_data()
 def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement):
     #------------------------------------------------------------------------------------------------------------------------------------------------------
-    df.rename(columns={'Entry points & Key Moments':'AF_Entry_point','Brand Prestige & Love':'AF_Brand_Love','Baby Milk':'AF_Baby_Milk','Adverts and Promotions':'AF_Adverts_Promo','Value For Money':'AF_Value_for_Money',
-               'Buying Experience': 'AF_Buying_Exp','Preparing Milk':'AF_Prep_Milk','Baby Experience':'AF_Baby_exp','Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
-'Brand Breadth': 'AA_Brand_Breadth', 'Average Engagement':'AS_Average_Engagement', 'Usage SoV':'AS_Usage_SoV',
+    df.rename(columns={'Brand Prestige & Love':'AF_Brand_Love','Motivation for Change':'AF_Motivation_for_Change','Consumption Experience':'AF_Consumption_Experience','Supporting Experience':'AF_Supporting_Experience','Value For Money':'AF_Value_for_Money',
+   'Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
+'Brand Breadth': 'AA_Brand_Breadth', 'Average Engagement':'AS_Average_Engagement', 'Usage SoV':'AS_Usage_SoV','Quitting':'Quitting_Sov','Consideration':'Consideration_Sov',
 'Search Index': 'AS_Search_Index', 'Brand Centrality':'AS_Brand_Centrality'},inplace=True)
 
-    df_total_uns.rename(columns={'Entry points & Key Moments':'AF_Entry_point','Brand Prestige & Love':'AF_Brand_Love','Baby Milk':'AF_Baby_Milk','Adverts and Promotions':'AF_Adverts_Promo','Value For Money':'AF_Value_for_Money',
-               'Buying Experience': 'AF_Buying_Exp','Preparing Milk':'AF_Prep_Milk','Baby Experience':'AF_Baby_exp','Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
-'Brand Breadth': 'AA_Brand_Breadth', 'Average Engagement':'AS_Average_Engagement', 'Usage SoV':'AS_Usage_SoV',
+    df_total_uns.rename(columns={'Brand Prestige & Love':'AF_Brand_Love','Motivation for Change':'AF_Motivation_for_Change','Consumption Experience':'AF_Consumption_Experience','Supporting Experience':'AF_Supporting_Experience','Value For Money':'AF_Value_for_Money',
+   'Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
+'Brand Breadth': 'AA_Brand_Breadth', 'Average Engagement':'AS_Average_Engagement', 'Usage SoV':'AS_Usage_SoV','Quitting':'Quitting_Sov','Consideration':'Consideration_Sov',
 'Search Index': 'AS_Search_Index', 'Brand Centrality':'AS_Brand_Centrality'},inplace=True)
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
@@ -157,7 +157,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement):
     replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
     df_total_uns["time_period"] = df_total_uns["time_period"].replace(replacements)
     
-    affinity_labels = ['AF_Entry_point','AF_Brand_Love','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Prep_Milk','AF_Baby_exp']
+    affinity_labels = ['AF_Brand_Love','AF_Motivation_for_Change','AF_Consumption_Experience','AF_Supporting_Experience','AF_Value_for_Money']
     
     # Doing the percentual in total_unsmoothened
     for aff in affinity_labels:
@@ -173,25 +173,26 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement):
     final_average = join_data[['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
                 'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
                 'AS_Usage_SoV_average', 'AS_Search_Index_average',
-                'AS_Brand_Centrality_average','AF_Entry_point_average', 'AF_Brand_Love_average', 'AF_Baby_Milk_average','AF_Adverts_Promo_average','AF_Value_for_Money_average','AF_Buying_Exp_average',
-                'AF_Prep_Milk_average','AF_Baby_exp_average',
+                'AS_Brand_Centrality_average','AF_Brand_Love_average', 'AF_Motivation_for_Change_average', 'AF_Consumption_Experience_average','AF_Supporting_Experience_average','AF_Value_for_Money_average',
+                'Quitting_Sov_average','Consideration_Sov_average',
                 'Framework_Awareness_average', 'Framework_Saliency_average',
                 'Framework_Affinity_average', 'Total_Equity_average',
                 'Category_average']]
 
 
     final_total = join_data[['time', 'time_period', 'brand', 'AA_eSoV_total', 'AA_Reach_total',
-                  'AA_Brand_Breadth_total', 'AS_Average_Engagement_total',
-                  'AS_Usage_SoV_total', 'AS_Search_Index_total',
-                  'AS_Brand_Centrality_total','AF_Entry_point_total', 'AF_Brand_Love_total', 'AF_Baby_Milk_total','AF_Adverts_Promo_total','AF_Value_for_Money_total','AF_Buying_Exp_total',
-                  'AF_Prep_Milk_total','AF_Baby_exp_total',
-                  'Framework_Awareness_total', 'Framework_Saliency_total',
-                  'Framework_Affinity_total', 'Total_Equity_total', 'Category_total']]
+                'AA_Brand_Breadth_total', 'AS_Average_Engagement_total',
+                'AS_Usage_SoV_total', 'AS_Search_Index_total',
+                'AS_Brand_Centrality_total','AF_Brand_Love_total', 'AF_Motivation_for_Change_total', 'AF_Consumption_Experience_total','AF_Supporting_Experience_total','AF_Value_for_Money_total',
+                'Quitting_Sov_total','Consideration_Sov_total',
+                'Framework_Awareness_total', 'Framework_Saliency_total',
+                'Framework_Affinity_total', 'Total_Equity_total',
+                'Category_total']]
 
     list_fix = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
                   'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
                   'AS_Usage_SoV_average', 'AS_Search_Index_average',
-                  'AS_Brand_Centrality_average','Framework_Awareness_average', 'Framework_Saliency_average','Total_Equity_average',
+                  'AS_Brand_Centrality_average', 'Quitting_Sov_average','Consideration_Sov_average','Framework_Awareness_average', 'Framework_Saliency_average','Total_Equity_average',
                   'Category_average']
             
 
@@ -204,7 +205,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement):
             weighted_average_equity["weighted_" + aff_pilar][index] = round(((weighted_avg * final_average[aff_pilar + "_average"][index]) + (weighted_total * final_total[aff_pilar + "_total"][index])),2)
         
     #getting the new framework affinity
-    weighted_average_equity["weighted_Framework_Affinity"] = round((weighted_average_equity["weighted_AF_Entry_point"] + weighted_average_equity["weighted_AF_Brand_Love"] + weighted_average_equity["weighted_AF_Baby_Milk"] +weighted_average_equity["weighted_AF_Adverts_Promo"] + weighted_average_equity["weighted_AF_Value_for_Money"] + weighted_average_equity["weighted_AF_Buying_Exp"] +  weighted_average_equity["weighted_AF_Prep_Milk"] + weighted_average_equity["weighted_AF_Baby_exp"]  )/8,2)
+    weighted_average_equity["weighted_Framework_Affinity"] = round((weighted_average_equity["weighted_AF_Brand_Love"] + weighted_average_equity["weighted_AF_Motivation_for_Change"] + weighted_average_equity["weighted_AF_Consumption_Experience"] +weighted_average_equity["weighted_AF_Supporting_Experience"] + weighted_average_equity["weighted_AF_Value_for_Money"])/5,2)
 
     # getting the new total equity
 
@@ -214,7 +215,9 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement):
     order = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
        'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
        'AS_Usage_SoV_average', 'AS_Search_Index_average',
-       'AS_Brand_Centrality_average','weighted_AF_Entry_point','weighted_AF_Brand_Love','weighted_AF_Baby_Milk','weighted_AF_Adverts_Promo','weighted_AF_Value_for_Money','weighted_AF_Buying_Exp','weighted_AF_Prep_Milk','weighted_AF_Baby_exp',
+       'AS_Brand_Centrality_average',
+         'Quitting_Sov_average','Consideration_Sov_average',
+         'weighted_AF_Brand_Love','weighted_AF_Motivation_for_Change','weighted_AF_Consumption_Experience','weighted_AF_Supporting_Experience','weighted_AF_Value_for_Money',
         'Framework_Awareness_average',
        'Framework_Saliency_average','weighted_Framework_Affinity','Total_Equity',"Category_average"]
     weighted_average_equity = weighted_average_equity[order]
@@ -222,11 +225,9 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement):
     weighted_average_equity.rename(columns={'AA_eSoV_average':'AA_eSoV', 'AA_Reach_average':'AA_Reach',
        'AA_Brand_Breadth_average':'AA_Brand_Breadth', 'AS_Average_Engagement_average':'AS_Average_Engagement',
        'AS_Usage_SoV_average':'AS_Usage_SoV', 'AS_Search_Index_average':'AS_Search_Index',
-       'AS_Brand_Centrality_average':'AS_Brand_Centrality','weighted_AF_Entry_point':'AF_Entry_point','weighted_AF_Brand_Love':'AF_Brand_Love',
-       'weighted_AF_Brand_Love':'AF_Brand_Love','weighted_AF_Baby_Milk':'AF_Baby_Milk','weighted_AF_Buying_Exp':'AF_Buying_Exp','weighted_AF_Prep_Milk':'AF_Prep_Milk'
-       ,'weighted_AF_Baby_exp':'AF_Baby_exp',
-       'weighted_AF_Adverts_Promo':'AF_Adverts_Promo',
-       'weighted_AF_Value_for_Money':'AF_Value_for_Money','Framework_Awareness_average':'Framework_Awareness',
+       'Quitting_Sov_average':'Quitting_Sov','Consideration_Sov_average':'Consideration_Sov',
+       'AS_Brand_Centrality_average':'AS_Brand_Centrality',   'weighted_AF_Brand_Love':'AF_Brand_Love','weighted_AF_Motivation_for_Change':'AF_Motivation_for_Change',
+       'weighted_AF_Consumption_Experience':'AF_Consumption_Experience','weighted_AF_Supporting_Experience':'AF_Supporting_Experience','weighted_AF_Value_for_Money':'AF_Value_for_Money','Framework_Awareness_average':'Framework_Awareness',
        'Framework_Saliency_average':'Framework_Saliency','weighted_Framework_Affinity':'Framework_Affinity','Category_average':'Category'},inplace=True)
 
     return weighted_average_equity
@@ -239,7 +240,7 @@ def weighted_brand_calculation(df, weights, value_columns):
     
     df.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
        'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
-       'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality'},inplace=True)
+       'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality','Quitting_Sov':'Quitting','Consideration_Sov':'Consideration'},inplace=True)
   
     # Convert value columns to numeric, replacing non-numeric values with NaN
     for col in value_columns:
@@ -357,8 +358,7 @@ def equity_options(df,brand_mapping):
          df["time_period"] = df["time_period"].replace(replacements)
          time_period_options = df["time_period"].unique()
          
-         framework_options = ["Total Equity","Awareness","Saliency","Affinity",'Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
-                                'Buying Experience','Preparing Milk','Baby Experience']
+         framework_options = ["Total Equity","Awareness","Saliency","Affinity",'Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money']
          return (category_options,time_period_options,framework_options)
 
 
@@ -367,7 +367,7 @@ def equity_options(df,brand_mapping):
 def merged_options(df):
     category_options_merged = df["Category"].unique()
     time_period_options_merged = df["time_period"].unique()
-    framework_options_merged = ['AF_Entry_point', 'AF_Brand_Love', 'AF_Adverts_Promo','AF_Prep_Meal','AF_Experience','AF_Value_for_Money', "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
+    framework_options_merged = ['AF_Brand_Love','AF_Motivation_for_Change','AF_Consumption_Experience','AF_Supporting_Experience','AF_Value_for_Money',"Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
     framework_options_value = ["Volume_share","Price_change"]
     return(category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
 
@@ -391,7 +391,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
 
     df.rename(columns={'Total_Equity':'Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
        'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
-       'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality'},inplace=True)
+       'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality','Quitting_Sov':'Quitting','Consideration_Sov':'Consideration'},inplace=True)
 
     
     st.subheader(f"Final Equity plot - {name}")
@@ -583,8 +583,8 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     # ------------------------------------------------------------------------------------------------Aesthetic changes-------------------------------------------------------------------------
     #changing the names of the filtered  columns
     ################################################################## df ####################################################################################################
-    df.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+    df.rename(columns={'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
+    'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'},inplace=True)
 
     df.brand = df.brand.replace(brand_replacement)
     
@@ -592,8 +592,8 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
 
     ################################################################## df_total_uns ####################################################################################################
 
-    df_total_uns.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+    df_total_uns.rename(columns={'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
+    'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'},inplace=True)
 
 
     df_total_uns.brand = df_total_uns.brand.replace(brand_replacement)
@@ -609,8 +609,8 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     ################################################################## weighted_df ####################################################################################################
 
 
-    weighted_df.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+    weighted_df.rename(columns={'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
+    'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'},inplace=True)
 
     weighted_df.brand = weighted_df.brand.replace(brand_replacement)
 
@@ -804,10 +804,10 @@ def main():
                            
                            with st.sidebar:
                                     st.image(image)
-                                    brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
+                                    brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE"}
          
                                     # user input for equity and mmm file. 
-                                    markets_available = ["UK"]
+                                    markets_available = ["CANADA"]
                                     column_1,_ = st.columns(2)
                      
                                     with column_1:
@@ -816,7 +816,9 @@ def main():
                                              
                                     if market == "uk":
                                              slang ="MMM_UK_"
-                                        
+
+                                    if market == "canada":
+                                             slang ="MMM_CAN_"
                            
                                     # getting our equity    
                                     filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
@@ -837,8 +839,7 @@ def main():
                                       #creating the market_share_weighted
                                     value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
                                    'Brand Breadth', 'Average Engagement', 'Usage SoV',
-                                   'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
-                                    'Buying Experience','Preparing Milk','Baby Experience']
+                                   'Search Index', 'Brand Centrality','Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money']
                   
 #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
                                     #creating a copy of our dataframes.
@@ -847,8 +848,8 @@ def main():
                                     # Aesthetic changes --------------------------------------------------------------------------------------------------
                                     #changing the names of the filtered  columns
                                     ################################################################## df ####################################################################################################
-                                    df_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                                          'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                                    df_copy.rename(columns={'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
+                                        'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'},inplace=True)
                                     
                                     
                                     
@@ -858,8 +859,9 @@ def main():
                                     
                                     ################################################################## df_total_uns ####################################################################################################
                                     
-                                    df_total_uns_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                                          'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                                    df_total_uns_copy.rename(columns={
+'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
+    'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'},inplace=True)
                                     
                                     
                                     df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
@@ -898,33 +900,33 @@ def main():
                            
                                     col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
                                     # creating the average_weighted 
-                                    weights_values_for_average = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                    weights_values_for_average = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
                                     
                                     with col1:
-                                           number = st.number_input("APTAMIL", min_value=0, max_value=100, value=10)
+                                           number = st.number_input("ELF BAR", min_value=0, max_value=100, value=10)
                                            number = number/100
-                                           weights_values_for_average["APTAMIL"]=number
+                                           weights_values_for_average["ELF BAR"]=number
                                     
                                     with col2:
-                                           number = st.number_input("COW & GATE", min_value=0, max_value=100, value=10)
+                                           number = st.number_input("GEEK BAR", min_value=0, max_value=100, value=10)
                                            number = number/100
-                                           weights_values_for_average["COW & GATE"]=number
+                                           weights_values_for_average["GEEK BAR"]=number
                            
                                     with col3:
-                                           number = st.number_input(f"SMA", min_value=0, max_value=100, value=10)
+                                           number = st.number_input(f"JUUL", min_value=0, max_value=100, value=10)
                                            number = number/100
-                                           weights_values_for_average["SMA"]=number
+                                           weights_values_for_average["JUUL"]=number
                            
                                     with col4:
-                                           number = st.number_input(f"KENDAMIL", min_value=0, max_value=100, value=10)
+                                           number = st.number_input(f"STLTH", min_value=0, max_value=100, value=10)
                                            number = number/100
-                                           weights_values_for_average["KENDAMIL"]=number
+                                           weights_values_for_average["STLTH"]=number
                            
                                     
                                     with col5:
-                                           number = st.number_input(f"HIPP ORGANIC", min_value=0, max_value=100, value=10)
+                                           number = st.number_input(f"VUSE", min_value=0, max_value=100, value=10)
                                            number = number/100
-                                           weights_values_for_average["HIPP ORGANIC"]=number
+                                           weights_values_for_average["VUSE"]=number
                            
                                     
                                     #creating the market_share_weighted
@@ -1089,18 +1091,17 @@ def main():
          else:
                   with st.sidebar:
                            st.image(image)
-                           brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
-                           
+                           brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE"}                           
                            # user input for equity and mmm file. 
-                           markets_available = ["UK"]
+                           markets_available = ["CANADA"]
                            column_1,_ = st.columns(2)
                            
                            with column_1:
                                     market = st.selectbox('Markets', markets_available)
                                     market = market.lower()
                                     
-                           if market == "uk":
-                                    slang ="MMM_UK_"
+                           if market == "canada":
+                                    slang ="MMM_CAN_"
                                
                            
                            # getting our equity    
@@ -1121,9 +1122,8 @@ def main():
                            
                              #creating the market_share_weighted
                            value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
-                           'Brand Breadth', 'Average Engagement', 'Usage SoV',
-                           'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
-                           'Buying Experience','Preparing Milk','Baby Experience']
+                                   'Brand Breadth', 'Average Engagement', 'Usage SoV',
+                                   'Search Index', 'Brand Centrality','Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money']
                            
                            #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
                            #creating a copy of our dataframes.
@@ -1132,8 +1132,9 @@ def main():
                            # Aesthetic changes --------------------------------------------------------------------------------------------------
                            #changing the names of the filtered  columns
                            ################################################################## df ####################################################################################################
-                           df_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                           df_copy.rename(columns={'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
+                           'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'
+                           },inplace=True)
                            
                            
                            
@@ -1143,8 +1144,9 @@ def main():
                            
                            ################################################################## df_total_uns ####################################################################################################
                            
-                           df_total_uns_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                           df_total_uns_copy.rename(columns={'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
+                               'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'
+                                    },inplace=True)
                            
                            
                            df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
@@ -1186,33 +1188,33 @@ def main():
                   
                            col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
                            # creating the average_weighted 
-                           weights_values_for_average = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                           weights_values_for_average = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
                            
                            with col1:
-                                  number = st.number_input("APTAMIL", min_value=0, max_value=100, value=10)
+                                  number = st.number_input("ELF BAR", min_value=0, max_value=100, value=10)
                                   number = number/100
-                                  weights_values_for_average["APTAMIL"]=number
+                                  weights_values_for_average["ELF BAR"]=number
                            
                            with col2:
-                                  number = st.number_input("COW & GATE", min_value=0, max_value=100, value=10)
+                                  number = st.number_input("GEEK BAR", min_value=0, max_value=100, value=10)
                                   number = number/100
-                                  weights_values_for_average["COW & GATE"]=number
+                                  weights_values_for_average["GEEK BARE"]=number
                   
                            with col3:
-                                  number = st.number_input(f"SMA", min_value=0, max_value=100, value=10)
+                                  number = st.number_input(f"JUUL", min_value=0, max_value=100, value=10)
                                   number = number/100
-                                  weights_values_for_average["SMA"]=number
+                                  weights_values_for_average["JUUL"]=number
                   
                            with col4:
-                                  number = st.number_input(f"KENDAMIL", min_value=0, max_value=100, value=10)
+                                  number = st.number_input(f"STLTH", min_value=0, max_value=100, value=10)
                                   number = number/100
-                                  weights_values_for_average["KENDAMIL"]=number
+                                  weights_values_for_average["STLTH"]=number
                   
                            
                            with col5:
-                                  number = st.number_input(f"HIPP ORGANIC", min_value=0, max_value=100, value=10)
+                                  number = st.number_input(f"VUSE", min_value=0, max_value=100, value=10)
                                   number = number/100
-                                  weights_values_for_average["HIPP ORGANIC"]=number
+                                  weights_values_for_average["VUSE"]=number
                   
                            
                            #creating the market_share_weighted
