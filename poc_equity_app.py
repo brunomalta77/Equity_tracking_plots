@@ -829,8 +829,8 @@ def main():
                                     df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
                                     df_total_smooth = reading_df(filepath_equity,sheet_name="total_smoothened")
                                     df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
-                                    df_significance = reading_df(filepath_equity,sheet_name="significance")
-                                    df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
+                                    #df_significance = reading_df(filepath_equity,sheet_name="significance")
+                                    #df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
                            
                                     
                                     #Equity options
@@ -1113,8 +1113,8 @@ def main():
                            df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
                            df_total_smooth = reading_df(filepath_equity,sheet_name="total_smoothened")
                            df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
-                           df_significance = reading_df(filepath_equity,sheet_name="significance")
-                           df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
+                           #df_significance = reading_df(filepath_equity,sheet_name="significance")
+                           #df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
                            
                            
                            #Equity options
