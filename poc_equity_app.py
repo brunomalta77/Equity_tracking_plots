@@ -78,11 +78,6 @@ def login():
          st.markdown(html_string, unsafe_allow_html=True)
 
 
-
-
-
-
-
 def get_user_info(access_token):
        headers = {'Authorization': f'Bearer {access_token}'}
        response = requests.get('https://graph.microsoft.com/v1.0/me', headers=headers)
@@ -568,7 +563,7 @@ def Equity_plot_market_share_(df,category,time_frame,framework,ws,we):
 
 #Used to comparing the Equity from different sheets
 def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks,brand_replacement):
-    st.subheader(f"Combine Average and Absolute")
+    st.subheader(f"Average, absolute and market share weighted")
     
     # ------------------------------------------------------------------------------------------------Aesthetic changes-------------------------------------------------------------------------
     #changing the names of the filtered  columns
@@ -790,7 +785,7 @@ def main():
                                     
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
                            with st.container():
-                                    tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Combine Average and Absolute","📕 Final Equity plots"])
+                                    tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Average, absolute and market share weighted","📕 Final Equity plots"])
                            
                            with st.sidebar:
                                     st.header("📝 General info")
@@ -873,7 +868,7 @@ def main():
                                     with column_1:
                                              sheet_name = st.selectbox("Select sheet",["Average","Absolute"])
                                     
-                                    st.subheader(f"Equity Metrics Plot - Market Share Weighted {sheet_name}")
+                                    st.subheader(f"Equity Metrics Plot - Market Share weighted {sheet_name}")
                            
                            
                                     if sheet_name == "Average":
@@ -993,7 +988,7 @@ def main():
                                     
                                     column_1,_,_,_ = st.columns(4)
                                     with column_1:
-                                             weighted_avg = st.number_input("Average Weight (%)", min_value=0, max_value=100, value=75, step=5, key="weighted_avg")
+                                             weighted_avg = st.number_input("Average weight (%)", min_value=0, max_value=100, value=75, step=5, key="weighted_avg")
                                     
                                     weighted_avg = weighted_avg/100
                                     weighted_total = 1 - weighted_avg
@@ -1249,6 +1244,19 @@ def main():
                            fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping)
                            st.plotly_chart(fig,use_container_width=True)
 
+                           buffer = io.BytesIO()
+                           with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                                    df_weighted.to_excel(writer, sheet_name=f'weighted_combined', index=False)
+                           
+                           
+                           new_file_name = f"{sheet_name_1}_{sheet_name_2}_weighted_{datetime.today()}.xlsx"
+                           
+                           st.download_button(
+                           label="📤",
+                           data=buffer,
+                           file_name=new_file_name)
+
+                           
 #--------------------------------------------------------------------------------------// Equity plot //----------------------------------------------------------------------------------
                   with tab4:
                            #chosing the sheet name 
