@@ -1282,7 +1282,7 @@ def main():
                            st.download_button(
                                     label="📤",
                                     data=buffer,
-                                    file_name=f"Equity_danone_{market}_{datetime.today()}.xlsx",
+                                    file_name=f"Equity_BAT_{market}_{datetime.today()}.xlsx",
                                     mime="application/vnd.ms-excel")
                  
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
