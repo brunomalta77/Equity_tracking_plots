@@ -32,11 +32,11 @@ colors = ["blue", "green", "red", "purple", "orange","teal","black","paleturquoi
 
 # creating a user database type for getting access to the app -----------------------------------------------------------------------------------------------------------------------------------------------------------
 # Microsoft Azure AD configurations
-CLIENT_ID = "baa3d4a8-3aa7-45bd-9245-93e8610b2b84"
-CLIENT_SECRET = "RBm8Q~fsy.iJ1_afdMITcNIgGe~n~mDmAx9cSaBO"
+CLIENT_ID = "a1da4fb5-ea06-42d6-b606-7ecd6ee34d74"
+CLIENT_SECRET = "dVW8Q~mnd0nyHQMVLQwHA0~5DYB3tcaOR2FOibAy"
 AUTHORITY = "https://login.microsoftonline.com/68421f43-a2e1-4c77-90f4-e12a5c7e0dbc"
 SCOPE = ["User.Read"]
-REDIRECT_URI = "https://equitytrackingplots-jqwdds7kl4pnw98dcmxfbz.streamlit.app/" # This should match your Azure AD app configuration
+REDIRECT_URI = "https://equitytrackingplots-zxmkdfrrewtbhpejro3jxx.streamlit.app/" # This should match your Azure AD app configuration
 
 # Initialize MSAL application
 app = msal.ConfidentialClientApplication(
@@ -1403,7 +1403,7 @@ def main():
                         if st.button("Logout", key="small_button", type="secondary", use_container_width=False, 
                                         help="Click to logout", kwargs={"class": "small_button"}):
                             st.markdown("""
-                            <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-jqwdds7kl4pnw98dcmxfbz.streamlit.app/'" />
+                            <meta http-equiv="refresh" content="0; url='https://equitytrackingplots-zxmkdfrrewtbhpejro3jxx.streamlit.app/'" />
                             """, unsafe_allow_html=True)
                                                
 if __name__=="__main__":
