@@ -578,7 +578,7 @@ def Equity_plot_market_share_(df,category,time_frame,framework,ws,we):
 
 #Used to comparing the Equity from different sheets
 def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks,brand_replacement):
-    st.subheader(f"Average, absolute and market share weighted")
+    st.subheader(f"Compare Average, Absolute and Market Share Weighted")
     
     # ------------------------------------------------------------------------------------------------Aesthetic changes-------------------------------------------------------------------------
     #changing the names of the filtered  columns
@@ -800,7 +800,7 @@ def main():
                                     
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
                            with st.container():
-                                    tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Average, absolute and market share weighted","📕 Final Equity plots"])
+                                    tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Compare Average, Absolute and Market Share Weighted","📕 Final Equity plots"])
                            
                            with st.sidebar:
                                     st.image(image)
@@ -1157,7 +1157,7 @@ def main():
 #--------------------------------------------------------------------------------------// Market Share Weighted----------------------------------------------------------------------------------
                   
                   with st.container():
-                           tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Average, absolute and market share weighted","📕 Final Equity plots"])
+                           tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Compare Average, Absolute and Market Share Weighted","📕 Final Equity plots"])
                   with tab2:
                             #chosing the sheet name 
                            column_1,_,_,_ = st.columns(4)
