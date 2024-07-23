@@ -90,7 +90,7 @@ def get_user_info(access_token):
 col1, col2 = st.columns([4, 1])  # Adjust the width ratios as needed
 
 # Logo on the left
-with col2:
+#with col2:
     #st.image(image)  # Adjust the width as needed
 
 # Title on the right
