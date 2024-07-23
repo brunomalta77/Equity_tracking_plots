@@ -1081,7 +1081,7 @@ def main():
          #if logged in
          else:
                   with st.sidebar:
-                           st.header("📝 General info")
+                           st.image(image)
                            brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
                            
                            # user input for equity and mmm file. 
