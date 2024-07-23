@@ -351,7 +351,7 @@ def equity_options(df,brand_mapping):
          df.brand = df.brand.replace(brand_mapping)
          
          
-         df["Category"] = df["Category"].replace("baby_milk","Baby milk")
+         df["Category"] = df["Category"].replace("vape","VAPE")
          category_options = df["Category"].unique()
          
          replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
@@ -602,7 +602,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     df_total_uns["time_period"] = df_total_uns["time_period"].replace(replacements)
 
 
-    df_total_uns["Category"] = df_total_uns["Category"].replace("baby_milk","Baby milk")
+    df_total_uns["Category"] = df_total_uns["Category"].replace("vape","VAPE")
 
     df_total_uns.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
 
@@ -870,7 +870,7 @@ def main():
                                     df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
                                     
                                     
-                                    df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
+                                    df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("vape","VAPE")
                                     
                                     
                                     df_total_uns_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
@@ -994,7 +994,7 @@ def main():
                                     st.download_button(
                                              label="📤",
                                              data=buffer,
-                                             file_name=f"Equity_danone_{market}_{datetime.today()}.xlsx",
+                                             file_name=f"Equity_BAT_{market}_{datetime.today()}.xlsx",
                                              mime="application/vnd.ms-excel")
                           
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
@@ -1155,7 +1155,7 @@ def main():
                            df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
                            
                            
-                           df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
+                           df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("vape","VAPE")
                            
                            
                            df_total_uns_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
