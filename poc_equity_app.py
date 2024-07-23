@@ -990,10 +990,7 @@ def main():
                                              sheet_name_1 = st.selectbox("Select sheet 1",["Average","Absolute", "Market Share weighted"])
                                     with column_2:
                                              sheet_name_2 = st.selectbox("Select sheet 2",["Absolute","Average", "Market Share weighted"])
-
-
-
-
+                                    
                                     if sheet_name_1 == "Average":
                                              sheet_1 = df
                                     if sheet_name_1 == "Absolute":
@@ -1007,7 +1004,7 @@ def main():
                                              sheet_2 = df_total_uns
                                     if sheet_name_2 == "Market Share weighted":
                                              sheet_2 = market_share_weighted
-
+                                    
                                     column_1,column_2 = st.columns([1,1])
                                     with column_1:
                                              weighted_1_page = st.number_input("sheet 1 weight (%)", min_value=0, max_value=100, value=75, step=5, key="sheet 1")
@@ -1019,14 +1016,13 @@ def main():
                                     else:
                                              weighted_1_page = weighted_1_page/100
                                              weighted_2_page = weighted_2_page/100
-
                                     
                                     
                                     df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping)
                                     # Comparing all the sheets
                                     fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping)
                                     st.plotly_chart(fig,use_container_width=True)
-
+                                    
                                     buffer = io.BytesIO()
                                     with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
                                              df_weighted.to_excel(writer, sheet_name=f'weighted_combined', index=False)
