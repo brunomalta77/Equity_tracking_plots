@@ -1077,7 +1077,7 @@ def main():
                                              st.plotly_chart(fig,use_container_width=True)
                                     
                                     if sheet_name == "Market Share Weighted":
-                                             fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                             fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
                                              st.plotly_chart(fig,use_container_width=True)
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
@@ -1363,7 +1363,7 @@ def main():
                                     st.plotly_chart(fig,use_container_width=True)
                            
                            if sheet_name == "Market Share Weighted":
-                                    fig = Equity_plot(df_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                    fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
                                     st.plotly_chart(fig,use_container_width=True)
 
 
