@@ -386,8 +386,8 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
         name = "Average"
     if sheet_name == "Total Unsmoothening":
         name = "Absolute"
-    if sheet_name == "Market Share Weighted":
-        name = "Market Share Weighted"
+    if sheet_name == "Mkt Share Weighted ":
+        name = "Mkt Share Weighted "
 
     df.rename(columns={'Total_Equity':'Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
        'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
@@ -1004,22 +1004,22 @@ def main():
                                     #creating the weighted file and the plot  
                                     column_1,column_2 = st.columns([1,1])
                                     with column_1:
-                                             sheet_name_1 = st.selectbox("Select sheet 1",["Average","Absolute", "Market Share weighted"])
+                                             sheet_name_1 = st.selectbox("Select sheet 1",["Average","Absolute", "Mkt Share Weighted "])
                                     with column_2:
-                                             sheet_name_2 = st.selectbox("Select sheet 2",["Absolute","Average", "Market Share weighted"])
+                                             sheet_name_2 = st.selectbox("Select sheet 2",["Absolute","Average", "Mkt Share Weighted "])
                                     
                                     if sheet_name_1 == "Average":
                                              sheet_1 = df
                                     if sheet_name_1 == "Absolute":
                                              sheet_1 = df_total_uns
-                                    if sheet_name_1 == "Market Share weighted":
+                                    if sheet_name_1 == "Mkt Share Weighted ":
                                              sheet_1 = market_share_weighted
                                     
                                     if sheet_name_2 == "Average":
                                              sheet_2 = df
                                     if sheet_name_2 == "Absolute":
                                              sheet_2 = df_total_uns
-                                    if sheet_name_2 == "Market Share weighted":
+                                    if sheet_name_2 == "Mkt Share Weighted ":
                                              sheet_2 = market_share_weighted
                                     
                                     column_1,column_2 = st.columns([1,1])
@@ -1057,7 +1057,7 @@ def main():
                                     #chosing the sheet name 
                                     column_1,_,_,_ = st.columns(4)
                                     with column_1:
-                                             sheet_name = st.selectbox("Select sheet",["Average","Absolute", "Market Share Weighted"])
+                                             sheet_name = st.selectbox("Select sheet",["Average","Absolute", "Mkt Share Weighted "])
                                     
                                     if sheet_name == "Average":
                                              sheet_name = "Average Smoothening"
@@ -1065,8 +1065,8 @@ def main():
                                     if sheet_name == "Absolute":
                                              sheet_name = "Total Unsmoothening"
 
-                                    if sheet_name =="Market Share Weighted":
-                                             sheet_name = "Market Share Weighted"
+                                    if sheet_name =="Mkt Share Weighted ":
+                                             sheet_name = "Mkt Share Weighted "
                            
 
                                     
@@ -1078,7 +1078,7 @@ def main():
                                              fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name=sheet_name)
                                              st.plotly_chart(fig,use_container_width=True)
                                     
-                                    if sheet_name == "Market Share Weighted":
+                                    if sheet_name == "Mkt Share Weighted ":
                                              fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
                                              st.plotly_chart(fig,use_container_width=True)
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
@@ -1292,22 +1292,22 @@ def main():
                            #creating the weighted file and the plot  
                            column_1,column_2 = st.columns([1,1])
                            with column_1:
-                                    sheet_name_1 = st.selectbox("Select sheet 1",["Average","Absolute", "Market Share weighted"])
+                                    sheet_name_1 = st.selectbox("Select sheet 1",["Average","Absolute", "Mkt Share Weighted "])
                            with column_2:
-                                    sheet_name_2 = st.selectbox("Select sheet 2",["Absolute","Average", "Market Share weighted"])
+                                    sheet_name_2 = st.selectbox("Select sheet 2",["Absolute","Average", "Mkt Share Weighted "])
                            
                            if sheet_name_1 == "Average":
                                     sheet_1 = df
                            if sheet_name_1 == "Absolute":
                                     sheet_1 = df_total_uns
-                           if sheet_name_1 == "Market Share weighted":
+                           if sheet_name_1 == "Mkt Share Weighted ":
                                     sheet_1 = market_share_weighted
                            
                            if sheet_name_2 == "Average":
                                     sheet_2 = df
                            if sheet_name_2 == "Absolute":
                                     sheet_2 = df_total_uns
-                           if sheet_name_2 == "Market Share weighted":
+                           if sheet_name_2 == "Mkt Share Weighted ":
                                     sheet_2 = market_share_weighted
                            
                            column_1,column_2 = st.columns([1,1])
@@ -1346,15 +1346,15 @@ def main():
                            #chosing the sheet name 
                            column_1,_,_,_ = st.columns(4)
                            with column_1:
-                                    sheet_name = st.selectbox("Select sheet",["Average","Absolute", "Market Share Weighted"])
+                                    sheet_name = st.selectbox("Select sheet",["Average","Absolute", "Mkt Share Weighted "])
                            
                            if sheet_name == "Average":
                                     sheet_name = "Average Smoothening"
                            if sheet_name == "Absolute":
                                     sheet_name = "Total Unsmoothening"
 
-                           if sheet_name =="Market Share Weighted":
-                                    sheet_name = "Market Share Weighted"
+                           if sheet_name =="Mkt Share Weighted ":
+                                    sheet_name = "Mkt Share Weighted "
                            
                            if sheet_name == "Average Smoothening":
                                     fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
