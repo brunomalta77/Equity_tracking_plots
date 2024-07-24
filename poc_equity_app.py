@@ -1006,8 +1006,6 @@ def main():
          else:
                   with st.sidebar:
                            st.image(image)
-                           brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE"}                           
-                           # user input for equity and mmm file. 
                            markets_available = ["Canada","Germany"]
                            column_1,_ = st.columns(2)
                            
