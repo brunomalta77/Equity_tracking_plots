@@ -18,6 +18,34 @@ from PIL import Image
 import msal
 import io
 import requests
+#--------------------------------------------------------------------------------------// Aesthetic Global Variables // -------------------------------------------------------------------------
+user_to_equity = {'Brand Prestige & Love':'AF_Brand_Love','Motivation for Change':'AF_Motivation_for_Change','Consumption Experience':'AF_Consumption_Experience','Supporting Experience':'AF_Supporting_Experience','Value For Money':'AF_Value_for_Money',
+   'Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
+'Brand Breadth': 'AA_Brand_Breadth', 'Average Engagement':'AS_Average_Engagement', 'Usage SoV':'AS_Usage_SoV','Quitting':'Quitting_Sov','Consideration':'Consideration_Sov',
+'Search Index': 'AS_Search_Index', 'Brand Centrality':'AS_Brand_Centrality'}
+
+affinity_labels=['AF_Brand_Love','AF_Motivation_for_Change','AF_Consumption_Experience','AF_Supporting_Experience','AF_Value_for_Money']
+
+framework_to_user={'Total_Equity':'Total Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
+       'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
+       'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality','Quitting_Sov':'Quitting','Consideration_Sov':'Consideration'}
+
+original_category = "vape"
+changed_category = "Vape"
+
+framework_options_ =["Total Equity","Awareness","Saliency","Affinity",'Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money']
+
+
+affinity_to_user = {'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
+    'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'}
+
+general_equity_to_user = {'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'}
+
+
+value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
+                                   'Brand Breadth', 'Average Engagement', 'Usage SoV',
+                                   'Search Index', 'Brand Centrality','Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money']
+#--------------------------------------------------------------------------------------// Aesthetic Global Variables // -------------------------------------------------------------------------
 
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
@@ -132,17 +160,11 @@ def media_plan(filepath,sheet_spend,sheet_week):
 
 
 @st.cache_data()
-def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement):
+def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,user_to_equity,affinity_labels):
     #------------------------------------------------------------------------------------------------------------------------------------------------------
-    df.rename(columns={'Brand Prestige & Love':'AF_Brand_Love','Motivation for Change':'AF_Motivation_for_Change','Consumption Experience':'AF_Consumption_Experience','Supporting Experience':'AF_Supporting_Experience','Value For Money':'AF_Value_for_Money',
-   'Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
-'Brand Breadth': 'AA_Brand_Breadth', 'Average Engagement':'AS_Average_Engagement', 'Usage SoV':'AS_Usage_SoV','Quitting':'Quitting_Sov','Consideration':'Consideration_Sov',
-'Search Index': 'AS_Search_Index', 'Brand Centrality':'AS_Brand_Centrality'},inplace=True)
+    df.rename(columns=user_to_equity,inplace=True)
 
-    df_total_uns.rename(columns={'Brand Prestige & Love':'AF_Brand_Love','Motivation for Change':'AF_Motivation_for_Change','Consumption Experience':'AF_Consumption_Experience','Supporting Experience':'AF_Supporting_Experience','Value For Money':'AF_Value_for_Money',
-   'Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
-'Brand Breadth': 'AA_Brand_Breadth', 'Average Engagement':'AS_Average_Engagement', 'Usage SoV':'AS_Usage_SoV','Quitting':'Quitting_Sov','Consideration':'Consideration_Sov',
-'Search Index': 'AS_Search_Index', 'Brand Centrality':'AS_Brand_Centrality'},inplace=True)
+    df_total_uns.rename(columns=user_to_equity,inplace=True)
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     
@@ -157,7 +179,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement):
     replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
     df_total_uns["time_period"] = df_total_uns["time_period"].replace(replacements)
     
-    affinity_labels = ['AF_Brand_Love','AF_Motivation_for_Change','AF_Consumption_Experience','AF_Supporting_Experience','AF_Value_for_Money']
+    affinity_labels = affinity_labels
     
     # Doing the percentual in total_unsmoothened
     for aff in affinity_labels:
@@ -236,11 +258,9 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement):
 #---------------------------------------------------------------------------------------////--------------------------------------------------------------------------------------------------
 
 # Market_share_weighted_average
-def weighted_brand_calculation(df, weights, value_columns):
+def weighted_brand_calculation(df, weights, value_columns,framework_to_user):
     
-    df.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
-       'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
-       'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality','Quitting_Sov':'Quitting','Consideration_Sov':'Consideration'},inplace=True)
+    df.rename(columns=framework_to_user,inplace=True)
   
     # Convert value columns to numeric, replacing non-numeric values with NaN
     for col in value_columns:
@@ -266,29 +286,6 @@ def weighted_brand_calculation(df, weights, value_columns):
     return result_df
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-#merged file
-@st.cache_data() 
-def merged_file(df,df_vol):
-    df_merged = pd.merge(df_vol,df,on=["time","brand","Category"],how="inner")
-    return df_merged
-
-# Function to calculate confidence intervals
-def calculate_confidence_intervals(data, confidence=0.90):
-    if confidence == 0.90:
-        multi = 1.645
-    if confidence == 0.95:
-        multi = 1.960
-    else:
-        multi = 2.576
-    
-    n = len(data)
-    mean = np.mean(data)
-    std_err = np.std(data, ddof=1) / np.sqrt(n)
-    margin_of_error = std_err * 1.645  # 1.96 for 95% confidence interval (z-score)
-    lower_bound = mean - margin_of_error
-    upper_bound = mean + margin_of_error
-    return lower_bound, upper_bound
-
 def equity_info(data,market_flag):
     if market_flag == "UK":
         market_flag = "UK_equity_"
@@ -302,86 +299,23 @@ def equity_info(data,market_flag):
     return filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity
 
 
-def mmm_info(data,slang_flag):
-    for x in os.listdir(data):
-        if slang_flag in x:
-            filepath_mmm = os.path.join(data,x)
-            info_number = [x for x in x.split("_") if x >= "0" and x <="9"]
-            day_mmm,month_mmm,year_mmm,hour_mmm,minute_mmm = info_number[:5]
-            second_mmm = info_number[-1].split(".")[0]
-    
-    return filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm
-
-
-# media processing
-def media_spend_processed(df,df_spend,df_weeks):
-         # making everything as a string and in lower case
-         df_weeks["w"] = df_weeks["w"].apply(lambda x : str(x).lower())
-         df_weeks["y"] = df_weeks["y"].apply(lambda x : str(x).lower())
-         df_weeks["m"] = df_weeks["m"].apply(lambda x : str(x).lower())
-         df_weeks["qt"] = df_weeks["qt"].apply(lambda x : str(x).lower())
-         df_weeks["h"] = df_weeks["h"].apply(lambda x : str(x).lower())
-         
-         # renaming and put everything into string and lower case
-         df_spend.rename(columns={"Group Type":"Media_spend"},inplace=True)
-         df_spend.rename(columns={"time_frame":"time_period"},inplace=True)
-         df_spend["Date"] = df_spend["Date"].apply(lambda x : str(x).lower())
-         
-         # mapping our codes from the y,h,qt,m,w into time
-         trans_dic = {}
-         trans_dic.update({k: i for k, i in zip(df_weeks["w"], df_weeks["time"])})
-         trans_dic.update({k: i for k, i in zip(df_weeks["y"], df_weeks["time"])})
-         trans_dic.update({k: i for k, i in zip(df_weeks["m"], df_weeks["time"])})
-         trans_dic.update({k: i for k, i in zip(df_weeks["qt"], df_weeks["time"])})
-         trans_dic.update({k: i for k, i in zip(df_weeks["h"], df_weeks["time"])})
-         
-         #creating the time column
-         df_spend["time"] = [trans_dic[x] for x in df_spend["Date"]]
-         
-         #grouping by
-         df_spend=df_spend.groupby(['Date','time_period','brand','Media_spend','Category','time'])['value'].sum().reset_index()
-         
-         merged_df = pd.merge(df_spend,df,on=["time","brand","Category"],how="inner")
-         
-         return merged_df
-
-
-
-def equity_options(df,brand_mapping):
+def equity_options(df,brand_mapping,original_category,changed_category,framework_options_):
          df.brand = df.brand.replace(brand_mapping)
          
          
-         df["Category"] = df["Category"].replace("vape","Vape")
+         df["Category"] = df["Category"].replace(original_category,changed_category)
          category_options = df["Category"].unique()
          
          replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
          df["time_period"] = df["time_period"].replace(replacements)
          time_period_options = df["time_period"].unique()
          
-         framework_options = ["Total Equity","Awareness","Saliency","Affinity",'Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money']
+         framework_options = framework_options_
          return (category_options,time_period_options,framework_options)
-
-
-
-
-def merged_options(df):
-    category_options_merged = df["Category"].unique()
-    time_period_options_merged = df["time_period"].unique()
-    framework_options_merged = ['AF_Brand_Love','AF_Motivation_for_Change','AF_Consumption_Experience','AF_Supporting_Experience','AF_Value_for_Money',"Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
-    framework_options_value = ["Volume_share","Price_change"]
-    return(category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
-
-
-def merged_options_media(df):
-         category_options_merged_media = df["Category"].unique()
-         time_period_options_merged_media = df["time_period_x"].unique()
-         framework_options_media = ['AF_Entry_point', 'AF_Brand_Love', 'AF_Adverts_Promo','AF_Prep_Meal','AF_Experience','AF_Value_for_Money', "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
-         framework_options_value_media = ["value"]
-         return(category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
          
 #-----------------------------------------------------------------------------------------------------//-----------------------------------------------------------------------------------------
 # Equity_plot
-def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
+def Equity_plot(df,categories,time_frames,frameworks,sheet_name,framework_to_user):
     if sheet_name == "Average Smoothening":
         name = "Average"
     if sheet_name == "Total Unsmoothening":
@@ -389,9 +323,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
     if sheet_name == "Mkt Share Weighted":
         name = "Mkt Share Weighted"
 
-    df.rename(columns={'Total_Equity':'Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
-       'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
-       'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality','Quitting_Sov':'Quitting','Consideration_Sov':'Consideration'},inplace=True)
+    df.rename(columns=framework_to_user,inplace=True)
 
     
     st.subheader(f"Final Equity plot - {name}")
@@ -577,23 +509,21 @@ def Equity_plot_market_share_(df,category,time_frame,framework,ws,we):
 
 
 #Used to comparing the Equity from different sheets
-def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks,brand_replacement):
+def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks,brand_replacement,affinity_to_user,original_category,changed_category,general_equity_to_user):
     st.subheader(f"Compare Average, Absolute and Market Share Weighted")
     
     # ------------------------------------------------------------------------------------------------Aesthetic changes-------------------------------------------------------------------------
     #changing the names of the filtered  columns
     ################################################################## df ####################################################################################################
-    df.rename(columns={'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
-    'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'},inplace=True)
+    df.rename(columns=affinity_to_user,inplace=True)
 
     df.brand = df.brand.replace(brand_replacement)
     
-    df.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+    df.rename(columns=general_equity_to_user,inplace=True)
 
     ################################################################## df_total_uns ####################################################################################################
 
-    df_total_uns.rename(columns={'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
-    'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'},inplace=True)
+    df_total_uns.rename(columns=affinity_to_user,inplace=True)
 
 
     df_total_uns.brand = df_total_uns.brand.replace(brand_replacement)
@@ -604,17 +534,16 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
 
     df_total_uns["Category"] = df_total_uns["Category"].replace("vape","Vape")
 
-    df_total_uns.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+    df_total_uns.rename(columns=general_equity_to_user,inplace=True)
 
     ################################################################## weighted_df ####################################################################################################
 
 
-    weighted_df.rename(columns={'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
-    'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'},inplace=True)
+    weighted_df.rename(columns=affinity_to_user,inplace=True)
 
     weighted_df.brand = weighted_df.brand.replace(brand_replacement)
 
-    weighted_df.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+    weighted_df.rename(columns=general_equity_to_user,inplace=True)
 
     #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
@@ -804,7 +733,7 @@ def main():
                            
                            with st.sidebar:
                                     st.image(image)
-                                    brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE"}
+                                   
          
                                     # user input for equity and mmm file. 
                                     markets_available = ["Canada","Germany"]
@@ -816,11 +745,14 @@ def main():
                                              
                                     if market =="germany":
                                              slang = "MMM_GER_"
-
+                                             brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "stlth": "STLTH","vuse":"VUSE","blu":"BLU","glo":"GLO","iqos":"IQOS"}
+                                             weights_values_for_average = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
+         
+                                             
                                     if market == "canada":
                                              slang ="MMM_CAN_"
-
-                                    
+                                             brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE"}
+                                             weights_values_for_average = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
                            
                                     # getting our equity    
                                     filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
@@ -838,10 +770,6 @@ def main():
                                     #Equity options
                                     category_options,time_period_options,framework_options = equity_options(df,brand_mapping)
                                     
-                                      #creating the market_share_weighted
-                                    value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
-                                   'Brand Breadth', 'Average Engagement', 'Usage SoV',
-                                   'Search Index', 'Brand Centrality','Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money']
                   
 #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
                                     #creating a copy of our dataframes.
@@ -850,20 +778,17 @@ def main():
                                     # Aesthetic changes --------------------------------------------------------------------------------------------------
                                     #changing the names of the filtered  columns
                                     ################################################################## df ####################################################################################################
-                                    df_copy.rename(columns={'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
-                                        'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'},inplace=True)
+                                    df_copy.rename(columns=affinity_to_user,inplace=True)
                                     
                                     
                                     
                                     df_copy.brand = df_copy.brand.replace(brand_mapping)
                                     
-                                    df_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                                    df_copy.rename(columns=general_equity_to_user,inplace=True)
                                     
                                     ################################################################## df_total_uns ####################################################################################################
                                     
-                                    df_total_uns_copy.rename(columns={
-'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
-    'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'},inplace=True)
+                                    df_total_uns_copy.rename(columns=affinity_to_user,inplace=True)
                                     
                                     
                                     df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
@@ -872,10 +797,10 @@ def main():
                                     df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
                                     
                                     
-                                    df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("vape","Vape")
+                                    df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace(original_category,changed_category)
                                     
                                     
-                                    df_total_uns_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                                    df_total_uns_copy.rename(columns=general_equity_to_user,inplace=True)
 
 ################################################################## ##################################################################################################################
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -900,39 +825,27 @@ def main():
                                              df_for_weighted = df_total_uns_copy
                                     
                            
-                                    col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
-                                    # creating the average_weighted 
-                                    weights_values_for_average = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
+                                    #col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
+                                    #with col1:
+                                    #       number = st.number_input("ELF BAR", min_value=0, max_value=100, value=10)
+                                    #       number = number/100
+                                    #       weights_values_for_average["ELF BAR"]=number
                                     
-                                    with col1:
-                                           number = st.number_input("ELF BAR", min_value=0, max_value=100, value=10)
-                                           number = number/100
-                                           weights_values_for_average["ELF BAR"]=number
+                                    # Assuming you want one column per key in brand_mapping
+                                    num_columns = len(brand_mapping.keys())
                                     
-                                    with col2:
-                                           number = st.number_input("GEEK BAR", min_value=0, max_value=100, value=10)
-                                           number = number/100
-                                           weights_values_for_average["GEEK BAR"]=number
-                           
-                                    with col3:
-                                           number = st.number_input(f"JUUL", min_value=0, max_value=100, value=10)
-                                           number = number/100
-                                           weights_values_for_average["JUUL"]=number
-                           
-                                    with col4:
-                                           number = st.number_input(f"STLTH", min_value=0, max_value=100, value=10)
-                                           number = number/100
-                                           weights_values_for_average["STLTH"]=number
-                           
+                                    # Create the columns
+                                    cols = st.columns(num_columns)
                                     
-                                    with col5:
-                                           number = st.number_input(f"VUSE", min_value=0, max_value=100, value=10)
-                                           number = number/100
-                                           weights_values_for_average["VUSE"]=number
+                                    # Iterate over the columns and keys simultaneously
+                                    for col, key in zip(cols, weights_values_for_average.keys()):
+                                             with col:
+                                                      number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10)
+                                                      weights_values_for_average[key] = number / 100
                            
                                     
                                     #creating the market_share_weighted
-                                    market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns)
+                                    market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns,framework_to_user)
                                     
                                     # creating the columns for the app
                                     right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
@@ -1037,9 +950,9 @@ def main():
                                              weighted_2_page = weighted_2_page/100
                                     
                                     
-                                    df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping)
+                                    df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels)
                                     # Comparing all the sheets
-                                    fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping)
+                                    fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,original_category,changed_category,general_equity_to_user)
                                     st.plotly_chart(fig,use_container_width=True)
                                     
                                     buffer = io.BytesIO()
@@ -1073,15 +986,15 @@ def main():
 
                                     
                                     if sheet_name == "Average Smoothening":
-                                             fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                             fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
                                              st.plotly_chart(fig,use_container_width=True)
                                     
                                     if sheet_name == "Total Unsmoothening":
-                                             fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                             fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
                                              st.plotly_chart(fig,use_container_width=True)
                                     
                                     if sheet_name == "Mkt Share Weighted":
-                                             fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                             fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
                                              st.plotly_chart(fig,use_container_width=True)
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
@@ -1103,12 +1016,17 @@ def main():
                                     market = market.lower()
 
 
-                           if market == "germany":
+                           if market =="germany":
                                     slang = "MMM_GER_"
-                           
-                           
+                                    brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "stlth": "STLTH","vuse":"VUSE","blu":"BLU","glo":"GLO","iqos":"IQOS"}
+                                    weights_values_for_average = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
+         
+                                             
                            if market == "canada":
                                     slang ="MMM_CAN_"
+                                    brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE"}
+                                    weights_values_for_average = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
+                           
                            
                            
                            # getting our equity    
@@ -1125,12 +1043,7 @@ def main():
                            
                            
                            #Equity options
-                           category_options,time_period_options,framework_options = equity_options(df,brand_mapping)
-                           
-                             #creating the market_share_weighted
-                           value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
-                                   'Brand Breadth', 'Average Engagement', 'Usage SoV',
-                                   'Search Index', 'Brand Centrality','Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money']
+                           category_options,time_period_options,framework_options = equity_options(df,brand_mapping,original_category,changed_category,framework_options_)
                            
                            #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
                            #creating a copy of our dataframes.
@@ -1139,21 +1052,17 @@ def main():
                            # Aesthetic changes --------------------------------------------------------------------------------------------------
                            #changing the names of the filtered  columns
                            ################################################################## df ####################################################################################################
-                           df_copy.rename(columns={'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
-                           'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'
-                           },inplace=True)
+                           df_copy.rename(columns=affinity_to_user,inplace=True)
                            
                            
                            
                            df_copy.brand = df_copy.brand.replace(brand_mapping)
                            
-                           df_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                           df_copy.rename(columns=general_equity_to_user,inplace=True)
                            
                            ################################################################## df_total_uns ####################################################################################################
                            
-                           df_total_uns_copy.rename(columns={'AF_Brand_Love':'Brand Prestige & Love','AF_Motivation_for_Change':'Motivation for Change','AF_Consumption_Experience':'Consumption Experience',
-                               'AF_Supporting_Experience':'Supporting Experience','AF_Value_for_Money':'Value For Money'
-                                    },inplace=True)
+                           df_total_uns_copy.rename(columns=affinity_to_user,inplace=True)
                            
                            
                            df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
@@ -1162,10 +1071,10 @@ def main():
                            df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
                            
                            
-                           df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("vape","Vape")
+                           df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace(original_category,changed_category)
                            
                            
-                           df_total_uns_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                           df_total_uns_copy.rename(columns=general_equity_to_user,inplace=True)
 
 ################################################################## ##################################################################################################################
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1193,39 +1102,20 @@ def main():
                                     df_for_weighted = df_total_uns_copy
                            
                   
-                           col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
-                           # creating the average_weighted 
-                           weights_values_for_average = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
+                           # Assuming you want one column per key in brand_mapping
+                           num_columns = len(brand_mapping.keys())
                            
-                           with col1:
-                                  number = st.number_input("ELF BAR", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["ELF BAR"]=number
+                           # Create the columns
+                           cols = st.columns(num_columns)
                            
-                           with col2:
-                                  number = st.number_input("GEEK BAR", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["GEEK BARE"]=number
-                  
-                           with col3:
-                                  number = st.number_input(f"JUUL", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["JUUL"]=number
-                  
-                           with col4:
-                                  number = st.number_input(f"STLTH", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["STLTH"]=number
-                  
-                           
-                           with col5:
-                                  number = st.number_input(f"VUSE", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["VUSE"]=number
-                  
+                           # Iterate over the columns and keys simultaneously
+                           for col, key in zip(cols, weights_values_for_average.keys()):
+                                    with col:
+                                             number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10)
+                                             weights_values_for_average[key] = number / 100
                            
                            #creating the market_share_weighted
-                           market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns)
+                           market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns,framework_to_user)
                            
                            # creating the columns for the app
                            right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
@@ -1330,9 +1220,9 @@ def main():
                                     weighted_2_page = weighted_2_page/100
                            
                            
-                           df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping)
+                           df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels)
                            # Comparing all the sheets
-                           fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping)
+                           fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,original_category,changed_category,general_equity_to_user)
                            st.plotly_chart(fig,use_container_width=True)
                            
                            buffer = io.BytesIO()
@@ -1364,15 +1254,15 @@ def main():
                                     sheet_name = "Mkt Share Weighted"
                            
                            if sheet_name == "Average Smoothening":
-                                    fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                    fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
                                     st.plotly_chart(fig,use_container_width=True)
                            
                            if sheet_name == "Total Unsmoothening":
-                                    fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                    fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
                                     st.plotly_chart(fig,use_container_width=True)
                            
                            if sheet_name == "Mkt Share Weighted":
-                                    fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                    fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
                                     st.plotly_chart(fig,use_container_width=True)
 
 
