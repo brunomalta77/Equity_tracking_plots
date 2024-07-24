@@ -1093,7 +1093,7 @@ def main():
                            st.image(image)
                            brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE"}                           
                            # user input for equity and mmm file. 
-                           markets_available = ["CANADA"]
+                           markets_available = ["Canada"]
                            column_1,_ = st.columns(2)
                            
                            with column_1:
