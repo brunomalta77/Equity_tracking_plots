@@ -807,18 +807,20 @@ def main():
                                     brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE"}
          
                                     # user input for equity and mmm file. 
-                                    markets_available = ["Canada"]
+                                    markets_available = ["Canada","Germany"]
                                     column_1,_ = st.columns(2)
                      
                                     with column_1:
                                              market = st.selectbox('Markets', markets_available)
                                              market = market.lower()
                                              
-                                    if market == "uk":
-                                             slang ="MMM_UK_"
+                                    if market =="germany":
+                                             slang = "MMM_GER_"
 
                                     if market == "canada":
                                              slang ="MMM_CAN_"
+
+                                    
                            
                                     # getting our equity    
                                     filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
@@ -1093,16 +1095,21 @@ def main():
                            st.image(image)
                            brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE"}                           
                            # user input for equity and mmm file. 
-                           markets_available = ["Canada"]
+                           markets_available = ["Canada","Germany"]
                            column_1,_ = st.columns(2)
                            
                            with column_1:
                                     market = st.selectbox('Markets', markets_available)
                                     market = market.lower()
-                                    
+
+
+                           if market == "germany":
+                                    slang = "MMM_GER_"
+                           
+                           
                            if market == "canada":
                                     slang ="MMM_CAN_"
-                               
+                           
                            
                            # getting our equity    
                            filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
