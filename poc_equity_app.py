@@ -954,7 +954,7 @@ def main():
                                              weighted_2_page = weighted_2_page/100
                                     
                                     
-                                    df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels)
+                                    df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels,,join_data_average,join_data_total,list_fix)
                                     # Comparing all the sheets
                                     fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,original_category,changed_category,general_equity_to_user)
                                     st.plotly_chart(fig,use_container_width=True)
@@ -1222,7 +1222,7 @@ def main():
                                     weighted_2_page = weighted_2_page/100
                            
                            
-                           df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels)
+                           df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels,,join_data_average,join_data_total,list_fix)
                            # Comparing all the sheets
                            fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,original_category,changed_category,general_equity_to_user)
                            st.plotly_chart(fig,use_container_width=True)
