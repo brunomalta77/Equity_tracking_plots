@@ -772,7 +772,7 @@ def main():
                            
                                     
                                     #Equity options
-                                    category_options,time_period_options,framework_options = equity_options(df,brand_mapping)
+                                    category_options,time_period_options,framework_options = equity_options(df,brand_mapping,original_category,changed_category,framework_options_)
                                     
                   
 #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
