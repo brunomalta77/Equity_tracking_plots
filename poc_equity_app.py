@@ -731,14 +731,19 @@ def main():
                                     if market =="germany":
                                              slang = "MMM_GER_"
                                              brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "stlth": "STLTH","vuse":"VUSE","blu":"BLU","glo":"GLO","iqos":"IQOS"}
-                                             weights_values_for_average = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
-         
+                                             weights_values_for_average_2021 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
+                                             weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
+                                             weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
+                                             weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}       
                                              
                                     if market == "canada":
                                              slang ="MMM_CAN_"
                                              brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE"}
-                                             weights_values_for_average = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
-                           
+                                             weights_values_for_average_2021 =  {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
+                                             weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
+                                             weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
+                                             weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}      
+
                                     # getting our equity    
                                     filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
                                     
@@ -810,25 +815,79 @@ def main():
                                              df_for_weighted = df_total_uns_copy
                                     
                            
-                                    #col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
-                                    #with col1:
-                                    #       number = st.number_input("ELF BAR", min_value=0, max_value=100, value=10)
-                                    #       number = number/100
-                                    #       weights_values_for_average["ELF BAR"]=number
+                                   # getting the individual years
+                                    years_filtered = df_for_weighted[df_for_weighted.time_period == "Years"]            
+                                    years_filtered = years_filtered.time.dt.year.unique()
+                                    years_cols = [str(year) for year in years_filtered if year != 2020]
                                     
+                        
+#--------------------------------------------------------------------------------------------------------------------------// //----------------------------------------------------------------
+                                    weights_joined = []
+                                    join_brand_year= []
+                                    keys = [ key for key in brand_mapping.keys()]
+                        
+                                    for year in years_cols:
+                                        join_brand_year.append((year,keys))
+                        
                                     # Assuming you want one column per key in brand_mapping
-                                    num_columns = len(brand_mapping.keys())
+                                    num_columns = len(join_brand_year)
+                                    num_brand = len(brand_mapping.keys())
                                     
-                                    # Create the columns
+                                    #colunas
                                     cols = st.columns(num_columns)
-                                    
-                                    # Iterate over the columns and keys simultaneously
-                                    for col, key in zip(cols, weights_values_for_average.keys()):
-                                             with col:
-                                                      number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10)
-                                                      weights_values_for_average[key] = number / 100
-                           
-                                    
+                        
+                                    for index,col in zip(range(num_columns),cols[:]):
+                                        
+                                        workspace = join_brand_year[index]
+                                        year,brand = workspace[0],workspace[1]
+                                        st.write(year)
+                                        # Assuming you want one column per key in brand_mapping
+                                        num_columns = len(brand_mapping.keys())
+                                        # Create the columns
+                                        cols = st.columns(num_columns)
+                                        if year == "2021":
+                                            # Iterate over the columns and keys simultaneously
+                                            for col, key in zip(cols, weights_values_for_average_2021.keys()):
+                                                        year_key = f"{key}_{year}"
+                                                        with col:
+                                                                number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                                weights_values_for_average_2021[key] = number / 100
+                        
+                                        if year == "2022":
+                                            # Iterate over the columns and keys simultaneously
+                                            for col, key in zip(cols, weights_values_for_average_2022.keys()):
+                                                        year_key = f"{key}_{year}"
+                                                        with col:
+                                                                number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                                weights_values_for_average_2022[key] = number / 100
+                        
+                        
+                                        if year == "2023":
+                                            # Iterate over the columns and keys simultaneously
+                                            for col, key in zip(cols, weights_values_for_average_2023.keys()):
+                                                        year_key = f"{key}_{year}"
+                                                        with col:
+                                                                number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                                weights_values_for_average_2023[key] = number / 100
+                        
+                        
+                                        if year == "2024":
+                                            # Iterate over the columns and keys simultaneously
+                                            for col, key in zip(cols, weights_values_for_average_2024.keys()):
+                                                        year_key = f"{key}_{year}"
+                                                        with col:
+                                                                number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                                weights_values_for_average_2024[key] = number / 100
+                        
+                        
+                        
+                                    weights_joined.append(weights_values_for_average_2021)
+                                    weights_joined.append(weights_values_for_average_2022)
+                                    weights_joined.append(weights_values_for_average_2023)
+                                    weights_joined.append(weights_values_for_average_2024)            
+                                                            
+#--------------------------------------------------------------------------------------------------------------------------// //--------------------------------------------------------------
+
                                     #creating the market_share_weighted
                                     market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns,framework_to_user)
                                     
