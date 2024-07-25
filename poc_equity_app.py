@@ -1211,7 +1211,7 @@ def main():
 #--------------------------------------------------------------------------------------------------------------------------// //-----------------------------------------------------
                            
                            #creating the market_share_weighted
-                           market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns)
+                           market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_joined,years_cols,value_columns,framework_to_user)
                            
                            # creating the columns for the app
                            right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
