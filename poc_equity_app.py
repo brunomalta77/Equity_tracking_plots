@@ -162,7 +162,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,u
     replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
     df_total_uns["time_period"] = df_total_uns["time_period"].replace(replacements)
     
-    affinity_labels = ['AF_Entry_point','AF_Brand_Love','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Prep_Milk','AF_Baby_exp']
+    affinity_labels = affinity_labels
     
     # Doing the percentual in total_unsmoothened
     for aff in affinity_labels:
@@ -520,7 +520,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     df_total_uns["time_period"] = df_total_uns["time_period"].replace(replacements)
 
 
-    df_total_uns["Category"] = df_total_uns["Category"].replace("baby_milk","Baby milk")
+    df_total_uns["Category"] = df_total_uns["Category"].replace(original_category,changed_category)
 
     df_total_uns.rename(columns=general_equity_to_user,inplace=True)
 
