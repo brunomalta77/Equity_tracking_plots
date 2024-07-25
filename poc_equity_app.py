@@ -556,13 +556,14 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     with left_column_1:    
         time_frame = st.radio('Choose  time frame:', time_frames,key="test_4")
     
+    df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
     with left_column_2:
         framework = st.selectbox('Choose  framework:', frameworks,key="test_5")
-        my_brand = st.multiselect('Choose  brand',df.brand.unique())
+        my_brand = st.multiselect('Choose  brand',df_filtered.brand.unique())
     
     #filtering all the dataframes
     #Average
-    df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
+    #df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
     df_filtered = df_filtered[(df_filtered['time'] >= ws) & (df_filtered['time'] <= we)]
     df_filtered = df_filtered.sort_values(by="time")
     df_filtered = df_filtered[df_filtered["brand"].isin(my_brand)]
