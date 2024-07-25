@@ -208,8 +208,12 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,u
         for index,row in final_average.iterrows():
             weighted_average_equity["weighted_" + aff_pilar][index] = round(((weighted_avg * final_average[aff_pilar + "_average"][index]) + (weighted_total * final_total[aff_pilar + "_total"][index])),2)
         
-    #getting the new framework affinity
-    weighted_average_equity["weighted_Framework_Affinity"] = round((weighted_average_equity["weighted_AF_Entry_point"] + weighted_average_equity["weighted_AF_Brand_Love"] + weighted_average_equity["weighted_AF_Baby_Milk"] +weighted_average_equity["weighted_AF_Adverts_Promo"] + weighted_average_equity["weighted_AF_Value_for_Money"] + weighted_average_equity["weighted_AF_Buying_Exp"] +  weighted_average_equity["weighted_AF_Prep_Milk"] + weighted_average_equity["weighted_AF_Baby_exp"]  )/8,2)
+    # Select columns that start with 'weighted_AF_'
+    affinity_columns = [col for col in weighted_average_equity.columns if col.startswith('weighted_AF_')]
+
+    # Calculate the weighted Framework Affinity
+    weighted_average_equity["weighted_Framework_Affinity"] = round(weighted_average_equity[affinity_columns].mean(axis=1), 2)
+    
 
     # getting the new total equity
 
