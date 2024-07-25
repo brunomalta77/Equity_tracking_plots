@@ -18,7 +18,43 @@ from PIL import Image
 import msal
 import io
 import requests
+#--------------------------------------------------------------------------------------// Aesthetic Global Variables // -------------------------------------------------------------------------
 
+user_to_equity = {'Entry points & Key Moments':'AF_Entry_point','Brand Prestige & Love':'AF_Brand_Love','Baby Milk':'AF_Baby_Milk','Adverts and Promotions':'AF_Adverts_Promo','Value For Money':'AF_Value_for_Money',
+                        'Buying Experience': 'AF_Buying_Exp','Preparing Milk':'AF_Prep_Milk','Baby Experience':'AF_Baby_exp','Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
+       'Brand Breadth': 'AA_Brand_Breadth', 'Average Engagement':'AS_Average_Engagement', 'Usage SoV':'AS_Usage_SoV',
+       'Search Index': 'AS_Search_Index', 'Brand Centrality':'AS_Brand_Centrality'}
+
+affinity_labels = ['AF_Entry_point','AF_Brand_Love','AF_Baby_Milk','AF_Adverts_Promo','AF_Value_for_Money','AF_Buying_Exp','AF_Prep_Milk','AF_Baby_exp']
+
+
+
+framework_to_user = {'Total_Equity':'Total Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
+       'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
+       'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality'}
+
+
+original_category = "baby_milk" 
+changed_category = "Baby Milk" 
+
+
+framework_options_ = ["Total Equity","Awareness","Saliency","Affinity",'Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+                                'Buying Experience','Preparing Milk','Baby Experience']
+
+
+affinity_to_user = {'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
+                                'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'}
+
+general_equity_to_user = {'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'}
+
+
+value_columns_  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity',
+        'eSoV', 'Reach',
+        'Brand Breadth', 'Average Engagement', 'Usage SoV',
+        'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+                                    'Buying Experience','Preparing Milk','Baby Experience']
+
+#--------------------------------------------------------------------------------------// Aesthetic Global Variables // -------------------------------------------------------------------------
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
 logo_path = r"data/brand_logo.png"
@@ -109,45 +145,14 @@ def reading_df(filepath,sheet_name):
     df = pd.read_excel(filepath,sheet_name=sheet_name)
     return df
 
-#mmm file 
-@st.cache_data() 
-def processing_mmm(filepath):
-    df_vol = pd.read_excel(filepath)
-    sales = list(df_vol[df_vol["Metric"] == "SalesValue"]["Value"])
-    volume = list(df_vol[df_vol["Metric"] == "SalesVol"]["Value"])
-    res = [round(x / y,2) if y != 0 else 0 for x, y in zip(sales, volume)]
-    df_vol = df_vol[df_vol["Metric"]== "SalesVol"]
-    df_vol["Price_change"] = res
-    df_vol.rename(columns={"Value":"Volume_share"},inplace=True)
-    df_vol=df_vol.groupby(['time','Y','H','QT','M','W','brand','Metric','Category'])[['Volume_share','Price_change']].sum().reset_index()
-    return df_vol
-
-# Media files
-@st.cache_data()
-def media_plan(filepath,sheet_spend,sheet_week):
-         df_uk_spend = pd.read_excel(filepath,sheet_name=sheet_spend)
-         df_uk_weeks = pd.read_excel(filepath,sheet_name=sheet_week)
-         return (df_uk_spend,df_uk_weeks)
-
-
 
 @st.cache_data()
-def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement):
+def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,user_to_equity,affinity_labels):
     #------------------------------------------------------------------------------------------------------------------------------------------------------
-    df.rename(columns={'Entry points & Key Moments':'AF_Entry_point','Brand Prestige & Love':'AF_Brand_Love','Baby Milk':'AF_Baby_Milk','Adverts and Promotions':'AF_Adverts_Promo','Value For Money':'AF_Value_for_Money',
-               'Buying Experience': 'AF_Buying_Exp','Preparing Milk':'AF_Prep_Milk','Baby Experience':'AF_Baby_exp','Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
-'Brand Breadth': 'AA_Brand_Breadth', 'Average Engagement':'AS_Average_Engagement', 'Usage SoV':'AS_Usage_SoV',
-'Search Index': 'AS_Search_Index', 'Brand Centrality':'AS_Brand_Centrality'},inplace=True)
+    df.rename(columns=user_to_equity,inplace=True)
 
-    df_total_uns.rename(columns={'Entry points & Key Moments':'AF_Entry_point','Brand Prestige & Love':'AF_Brand_Love','Baby Milk':'AF_Baby_Milk','Adverts and Promotions':'AF_Adverts_Promo','Value For Money':'AF_Value_for_Money',
-               'Buying Experience': 'AF_Buying_Exp','Preparing Milk':'AF_Prep_Milk','Baby Experience':'AF_Baby_exp','Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
-'Brand Breadth': 'AA_Brand_Breadth', 'Average Engagement':'AS_Average_Engagement', 'Usage SoV':'AS_Usage_SoV',
-'Search Index': 'AS_Search_Index', 'Brand Centrality':'AS_Brand_Centrality'},inplace=True)
+    df_total_uns.rename(columns=user_to_equity,inplace=True)
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    
-    
-    
-    
     # drop any nan values
     df.dropna(inplace=True)
     df_total_uns.dropna(inplace=True)
@@ -235,58 +240,39 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement):
 #---------------------------------------------------------------------------------------////--------------------------------------------------------------------------------------------------
 
 # Market_share_weighted_average
-def weighted_brand_calculation(df, weights, value_columns):
-    
-    df.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
-       'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
-       'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality'},inplace=True)
-  
-    # Convert value columns to numeric, replacing non-numeric values with NaN
-    for col in value_columns:
-        df[col] = pd.to_numeric(df[col], errors='coerce')
-    
-    # Apply weights to each brand
-    for brand, weight in weights.items():
-        mask = (df['brand'] == brand)
-        df.loc[mask, value_columns] = df.loc[mask, value_columns].multiply(weight)
-    
-    # Group by time_period and time, then normalize
-    def normalize_group(group):
-        totals = group[value_columns].sum()
+def weighted_brand_calculation(df,weights_joined,years, value_columns,framework_to_user):
+  concat_data=[]
+    for year,weights in zip(years,weights_joined):
+        #filter by year
+        df = df_original[(df_original.time >= f"{year}-01-01") & (df_original.time <= f"{year}-12-31")]
+        df.rename(columns=framework_to_user,inplace=True)
+        # Convert value columns to numeric, replacing non-numeric values with NaN
         for col in value_columns:
-            if totals[col] == 0:
-                group[col] = 0
-            else:
-                group[col] = round((group[col] / totals[col]) * 100,2)
-        return group
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+        
+        # Apply weights to each brand
+        for brand, weight in weights.items():
+            mask = (df['brand'] == brand)
+            df.loc[mask, value_columns] = df.loc[mask, value_columns].multiply(weight)
+        
+        # Group by time_period and time, then normalize
+        def normalize_group(group):
+            totals = group[value_columns].sum()
+            for col in value_columns:
+                if totals[col] == 0:
+                    group[col] = 0
+                else:
+                    group[col] = round((group[col] / totals[col]) * 100,2)
+            return group
 
-    result_df = df.groupby(['time_period', 'time']).apply(normalize_group).reset_index(drop=True)
-    
-    return result_df
+        result_df = df.groupby(['time_period', 'time']).apply(normalize_group).reset_index(drop=True)
+        
+        
+        concat_data.append(result_df)
+
+    final_df = pd.concat(concat_data,axis=0)
+    return final_df
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-#merged file
-@st.cache_data() 
-def merged_file(df,df_vol):
-    df_merged = pd.merge(df_vol,df,on=["time","brand","Category"],how="inner")
-    return df_merged
-
-# Function to calculate confidence intervals
-def calculate_confidence_intervals(data, confidence=0.90):
-    if confidence == 0.90:
-        multi = 1.645
-    if confidence == 0.95:
-        multi = 1.960
-    else:
-        multi = 2.576
-    
-    n = len(data)
-    mean = np.mean(data)
-    std_err = np.std(data, ddof=1) / np.sqrt(n)
-    margin_of_error = std_err * 1.645  # 1.96 for 95% confidence interval (z-score)
-    lower_bound = mean - margin_of_error
-    upper_bound = mean + margin_of_error
-    return lower_bound, upper_bound
 
 def equity_info(data,market_flag):
     if market_flag == "UK":
@@ -300,84 +286,20 @@ def equity_info(data,market_flag):
     
     return filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity
 
-
-def mmm_info(data,slang_flag):
-    for x in os.listdir(data):
-        if slang_flag in x:
-            filepath_mmm = os.path.join(data,x)
-            info_number = [x for x in x.split("_") if x >= "0" and x <="9"]
-            day_mmm,month_mmm,year_mmm,hour_mmm,minute_mmm = info_number[:5]
-            second_mmm = info_number[-1].split(".")[0]
-    
-    return filepath_mmm,year_mmm,month_mmm,day_mmm,hour_mmm,minute_mmm,second_mmm
-
-
-# media processing
-def media_spend_processed(df,df_spend,df_weeks):
-         # making everything as a string and in lower case
-         df_weeks["w"] = df_weeks["w"].apply(lambda x : str(x).lower())
-         df_weeks["y"] = df_weeks["y"].apply(lambda x : str(x).lower())
-         df_weeks["m"] = df_weeks["m"].apply(lambda x : str(x).lower())
-         df_weeks["qt"] = df_weeks["qt"].apply(lambda x : str(x).lower())
-         df_weeks["h"] = df_weeks["h"].apply(lambda x : str(x).lower())
-         
-         # renaming and put everything into string and lower case
-         df_spend.rename(columns={"Group Type":"Media_spend"},inplace=True)
-         df_spend.rename(columns={"time_frame":"time_period"},inplace=True)
-         df_spend["Date"] = df_spend["Date"].apply(lambda x : str(x).lower())
-         
-         # mapping our codes from the y,h,qt,m,w into time
-         trans_dic = {}
-         trans_dic.update({k: i for k, i in zip(df_weeks["w"], df_weeks["time"])})
-         trans_dic.update({k: i for k, i in zip(df_weeks["y"], df_weeks["time"])})
-         trans_dic.update({k: i for k, i in zip(df_weeks["m"], df_weeks["time"])})
-         trans_dic.update({k: i for k, i in zip(df_weeks["qt"], df_weeks["time"])})
-         trans_dic.update({k: i for k, i in zip(df_weeks["h"], df_weeks["time"])})
-         
-         #creating the time column
-         df_spend["time"] = [trans_dic[x] for x in df_spend["Date"]]
-         
-         #grouping by
-         df_spend=df_spend.groupby(['Date','time_period','brand','Media_spend','Category','time'])['value'].sum().reset_index()
-         
-         merged_df = pd.merge(df_spend,df,on=["time","brand","Category"],how="inner")
-         
-         return merged_df
-
-
-
-def equity_options(df,brand_mapping):
+def equity_options(df,brand_mapping,original_category,changed_category,framework_options_):
          df.brand = df.brand.replace(brand_mapping)
          
          
-         df["Category"] = df["Category"].replace("baby_milk","Baby milk")
+         df["Category"] = df["Category"].replace(original_category,changed_category)
          category_options = df["Category"].unique()
          
          replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
          df["time_period"] = df["time_period"].replace(replacements)
          time_period_options = df["time_period"].unique()
          
-         framework_options = ["Total Equity","Awareness","Saliency","Affinity",'Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
-                                'Buying Experience','Preparing Milk','Baby Experience']
+         framework_options = framework_options_
+         
          return (category_options,time_period_options,framework_options)
-
-
-
-
-def merged_options(df):
-    category_options_merged = df["Category"].unique()
-    time_period_options_merged = df["time_period"].unique()
-    framework_options_merged = ['AF_Entry_point', 'AF_Brand_Love', 'AF_Adverts_Promo','AF_Prep_Meal','AF_Experience','AF_Value_for_Money', "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
-    framework_options_value = ["Volume_share","Price_change"]
-    return(category_options_merged,time_period_options_merged,framework_options_merged,framework_options_value)
-
-
-def merged_options_media(df):
-         category_options_merged_media = df["Category"].unique()
-         time_period_options_merged_media = df["time_period_x"].unique()
-         framework_options_media = ['AF_Entry_point', 'AF_Brand_Love', 'AF_Adverts_Promo','AF_Prep_Meal','AF_Experience','AF_Value_for_Money', "Framework_Awareness", "Framework_Saliency", "Framework_Affinity", "Total_Equity"]
-         framework_options_value_media = ["value"]
-         return(category_options_merged_media,time_period_options_merged_media,framework_options_media, framework_options_value_media)
          
 #-----------------------------------------------------------------------------------------------------//-----------------------------------------------------------------------------------------
 # Equity_plot
@@ -389,9 +311,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
     if sheet_name == "Market Share Weighted":
         name = "Market Share Weighted"
 
-    df.rename(columns={'Total_Equity':'Equity','Framework_Awareness':"Awareness",'Framework_Saliency':'Saliency','Framework_Affinity':'Affinity','AA_eSoV':'eSoV', 'AA_Reach':'Reach',
-       'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
-       'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality'},inplace=True)
+    df.rename(columns=framework_to_user,inplace=True)
 
     
     st.subheader(f"Final Equity plot - {name}")
@@ -583,17 +503,15 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     # ------------------------------------------------------------------------------------------------Aesthetic changes-------------------------------------------------------------------------
     #changing the names of the filtered  columns
     ################################################################## df ####################################################################################################
-    df.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+    df.rename(columns=affinity_to_user,inplace=True)
 
     df.brand = df.brand.replace(brand_replacement)
     
-    df.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+    df.rename(columns=general_equity_to_user,inplace=True)
 
     ################################################################## df_total_uns ####################################################################################################
 
-    df_total_uns.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+    df_total_uns.rename(columns=affinity_to_user,inplace=True)
 
 
     df_total_uns.brand = df_total_uns.brand.replace(brand_replacement)
@@ -604,17 +522,16 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
 
     df_total_uns["Category"] = df_total_uns["Category"].replace("baby_milk","Baby milk")
 
-    df_total_uns.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+    df_total_uns.rename(columns=general_equity_to_user,inplace=True)
 
     ################################################################## weighted_df ####################################################################################################
 
 
-    weighted_df.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+    weighted_df.rename(columns=affinity_to_user,inplace=True)
 
     weighted_df.brand = weighted_df.brand.replace(brand_replacement)
 
-    weighted_df.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+    weighted_df.rename(columns=general_equity_to_user,inplace=True)
 
     #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
@@ -804,7 +721,6 @@ def main():
                            
                            with st.sidebar:
                                     st.image(image)
-                                    brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
          
                                     # user input for equity and mmm file. 
                                     markets_available = ["UK"]
@@ -816,7 +732,11 @@ def main():
                                              
                                     if market == "uk":
                                              slang ="MMM_UK_"
-                                        
+                                             brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
+                                             weights_values_for_average_2021 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                             weights_values_for_average_2022 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                             weights_values_for_average_2023 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                             weights_values_for_average_2024 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
                            
                                     # getting our equity    
                                     filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
@@ -832,13 +752,10 @@ def main():
                            
                                     
                                     #Equity options
-                                    category_options,time_period_options,framework_options = equity_options(df,brand_mapping)
+                                    category_options,time_period_options,framework_options = equity_options(df,brand_mapping,original_category,changed_category,framework_options_)
                                     
                                       #creating the market_share_weighted
-                                    value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
-                                   'Brand Breadth', 'Average Engagement', 'Usage SoV',
-                                   'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
-                                    'Buying Experience','Preparing Milk','Baby Experience']
+                                    value_columns  = value_columns_
                   
 #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
                                     #creating a copy of our dataframes.
@@ -847,19 +764,17 @@ def main():
                                     # Aesthetic changes --------------------------------------------------------------------------------------------------
                                     #changing the names of the filtered  columns
                                     ################################################################## df ####################################################################################################
-                                    df_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                                          'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                                    df_copy.rename(columns=affinity_to_user,inplace=True)
                                     
                                     
                                     
                                     df_copy.brand = df_copy.brand.replace(brand_mapping)
                                     
-                                    df_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                                    df_copy.rename(columns=general_equity_to_user,inplace=True)
                                     
                                     ################################################################## df_total_uns ####################################################################################################
                                     
-                                    df_total_uns_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                                          'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                                    df_total_uns_copy.rename(columns=affinity_to_user,inplace=True)
                                     
                                     
                                     df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
@@ -871,7 +786,7 @@ def main():
                                     df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
                                     
                                     
-                                    df_total_uns_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                                    df_total_uns_copy.rename(columns=general_equity_to_user,inplace=True)
 
 ################################################################## ##################################################################################################################
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -896,39 +811,77 @@ def main():
                                              df_for_weighted = df_total_uns_copy
                                     
                            
-                                    col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
-                                    # creating the average_weighted 
-                                    weights_values_for_average = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                    # getting the individual years
+                                    years_filtered = df_for_weighted[df_for_weighted.time_period == "Years"]            
+                                    years_filtered = years_filtered.time.dt.year.unique()
+                                    years_cols = [str(year) for year in years_filtered if year != 2020]
                                     
-                                    with col1:
-                                           number = st.number_input("APTAMIL", min_value=0, max_value=100, value=10)
-                                           number = number/100
-                                           weights_values_for_average["APTAMIL"]=number
-                                    
-                                    with col2:
-                                           number = st.number_input("COW & GATE", min_value=0, max_value=100, value=10)
-                                           number = number/100
-                                           weights_values_for_average["COW & GATE"]=number
+#--------------------------------------------------------------------------------------------------------------------------// //-----------------------------------------------------
+                                    weights_joined = []
+                                    join_brand_year= []
+                                    keys = [ key for key in brand_mapping.keys()]
                            
-                                    with col3:
-                                           number = st.number_input(f"SMA", min_value=0, max_value=100, value=10)
-                                           number = number/100
-                                           weights_values_for_average["SMA"]=number
+                                    for year in years_cols:
+                                             join_brand_year.append((year,keys))
                            
-                                    with col4:
-                                           number = st.number_input(f"KENDAMIL", min_value=0, max_value=100, value=10)
-                                           number = number/100
-                                           weights_values_for_average["KENDAMIL"]=number
+                                    # Assuming you want one column per key in brand_mapping
+                                    num_columns = len(join_brand_year)
+                                    num_brand = len(brand_mapping.keys())
+                                       
+                                    #colunas
+                                    cols = st.columns(num_columns)
                            
-                                    
-                                    with col5:
-                                           number = st.number_input(f"HIPP ORGANIC", min_value=0, max_value=100, value=10)
-                                           number = number/100
-                                           weights_values_for_average["HIPP ORGANIC"]=number
+                                    for index,col in zip(range(num_columns),cols[:]):
+                                           workspace = join_brand_year[index]
+                                           year,brand = workspace[0],workspace[1]
+                                           st.write(year)
+                                           # Assuming you want one column per key in brand_mapping
+                                           num_columns = len(brand_mapping.keys())
+                                           # Create the columns
+                                           cols = st.columns(num_columns)
+                                           if year == "2021":
+                                               # Iterate over the columns and keys simultaneously
+                                               for col, key in zip(cols, weights_values_for_average_2021.keys()):
+                                                           year_key = f"{key}_{year}"
+                                                           with col:
+                                                                   number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                                   weights_values_for_average_2021[key] = number / 100
                            
-                                    
+                                           if year == "2022":
+                                               # Iterate over the columns and keys simultaneously
+                                               for col, key in zip(cols, weights_values_for_average_2022.keys()):
+                                                           year_key = f"{key}_{year}"
+                                                           with col:
+                                                                   number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                                   weights_values_for_average_2022[key] = number / 100
+                           
+                           
+                                           if year == "2023":
+                                               # Iterate over the columns and keys simultaneously
+                                               for col, key in zip(cols, weights_values_for_average_2023.keys()):
+                                                           year_key = f"{key}_{year}"
+                                                           with col:
+                                                                   number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                                   weights_values_for_average_2023[key] = number / 100
+                           
+                           
+                                           if year == "2024":
+                                               # Iterate over the columns and keys simultaneously
+                                               for col, key in zip(cols, weights_values_for_average_2024.keys()):
+                                                           year_key = f"{key}_{year}"
+                                                           with col:
+                                                                   number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                                   weights_values_for_average_2024[key] = number / 100
+                           
+                           
+                           
+                                    weights_joined.append(weights_values_for_average_2021)
+                                    weights_joined.append(weights_values_for_average_2022)
+                                    weights_joined.append(weights_values_for_average_2023)
+                                    weights_joined.append(weights_values_for_average_2024)                                       
+#--------------------------------------------------------------------------------------------------------------------------// //-----------------------------------------------------                   
                                     #creating the market_share_weighted
-                                    market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns)
+                                    market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_joined,years_cols,value_columns,framework_to_user)
                                     
                                     # creating the columns for the app
                                     right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
@@ -1033,9 +986,9 @@ def main():
                                              weighted_2_page = weighted_2_page/100
                                     
                                     
-                                    df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping)
+                                    df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels)
                                     # Comparing all the sheets
-                                    fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping)
+                                    fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,original_category,changed_category,general_equity_to_user)
                                     st.plotly_chart(fig,use_container_width=True)
                                     
                                     buffer = io.BytesIO()
@@ -1069,15 +1022,15 @@ def main():
 
                                     
                                     if sheet_name == "Average Smoothening":
-                                             fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                             fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
                                              st.plotly_chart(fig,use_container_width=True)
                                     
                                     if sheet_name == "Total Unsmoothening":
-                                             fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                             fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
                                              st.plotly_chart(fig,use_container_width=True)
                                     
                                     if sheet_name == "Market Share Weighted":
-                                             fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                             fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
                                              st.plotly_chart(fig,use_container_width=True)
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
@@ -1089,8 +1042,6 @@ def main():
          else:
                   with st.sidebar:
                            st.image(image)
-                           brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
-                           
                            # user input for equity and mmm file. 
                            markets_available = ["UK"]
                            column_1,_ = st.columns(2)
@@ -1101,7 +1052,11 @@ def main():
                                     
                            if market == "uk":
                                     slang ="MMM_UK_"
-                               
+                                    brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
+                                    weights_values_for_average_2021 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                    weights_values_for_average_2022 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                    weights_values_for_average_2023 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                    weights_values_for_average_2024 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
                            
                            # getting our equity    
                            filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
@@ -1117,13 +1072,10 @@ def main():
                            
                            
                            #Equity options
-                           category_options,time_period_options,framework_options = equity_options(df,brand_mapping)
+                           category_options,time_period_options,framework_options = equity_options(df,brand_mapping,original_category,changed_category,framework_options_)
                            
                              #creating the market_share_weighted
-                           value_columns  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity','eSoV', 'Reach',
-                           'Brand Breadth', 'Average Engagement', 'Usage SoV',
-                           'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
-                           'Buying Experience','Preparing Milk','Baby Experience']
+                           value_columns  = value_columns_
                            
                            #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
                            #creating a copy of our dataframes.
@@ -1132,19 +1084,17 @@ def main():
                            # Aesthetic changes --------------------------------------------------------------------------------------------------
                            #changing the names of the filtered  columns
                            ################################################################## df ####################################################################################################
-                           df_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                           df_copy.rename(columns=affinity_to_user,inplace=True)
                            
                            
                            
                            df_copy.brand = df_copy.brand.replace(brand_mapping)
                            
-                           df_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                           df_copy.rename(columns=general_equity_to_user,inplace=True)
                            
                            ################################################################## df_total_uns ####################################################################################################
                            
-                           df_total_uns_copy.rename(columns={'AF_Entry_point':'Entry points & Key Moments','AF_Brand_Love':'Brand Prestige & Love','AF_Baby_Milk':'Baby Milk','AF_Adverts_Promo':'Adverts and Promotions','AF_Value_for_Money':'Value For Money',
-                                                 'AF_Buying_Exp':'Buying Experience','AF_Prep_Milk':'Preparing Milk','AF_Baby_exp':'Baby Experience'},inplace=True)
+                           df_total_uns_copy.rename(columns=affinity_to_user,inplace=True)
                            
                            
                            df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
@@ -1156,7 +1106,7 @@ def main():
                            df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
                            
                            
-                           df_total_uns_copy.rename(columns={'Total_Equity':'Total Equity','Framework_Awareness':'Awareness','Framework_Saliency':'Saliency','Framework_Affinity':'Affinity'},inplace=True)
+                           df_total_uns_copy.rename(columns=general_equity_to_user,inplace=True)
 
 ################################################################## ##################################################################################################################
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1182,38 +1132,83 @@ def main():
                                     sheet_name = "Total Unsmoothening"
                                     sheet_name_download = "total"
                                     df_for_weighted = df_total_uns_copy
+                                             
                            
-                  
-                           col1,col2,col3,col4,col5 = st.columns([1,1,1,1,1])
-                           # creating the average_weighted 
-                           weights_values_for_average = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
                            
-                           with col1:
-                                  number = st.number_input("APTAMIL", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["APTAMIL"]=number
                            
-                           with col2:
-                                  number = st.number_input("COW & GATE", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["COW & GATE"]=number
+                           # getting the individual years
+                           years_filtered = df_for_weighted[df_for_weighted.time_period == "Years"]            
+                           years_filtered = years_filtered.time.dt.year.unique()
+                           years_cols = [str(year) for year in years_filtered if year != 2020]
                   
-                           with col3:
-                                  number = st.number_input(f"SMA", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["SMA"]=number
-                  
-                           with col4:
-                                  number = st.number_input(f"KENDAMIL", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["KENDAMIL"]=number
-                  
+
+
+#--------------------------------------------------------------------------------------------------------------------------// //-----------------------------------------------------
+                           weights_joined = []
+                           join_brand_year= []
+                           keys = [ key for key in brand_mapping.keys()]
                            
-                           with col5:
-                                  number = st.number_input(f"HIPP ORGANIC", min_value=0, max_value=100, value=10)
-                                  number = number/100
-                                  weights_values_for_average["HIPP ORGANIC"]=number
-                  
+                           for year in years_cols:
+                                    join_brand_year.append((year,keys))
+                           
+                           # Assuming you want one column per key in brand_mapping
+                           num_columns = len(join_brand_year)
+                           num_brand = len(brand_mapping.keys())
+                              
+                           #colunas
+                           cols = st.columns(num_columns)
+                           
+                           for index,col in zip(range(num_columns),cols[:]):
+                                  
+                                  workspace = join_brand_year[index]
+                                  year,brand = workspace[0],workspace[1]
+                                  st.write(year)
+                                  # Assuming you want one column per key in brand_mapping
+                                  num_columns = len(brand_mapping.keys())
+                                  # Create the columns
+                                  cols = st.columns(num_columns)
+                                  if year == "2021":
+                                      # Iterate over the columns and keys simultaneously
+                                      for col, key in zip(cols, weights_values_for_average_2021.keys()):
+                                                  year_key = f"{key}_{year}"
+                                                  with col:
+                                                          number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                          weights_values_for_average_2021[key] = number / 100
+                           
+                                  if year == "2022":
+                                      # Iterate over the columns and keys simultaneously
+                                      for col, key in zip(cols, weights_values_for_average_2022.keys()):
+                                                  year_key = f"{key}_{year}"
+                                                  with col:
+                                                          number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                          weights_values_for_average_2022[key] = number / 100
+                           
+                           
+                                  if year == "2023":
+                                      # Iterate over the columns and keys simultaneously
+                                      for col, key in zip(cols, weights_values_for_average_2023.keys()):
+                                                  year_key = f"{key}_{year}"
+                                                  with col:
+                                                          number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                          weights_values_for_average_2023[key] = number / 100
+                           
+                           
+                                  if year == "2024":
+                                      # Iterate over the columns and keys simultaneously
+                                      for col, key in zip(cols, weights_values_for_average_2024.keys()):
+                                                  year_key = f"{key}_{year}"
+                                                  with col:
+                                                          number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                          weights_values_for_average_2024[key] = number / 100
+                           
+                           
+                           
+                           weights_joined.append(weights_values_for_average_2021)
+                           weights_joined.append(weights_values_for_average_2022)
+                           weights_joined.append(weights_values_for_average_2023)
+                           weights_joined.append(weights_values_for_average_2024)
+
+#--------------------------------------------------------------------------------------------------------------------------// //-----------------------------------------------------
                            
                            #creating the market_share_weighted
                            market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns)
@@ -1321,9 +1316,9 @@ def main():
                                     weighted_2_page = weighted_2_page/100
                            
                            
-                           df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping)
+                           df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels)
                            # Comparing all the sheets
-                           fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping)
+                           fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,original_category,changed_category,general_equity_to_user)
                            st.plotly_chart(fig,use_container_width=True)
                            
                            buffer = io.BytesIO()
@@ -1355,15 +1350,15 @@ def main():
                                     sheet_name = "Market Share Weighted"
                            
                            if sheet_name == "Average Smoothening":
-                                    fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                    fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
                                     st.plotly_chart(fig,use_container_width=True)
                            
                            if sheet_name == "Total Unsmoothening":
-                                    fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                    fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
                                     st.plotly_chart(fig,use_container_width=True)
                            
                            if sheet_name == "Market Share Weighted":
-                                    fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name=sheet_name)
+                                    fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
                                     st.plotly_chart(fig,use_container_width=True)
 
 
