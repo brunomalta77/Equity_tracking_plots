@@ -716,237 +716,237 @@ def main():
                            
                                     
 #---------------------------------------------------------------------------------------------------------//General info// ------------------------------------------------------------------------------------- 
-                           with st.container():
-                                    tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Compare Average, Absolute and Market Share Weighted","📕 Final Equity plots"])
+                           #with st.container():
+                                    #tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Compare Average, Absolute and Market Share Weighted","📕 Final Equity plots"])
                            
-                           with st.sidebar:
-                                    st.image(image)
+                           #with st.sidebar:
+                                    #st.image(image)
          
                                     # user input for equity and mmm file. 
                                     markets_available = ["UK"]
-                                    column_1,_ = st.columns(2)
+                                    #column_1,_ = st.columns(2)
                      
-                                    with column_1:
-                                             market = st.selectbox('Markets', markets_available)
-                                             market = market.lower()
+                                    #with column_1:
+                                             #market = st.selectbox('Markets', markets_available)
+                                             #market = market.lower()
                                              
-                                    if market == "uk":
-                                             slang ="MMM_UK_"
-                                             brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
-                                             weights_values_for_average_2021 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
-                                             weights_values_for_average_2022 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
-                                             weights_values_for_average_2023 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
-                                             weights_values_for_average_2024 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                    #if market == "uk":
+                                             #slang ="MMM_UK_"
+                                             #brand_mapping = {"aptamil":"APTAMIL" , "cow&gate": "COW & GATE", "sma": "SMA", "kendamil": "KENDAMIL", "hipp_organic": "HIPP ORGANIC"}
+                                             #weights_values_for_average_2021 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                             #weights_values_for_average_2022 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                             #weights_values_for_average_2023 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                             #weights_values_for_average_2024 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
                            
                                     # getting our equity    
-                                    filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
+                                    #filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
                                     
                            
                                     # reading the equity file
-                                    df = reading_df(filepath_equity,sheet_name="average_smoothened")
-                                    df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
-                                    df_total_smooth = reading_df(filepath_equity,sheet_name="total_smoothened")
-                                    df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
-                                    df_significance = reading_df(filepath_equity,sheet_name="significance")
-                                    df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
+                                    #df = reading_df(filepath_equity,sheet_name="average_smoothened")
+                                    #df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
+                                    #df_total_smooth = reading_df(filepath_equity,sheet_name="total_smoothened")
+                                    #df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
+                                    #df_significance = reading_df(filepath_equity,sheet_name="significance")
+                                    #df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
                            
                                     
                                     #Equity options
-                                    category_options,time_period_options,framework_options = equity_options(df,brand_mapping,original_category,changed_category,framework_options_)
+                                    #category_options,time_period_options,framework_options = equity_options(df,brand_mapping,original_category,changed_category,framework_options_)
                                     
                                       #creating the market_share_weighted
-                                    value_columns  = value_columns_
+                                    #value_columns  = value_columns_
                   
 #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
                                     #creating a copy of our dataframes.
-                                    df_copy = df.copy()
-                                    df_total_uns_copy = df_total_uns.copy()
+                                    #df_copy = df.copy()
+                                    #df_total_uns_copy = df_total_uns.copy()
                                     # Aesthetic changes --------------------------------------------------------------------------------------------------
                                     #changing the names of the filtered  columns
                                     ################################################################## df ####################################################################################################
-                                    df_copy.rename(columns=affinity_to_user,inplace=True)
+                                    #df_copy.rename(columns=affinity_to_user,inplace=True)
                                     
                                     
                                     
-                                    df_copy.brand = df_copy.brand.replace(brand_mapping)
+                                    #df_copy.brand = df_copy.brand.replace(brand_mapping)
                                     
-                                    df_copy.rename(columns=general_equity_to_user,inplace=True)
+                                    #df_copy.rename(columns=general_equity_to_user,inplace=True)
                                     
                                     ################################################################## df_total_uns ####################################################################################################
                                     
-                                    df_total_uns_copy.rename(columns=affinity_to_user,inplace=True)
+                                    #df_total_uns_copy.rename(columns=affinity_to_user,inplace=True)
                                     
                                     
-                                    df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
+                                    #df_total_uns_copy.brand = df_total_uns_copy.brand.replace(brand_mapping)
                                     
-                                    replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
-                                    df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
-                                    
-                                    
-                                    df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
+                                    #replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
+                                    #df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
                                     
                                     
-                                    df_total_uns_copy.rename(columns=general_equity_to_user,inplace=True)
+                                    #df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
+                                    
+                                    
+                                    #df_total_uns_copy.rename(columns=general_equity_to_user,inplace=True)
 
 ################################################################## ##################################################################################################################
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------// Market Share Weighted----------------------------------------------------------------------------------
-                           with tab2:
+                           #with tab2:
                                     #chosing the sheet name 
-                                    column_1,_,_,_ = st.columns(4)
-                                    with column_1:
-                                             sheet_name = st.selectbox("Select sheet",["Average","Absolute"])
+                                    #column_1,_,_,_ = st.columns(4)
+                                    #with column_1:
+                                     #        sheet_name = st.selectbox("Select sheet",["Average","Absolute"])
                                     
-                                    st.subheader(f"Equity Metrics Plot - Market Share weighted {sheet_name}")
+                                    #st.subheader(f"Equity Metrics Plot - Market Share weighted {sheet_name}")
                            
                            
-                                    if sheet_name == "Average":
-                                             sheet_name = "Average Smoothening"
-                                             sheet_name_download = 'average'
-                                             df_for_weighted = df_copy
-                                    if sheet_name == "Absolute":
-                                             sheet_name = "Total Unsmoothening"
-                                             sheet_name_download = "total"
-                                             df_for_weighted = df_total_uns_copy
+                                    #if sheet_name == "Average":
+                                       #      sheet_name = "Average Smoothening"
+                                      #       sheet_name_download = 'average'
+                                     #        df_for_weighted = df_copy
+                                    #if sheet_name == "Absolute":
+                                             #sheet_name = "Total Unsmoothening"
+                                             #sheet_name_download = "total"
+                                             #df_for_weighted = df_total_uns_copy
                                     
                            
                                     # getting the individual years
-                                    years_filtered = df_for_weighted[df_for_weighted.time_period == "Years"]            
-                                    years_filtered = years_filtered.time.dt.year.unique()
-                                    years_cols = [str(year) for year in years_filtered if year != 2020]
+                                    #years_filtered = df_for_weighted[df_for_weighted.time_period == "Years"]            
+                                    #years_filtered = years_filtered.time.dt.year.unique()
+                                    #years_cols = [str(year) for year in years_filtered if year != 2020]
                                     
 #--------------------------------------------------------------------------------------------------------------------------// //-----------------------------------------------------
-                                    weights_joined = []
-                                    join_brand_year= []
-                                    keys = [ key for key in brand_mapping.keys()]
+                                    #weights_joined = []
+                                    #join_brand_year= []
+                                    #keys = [ key for key in brand_mapping.keys()]
                            
-                                    for year in years_cols:
-                                             join_brand_year.append((year,keys))
+                                    #for year in years_cols:
+                                     #        join_brand_year.append((year,keys))
                            
                                     # Assuming you want one column per key in brand_mapping
-                                    num_columns = len(join_brand_year)
-                                    num_brand = len(brand_mapping.keys())
+                                    #num_columns = len(join_brand_year)
+                                    #num_brand = len(brand_mapping.keys())
                                        
                                     #colunas
-                                    cols = st.columns(num_columns)
+                                    #cols = st.columns(num_columns)
                            
-                                    for index,col in zip(range(num_columns),cols[:]):
-                                           workspace = join_brand_year[index]
-                                           year,brand = workspace[0],workspace[1]
-                                           st.write(year)
+                                    #for index,col in zip(range(num_columns),cols[:]):
+                                           #workspace = join_brand_year[index]
+                                           #year,brand = workspace[0],workspace[1]
+                                           #st.write(year)
                                            # Assuming you want one column per key in brand_mapping
-                                           num_columns = len(brand_mapping.keys())
+                                           #num_columns = len(brand_mapping.keys())
                                            # Create the columns
-                                           cols = st.columns(num_columns)
-                                           if year == "2021":
+                                           #cols = st.columns(num_columns)
+                                           #if year == "2021":
                                                # Iterate over the columns and keys simultaneously
-                                               for col, key in zip(cols, weights_values_for_average_2021.keys()):
-                                                           year_key = f"{key}_{year}"
-                                                           with col:
-                                                                   number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
-                                                                   weights_values_for_average_2021[key] = number / 100
+                                            #   for col, key in zip(cols, weights_values_for_average_2021.keys()):
+                                             #              year_key = f"{key}_{year}"
+                                              #             with col:
+                                               #                    number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                #                   weights_values_for_average_2021[key] = number / 100
                            
-                                           if year == "2022":
+                                           #if year == "2022":
                                                # Iterate over the columns and keys simultaneously
-                                               for col, key in zip(cols, weights_values_for_average_2022.keys()):
-                                                           year_key = f"{key}_{year}"
-                                                           with col:
-                                                                   number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
-                                                                   weights_values_for_average_2022[key] = number / 100
+                                            #   for col, key in zip(cols, weights_values_for_average_2022.keys()):
+                                             #              year_key = f"{key}_{year}"
+                                              #             with col:
+                                               #                    number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                #                   weights_values_for_average_2022[key] = number / 100
                            
                            
-                                           if year == "2023":
+                                           #if year == "2023":
                                                # Iterate over the columns and keys simultaneously
-                                               for col, key in zip(cols, weights_values_for_average_2023.keys()):
-                                                           year_key = f"{key}_{year}"
-                                                           with col:
-                                                                   number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
-                                                                   weights_values_for_average_2023[key] = number / 100
+                                            #   for col, key in zip(cols, weights_values_for_average_2023.keys()):
+                                             #              year_key = f"{key}_{year}"
+                                              #             with col:
+                                               #                    number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                #                   weights_values_for_average_2023[key] = number / 100
                            
                            
-                                           if year == "2024":
+                                           #if year == "2024":
                                                # Iterate over the columns and keys simultaneously
-                                               for col, key in zip(cols, weights_values_for_average_2024.keys()):
-                                                           year_key = f"{key}_{year}"
-                                                           with col:
-                                                                   number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
-                                                                   weights_values_for_average_2024[key] = number / 100
+                                            #   for col, key in zip(cols, weights_values_for_average_2024.keys()):
+                                             #              year_key = f"{key}_{year}"
+                                              #             with col:
+                                               #                    number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                #                   weights_values_for_average_2024[key] = number / 100
                            
                            
                            
-                                    weights_joined.append(weights_values_for_average_2021)
-                                    weights_joined.append(weights_values_for_average_2022)
-                                    weights_joined.append(weights_values_for_average_2023)
-                                    weights_joined.append(weights_values_for_average_2024)                                       
+                                    #weights_joined.append(weights_values_for_average_2021)
+                                    #weights_joined.append(weights_values_for_average_2022)
+                                    #weights_joined.append(weights_values_for_average_2023)
+                                    #weights_joined.append(weights_values_for_average_2024)                                       
 #--------------------------------------------------------------------------------------------------------------------------// //-----------------------------------------------------                   
                                     #creating the market_share_weighted
-                                    market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_joined,years_cols,value_columns,framework_to_user)
+                                    #market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_joined,years_cols,value_columns,framework_to_user)
                                     
                                     # creating the columns for the app
-                                    right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
+                                    #right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
                                     
-                                    with right_column_1:
+                                    #with right_column_1:
                                     #getting the date
-                                             start_date = st.date_input("Select start date",value=datetime(2021, 2, 16),key='start_date')
-                                             end_date =  st.date_input("Select end date",key='test1')
+                                    #         start_date = st.date_input("Select start date",value=datetime(2021, 2, 16),key='start_date')
+                                    #         end_date =  st.date_input("Select end date",key='test1')
                                     # getting the parameters
-                                    with right_column_2:
-                                             st.session_state.category = st.radio('Choose  category:', category_options,key='test3')
+                                    #with right_column_2:
+                                     #        st.session_state.category = st.radio('Choose  category:', category_options,key='test3')
                                     
-                                    with left_column_1:    
-                                             st.session_state.time_frame = st.radio('Choose  time frame:', time_period_options,key='test4')
+                                    #with left_column_1:    
+                                     #        st.session_state.time_frame = st.radio('Choose  time frame:', time_period_options,key='test4')
                                     
-                                    with left_column_2:
-                                             framework = st.selectbox('Choose  framework:', value_columns,key='test5')
+                                    #with left_column_2:
+                                     #        framework = st.selectbox('Choose  framework:', value_columns,key='test5')
                                     
                                     
-                                    if st.session_state.button == False:
-                                             if st.button("Run!"):
-                                                      #convert our dates
-                                                      ws = start_date.strftime('%Y-%m-%d')
-                                                      we = end_date.strftime('%Y-%m-%d')
+                                    #if st.session_state.button == False:
+                                    #         if st.button("Run!"):
+                                    #                  #convert our dates
+                                    #                  ws = start_date.strftime('%Y-%m-%d')
+                                    #                  we = end_date.strftime('%Y-%m-%d')
                                                       
-                                                      st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
-                                                      st.session_state.button = True
-                                    else:
-                                             if st.button("Run!"):
+                                     #                 st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
+                                     #                 st.session_state.button = True
+                                    #else:
+                                     #        if st.button("Run!"):
                                                       #convert our dates
-                                                      ws = start_date.strftime('%Y-%m-%d')
-                                                      we = end_date.strftime('%Y-%m-%d')
+                                      #                ws = start_date.strftime('%Y-%m-%d')
+                                       #               we = end_date.strftime('%Y-%m-%d')
                                                       
-                                                      st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
+                                        #              st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
                                              
                                     
                                     
-                                    if st.session_state.button == False:
-                                             pass
-                                    else:
-                                             st.plotly_chart(st.session_state.fig,use_container_width=True)
+                                    #if st.session_state.button == False:
+                                    #         pass
+                                    #else:
+                                    #         st.plotly_chart(st.session_state.fig,use_container_width=True)
                                     
                                     
-                                    buffer = io.BytesIO()
-                                    with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
-                                             df.to_excel(writer, sheet_name='average_smoothened', index=False)
+                                    #buffer = io.BytesIO()
+                                    #with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                                    #         df.to_excel(writer, sheet_name='average_smoothened', index=False)
                                              
-                                             df_avg_unsmooth.to_excel(writer, sheet_name='average_unsmoothened', index=False)
+                                    #         df_avg_unsmooth.to_excel(writer, sheet_name='average_unsmoothened', index=False)
                                              
-                                             df_total_uns.to_excel(writer, sheet_name='total_unsmoothened', index=False)
+                                    #         df_total_uns.to_excel(writer, sheet_name='total_unsmoothened', index=False)
                                              
-                                             df_total_smooth.to_excel(writer, sheet_name='total_smoothened', index=False)
+                                    #         df_total_smooth.to_excel(writer, sheet_name='total_smoothened', index=False)
                                              
-                                             market_share_weighted.to_excel(writer,sheet_name=f'market_share_{sheet_name_download}',index=False)
+                                    #         market_share_weighted.to_excel(writer,sheet_name=f'market_share_{sheet_name_download}',index=False)
                                              
-                                             df_significance.to_excel(writer,sheet_name='significance',index=False)
+                                    #         df_significance.to_excel(writer,sheet_name='significance',index=False)
                                              
-                                             df_perc_changes.to_excel(writer,sheet_name='perc_changes',index=False)
+                                    #         df_perc_changes.to_excel(writer,sheet_name='perc_changes',index=False)
                                     
                                     
-                                    st.download_button(
-                                             label="📤",
-                                             data=buffer,
-                                             file_name=f"Equity_danone_{market}_{datetime.today()}.xlsx",
-                                             mime="application/vnd.ms-excel")
+                                    #st.download_button(
+                                    #         label="📤",
+                                    #         data=buffer,
+                                    #         file_name=f"Equity_danone_{market}_{datetime.today()}.xlsx",
+                                    #         mime="application/vnd.ms-excel")
                           
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
          
