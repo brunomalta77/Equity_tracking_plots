@@ -180,27 +180,6 @@ def reading_df(filepath,sheet_name):
     df = pd.read_excel(filepath,sheet_name=sheet_name)
     return df
 
-#mmm file 
-@st.cache_data() 
-def processing_mmm(filepath):
-    df_vol = pd.read_excel(filepath)
-    sales = list(df_vol[df_vol["Metric"] == "SalesValue"]["Value"])
-    volume = list(df_vol[df_vol["Metric"] == "SalesVol"]["Value"])
-    res = [round(x / y,2) if y != 0 else 0 for x, y in zip(sales, volume)]
-    df_vol = df_vol[df_vol["Metric"]== "SalesVol"]
-    df_vol["Price_change"] = res
-    df_vol.rename(columns={"Value":"Volume_share"},inplace=True)
-    df_vol=df_vol.groupby(['time','Y','H','QT','M','W','brand','Metric','Category'])[['Volume_share','Price_change']].sum().reset_index()
-    return df_vol
-
-# Media files
-@st.cache_data()
-def media_plan(filepath,sheet_spend,sheet_week):
-         df_uk_spend = pd.read_excel(filepath,sheet_name=sheet_spend)
-         df_uk_weeks = pd.read_excel(filepath,sheet_name=sheet_week)
-         return (df_uk_spend,df_uk_weeks)
-
-
 
 @st.cache_data()
 def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,user_to_equity,affinity_labels,join_data_average,join_data_total,list_fix,order_list,rename_all):
@@ -243,11 +222,13 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,u
         for index,row in final_average.iterrows():
             weighted_average_equity["weighted_" + aff_pilar][index] = round(((weighted_avg * final_average[aff_pilar + "_average"][index]) + (weighted_total * final_total[aff_pilar + "_total"][index])),2)
         
-    #getting the new framework affinity
-    weighted_average_equity["weighted_Framework_Affinity"] = round((weighted_average_equity["weighted_AF_Brand_Love"] + weighted_average_equity["weighted_AF_Motivation_for_Change"] + weighted_average_equity["weighted_AF_Consumption_Experience"] +weighted_average_equity["weighted_AF_Supporting_Experience"] + weighted_average_equity["weighted_AF_Value_for_Money"])/5,2)
+    # Select columns that start with 'weighted_AF_'
+    affinity_columns = [col for col in weighted_average_equity.columns if col.startswith('weighted_AF_')]
 
+    # Calculate the weighted Framework Affinity
+    weighted_average_equity["weighted_Framework_Affinity"] = round(weighted_average_equity[affinity_columns].mean(axis=1), 2)
+    
     # getting the new total equity
-
     weighted_average_equity["Total_Equity"] = round((weighted_average_equity["weighted_Framework_Affinity"] + weighted_average_equity["Framework_Awareness_average"] + weighted_average_equity["Framework_Saliency_average"])/3,2) 
 
     #ordering
