@@ -971,7 +971,7 @@ def main():
                                     #if sheet_name_2 == "Absolute":
                                     #         sheet_2 = df_total_uns
                                     #if sheet_name_2 == "Market Share weighted":
-                                             sheet_2 = market_share_weighted
+                                             #sheet_2 = market_share_weighted
                                     
                                     #column_1,column_2 = st.columns([1,1])
                                     #with column_1:
