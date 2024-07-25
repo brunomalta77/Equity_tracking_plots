@@ -243,32 +243,39 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,u
 #---------------------------------------------------------------------------------------////--------------------------------------------------------------------------------------------------
 
 # Market_share_weighted_average
-def weighted_brand_calculation(df, weights, value_columns,framework_to_user):
+def weighted_brand_calculation(df_original,weights_joined,years, value_columns,framework_to_user):
+    concat_data = []
+    for year,weights in zip(years,weights_joined):
+       df = df_original[(df_original.time >= f"{year}-01-01") & (df_original.time <= f"{year}-12-31")]
+       df.rename(columns=framework_to_user,inplace=True)
+     
+       # Convert value columns to numeric, replacing non-numeric values with NaN
+       for col in value_columns:
+           df[col] = pd.to_numeric(df[col], errors='coerce')
+       
+       # Apply weights to each brand
+       for brand, weight in weights.items():
+           mask = (df['brand'] == brand)
+           df.loc[mask, value_columns] = df.loc[mask, value_columns].multiply(weight)
+       
+       # Group by time_period and time, then normalize
+       def normalize_group(group):
+           totals = group[value_columns].sum()
+           for col in value_columns:
+               if totals[col] == 0:
+                   group[col] = 0
+               else:
+                   group[col] = round((group[col] / totals[col]) * 100,2)
+           return group
+   
+       result_df = df.groupby(['time_period', 'time']).apply(normalize_group).reset_index(drop=True)
+       concat_data.append(result_df)
     
-    df.rename(columns=framework_to_user,inplace=True)
-  
-    # Convert value columns to numeric, replacing non-numeric values with NaN
-    for col in value_columns:
-        df[col] = pd.to_numeric(df[col], errors='coerce')
-    
-    # Apply weights to each brand
-    for brand, weight in weights.items():
-        mask = (df['brand'] == brand)
-        df.loc[mask, value_columns] = df.loc[mask, value_columns].multiply(weight)
-    
-    # Group by time_period and time, then normalize
-    def normalize_group(group):
-        totals = group[value_columns].sum()
-        for col in value_columns:
-            if totals[col] == 0:
-                group[col] = 0
-            else:
-                group[col] = round((group[col] / totals[col]) * 100,2)
-        return group
+    final_df = pd.concat(concat_data,axis=0)
 
-    result_df = df.groupby(['time_period', 'time']).apply(normalize_group).reset_index(drop=True)
-    
-    return result_df
+
+       
+    return final_df
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def equity_info(data,market_flag):
@@ -889,7 +896,7 @@ def main():
 #--------------------------------------------------------------------------------------------------------------------------// //--------------------------------------------------------------
 
                                     #creating the market_share_weighted
-                                    market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns,framework_to_user)
+                                    market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_joined,years_cols,value_columns,framework_to_user)
                                     
                                     # creating the columns for the app
                                     right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
@@ -1223,7 +1230,7 @@ def main():
 
                            
                            #creating the market_share_weighted
-                           market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_values_for_average, value_columns,framework_to_user)
+                           market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_joined,years_cols,value_columns,framework_to_user)
                            
                            # creating the columns for the app
                            right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
