@@ -830,7 +830,7 @@ def main():
                           # getting the individual years
                            years_filtered = df_for_weighted[df_for_weighted.time_period == "Years"]            
                            years_filtered = years_filtered.time.dt.year.unique()
-                           years_cols = [str(year) for year in years_filtered if year in [2021,2022,2023,2024]
+                           years_cols = [str(year) for year in years_filtered if year in [2021,2022,2023,2024] ]
                            
                
    #--------------------------------------------------------------------------------------------------------------------------// //----------------------------------------------------------------
