@@ -994,6 +994,7 @@ def main():
                                     sheet_1 = df
                            if sheet_name_1 == "Absolute":
                                     sheet_1 = df_total_uns
+                           
                            if sheet_name_1 == "Mkt Share Weighted":
                                     sheet_1 = market_share_weighted
                            
@@ -1018,7 +1019,7 @@ def main():
                                     weighted_2_page = weighted_2_page/100
                            
                            
-                           df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels)
+                           df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels,join_data_average,join_data_total,list_fix,order_list,rename_all)
                            # Comparing all the sheets
                            fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,original_category,changed_category,general_equity_to_user)
                            st.plotly_chart(fig,use_container_width=True)
