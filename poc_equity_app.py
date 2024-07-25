@@ -303,7 +303,7 @@ def equity_options(df,brand_mapping,original_category,changed_category,framework
          
 #-----------------------------------------------------------------------------------------------------//-----------------------------------------------------------------------------------------
 # Equity_plot
-def Equity_plot(df,categories,time_frames,frameworks,sheet_name):
+def Equity_plot(df,categories,time_frames,frameworks,sheet_name,framework_to_user):
     if sheet_name == "Average Smoothening":
         name = "Average"
     if sheet_name == "Total Unsmoothening":
