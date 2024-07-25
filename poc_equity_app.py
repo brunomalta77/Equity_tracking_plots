@@ -54,6 +54,53 @@ value_columns_  = [ 'Total Equity','Awareness', 'Saliency', 'Affinity',
         'Search Index', 'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
                                     'Buying Experience','Preparing Milk','Baby Experience']
 
+join_data_average = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
+                'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
+                'AS_Usage_SoV_average', 'AS_Search_Index_average',
+                'AS_Brand_Centrality_average','AF_Entry_point_average', 'AF_Brand_Love_average', 'AF_Baby_Milk_average','AF_Adverts_Promo_average','AF_Value_for_Money_average','AF_Buying_Exp_average',
+                'AF_Prep_Milk_average','AF_Baby_exp_average',
+                'Framework_Awareness_average', 'Framework_Saliency_average',
+                'Framework_Affinity_average', 'Total_Equity_average',
+                'Category_average']
+
+
+join_data_total = ['time', 'time_period', 'brand', 'AA_eSoV_total', 'AA_Reach_total',
+                  'AA_Brand_Breadth_total', 'AS_Average_Engagement_total',
+                  'AS_Usage_SoV_total', 'AS_Search_Index_total',
+                  'AS_Brand_Centrality_total','AF_Entry_point_total', 'AF_Brand_Love_total', 'AF_Baby_Milk_total','AF_Adverts_Promo_total','AF_Value_for_Money_total','AF_Buying_Exp_total',
+                  'AF_Prep_Milk_total','AF_Baby_exp_total',
+                  'Framework_Awareness_total', 'Framework_Saliency_total',
+                  'Framework_Affinity_total', 'Total_Equity_total', 'Category_total']
+
+
+
+list_fix = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
+                  'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
+                  'AS_Usage_SoV_average', 'AS_Search_Index_average',
+                  'AS_Brand_Centrality_average','Framework_Awareness_average', 'Framework_Saliency_average','Total_Equity_average',
+                  'Category_average']
+
+
+order_list = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
+       'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
+       'AS_Usage_SoV_average', 'AS_Search_Index_average',
+       'AS_Brand_Centrality_average','weighted_AF_Entry_point','weighted_AF_Brand_Love','weighted_AF_Baby_Milk','weighted_AF_Adverts_Promo','weighted_AF_Value_for_Money','weighted_AF_Buying_Exp','weighted_AF_Prep_Milk','weighted_AF_Baby_exp',
+        'Framework_Awareness_average',
+       'Framework_Saliency_average','weighted_Framework_Affinity','Total_Equity',"Category_average"]
+
+rename_all = {'AA_eSoV_average':'AA_eSoV', 'AA_Reach_average':'AA_Reach',
+       'AA_Brand_Breadth_average':'AA_Brand_Breadth', 'AS_Average_Engagement_average':'AS_Average_Engagement',
+       'AS_Usage_SoV_average':'AS_Usage_SoV', 'AS_Search_Index_average':'AS_Search_Index',
+       'AS_Brand_Centrality_average':'AS_Brand_Centrality','weighted_AF_Entry_point':'AF_Entry_point','weighted_AF_Brand_Love':'AF_Brand_Love',
+       'weighted_AF_Brand_Love':'AF_Brand_Love','weighted_AF_Baby_Milk':'AF_Baby_Milk','weighted_AF_Buying_Exp':'AF_Buying_Exp','weighted_AF_Prep_Milk':'AF_Prep_Milk'
+       ,'weighted_AF_Baby_exp':'AF_Baby_exp',
+       'weighted_AF_Adverts_Promo':'AF_Adverts_Promo',
+       'weighted_AF_Value_for_Money':'AF_Value_for_Money','Framework_Awareness_average':'Framework_Awareness',
+       'Framework_Saliency_average':'Framework_Saliency','weighted_Framework_Affinity':'Framework_Affinity','Category_average':'Category'}
+
+
+
+
 #--------------------------------------------------------------------------------------// Aesthetic Global Variables // -------------------------------------------------------------------------
 #page config
 st.set_page_config(page_title="Equity Tracking plots app",page_icon="💼",layout="wide")
@@ -147,7 +194,7 @@ def reading_df(filepath,sheet_name):
 
 
 @st.cache_data()
-def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,user_to_equity,affinity_labels):
+def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,user_to_equity,affinity_labels,join_data_average,join_data_total,list_fix,order_list,rename_all):
     #------------------------------------------------------------------------------------------------------------------------------------------------------
     df.rename(columns=user_to_equity,inplace=True)
 
@@ -175,30 +222,12 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,u
 
     #splitting them 
 
-    final_average = join_data[['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
-                'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
-                'AS_Usage_SoV_average', 'AS_Search_Index_average',
-                'AS_Brand_Centrality_average','AF_Entry_point_average', 'AF_Brand_Love_average', 'AF_Baby_Milk_average','AF_Adverts_Promo_average','AF_Value_for_Money_average','AF_Buying_Exp_average',
-                'AF_Prep_Milk_average','AF_Baby_exp_average',
-                'Framework_Awareness_average', 'Framework_Saliency_average',
-                'Framework_Affinity_average', 'Total_Equity_average',
-                'Category_average']]
+    final_average = join_data[join_data_average]
 
 
-    final_total = join_data[['time', 'time_period', 'brand', 'AA_eSoV_total', 'AA_Reach_total',
-                  'AA_Brand_Breadth_total', 'AS_Average_Engagement_total',
-                  'AS_Usage_SoV_total', 'AS_Search_Index_total',
-                  'AS_Brand_Centrality_total','AF_Entry_point_total', 'AF_Brand_Love_total', 'AF_Baby_Milk_total','AF_Adverts_Promo_total','AF_Value_for_Money_total','AF_Buying_Exp_total',
-                  'AF_Prep_Milk_total','AF_Baby_exp_total',
-                  'Framework_Awareness_total', 'Framework_Saliency_total',
-                  'Framework_Affinity_total', 'Total_Equity_total', 'Category_total']]
+    final_total = join_data[join_data_total]
 
-    list_fix = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
-                  'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
-                  'AS_Usage_SoV_average', 'AS_Search_Index_average',
-                  'AS_Brand_Centrality_average','Framework_Awareness_average', 'Framework_Saliency_average','Total_Equity_average',
-                  'Category_average']
-            
+    list_fix = list_fix
 
     #Getting first the fixed stuff
     weighted_average_equity = final_average[list_fix]
@@ -220,23 +249,10 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,u
     weighted_average_equity["Total_Equity"] = round((weighted_average_equity["weighted_Framework_Affinity"] + weighted_average_equity["Framework_Awareness_average"] + weighted_average_equity["Framework_Saliency_average"])/3,2) 
 
     #ordering
-    order = ['time', 'time_period', 'brand', 'AA_eSoV_average', 'AA_Reach_average',
-       'AA_Brand_Breadth_average', 'AS_Average_Engagement_average',
-       'AS_Usage_SoV_average', 'AS_Search_Index_average',
-       'AS_Brand_Centrality_average','weighted_AF_Entry_point','weighted_AF_Brand_Love','weighted_AF_Baby_Milk','weighted_AF_Adverts_Promo','weighted_AF_Value_for_Money','weighted_AF_Buying_Exp','weighted_AF_Prep_Milk','weighted_AF_Baby_exp',
-        'Framework_Awareness_average',
-       'Framework_Saliency_average','weighted_Framework_Affinity','Total_Equity',"Category_average"]
+    order = order_list
     weighted_average_equity = weighted_average_equity[order]
 
-    weighted_average_equity.rename(columns={'AA_eSoV_average':'AA_eSoV', 'AA_Reach_average':'AA_Reach',
-       'AA_Brand_Breadth_average':'AA_Brand_Breadth', 'AS_Average_Engagement_average':'AS_Average_Engagement',
-       'AS_Usage_SoV_average':'AS_Usage_SoV', 'AS_Search_Index_average':'AS_Search_Index',
-       'AS_Brand_Centrality_average':'AS_Brand_Centrality','weighted_AF_Entry_point':'AF_Entry_point','weighted_AF_Brand_Love':'AF_Brand_Love',
-       'weighted_AF_Brand_Love':'AF_Brand_Love','weighted_AF_Baby_Milk':'AF_Baby_Milk','weighted_AF_Buying_Exp':'AF_Buying_Exp','weighted_AF_Prep_Milk':'AF_Prep_Milk'
-       ,'weighted_AF_Baby_exp':'AF_Baby_exp',
-       'weighted_AF_Adverts_Promo':'AF_Adverts_Promo',
-       'weighted_AF_Value_for_Money':'AF_Value_for_Money','Framework_Awareness_average':'Framework_Awareness',
-       'Framework_Saliency_average':'Framework_Saliency','weighted_Framework_Affinity':'Framework_Affinity','Category_average':'Category'},inplace=True)
+    weighted_average_equity.rename(columns=rename_all,inplace=True)
 
     return weighted_average_equity
 
