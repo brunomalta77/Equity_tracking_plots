@@ -329,7 +329,7 @@ def equity_options(df,brand_mapping,categories_changed,framework_options_):
          
          df["Category"] = df["Category"].replace(categories_changed)
          category_options = df["Category"].unique()
-         
+         st.write(category_options)
          replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
          df["time_period"] = df["time_period"].replace(replacements)
          time_period_options = df["time_period"].unique()
