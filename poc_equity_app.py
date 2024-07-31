@@ -323,11 +323,11 @@ def equity_info(data,market_flag):
     return filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity
 
 
-def equity_options(df,brand_mapping,original_category,changed_category,framework_options_):
+def equity_options(df,brand_mapping,categories_changed,framework_options_):
          df.brand = df.brand.replace(brand_mapping)
          
          
-         df["Category"] = df["Category"].replace(original_category,changed_category)
+         df["Category"] = df["Category"].replace(categories_changed)
          category_options = df["Category"].unique()
          
          replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
@@ -883,7 +883,7 @@ def main():
                            
                            
                            #Equity options
-                           category_options,time_period_options,framework_options = equity_options(df,brand_mapping,original_category,changed_category,framework_options_)
+                           category_options,time_period_options,framework_options = equity_options(df,brand_mapping,categories_changed,framework_options_)
                            
                            #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
                            #creating a copy of our dataframes.
