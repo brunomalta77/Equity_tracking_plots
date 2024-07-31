@@ -735,9 +735,6 @@ def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_c
     final_week = df_weeks
     final_week["Category"] = original_category
     final_week['Total Equity'] = final_week[['Awareness', 'Saliency', 'Affinity']].mean(axis=1)
-
-    st.write(final_week.columns)
-
     
     #calculate the montly
     monthly_output = MetricsClass.calculate_monthly_metrics(final_week, method)
