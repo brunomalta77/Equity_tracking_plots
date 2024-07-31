@@ -1049,8 +1049,6 @@ def main():
                                     else:
                                        market_share_weighted = market_share_weighted
 
-                                    st.write(market_share_weighted)
-                           
                            with left_column_1:    
                                     st.session_state.time_frame = st.radio('Choose  time frame:', time_period_options,key='test4')
                            
