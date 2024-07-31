@@ -1044,7 +1044,7 @@ def main():
                                     st.session_state.category = st.radio('Choose  category:', category_options,key='test3')
                                     
                                     if smoothening_type == "Smoothened":
-                                       market_share_weighted = smoothening_weeks(market_share_weighted,smoothening_weeks_list,affinity_to_user,framework_to_user,st.session_state.category,changed_category,brand_mapping,smoothening_parameters["window_size"],method= 'average')
+                                       market_share_weighted = smoothening_weeks(market_share_weighted,smoothening_weeks_list,affinity_to_user,framework_to_user,st.session_state.category,categories_changed,brand_mapping,smoothening_parameters["window_size"],method= 'average')
                                  
                                     else:
                                        market_share_weighted = market_share_weighted
