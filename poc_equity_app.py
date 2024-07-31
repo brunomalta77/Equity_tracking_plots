@@ -1031,7 +1031,11 @@ def main():
                            
                            else:
                               market_share_weighted = market_share_weighted
-                           
+
+
+
+
+                           st.write(market_share_weighted)
                            
                            # color stuff
                            all_brands = [x for x in brand_list]
