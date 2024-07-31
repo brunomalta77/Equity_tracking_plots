@@ -1025,10 +1025,7 @@ def main():
                            
                            #creating the market_share_weighted
                            market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_joined,years_cols,value_columns,framework_to_user)
-                           
-                         
-                           st.write(market_share_weighted)
-                           
+                                             
                            # color stuff
                            all_brands = [x for x in brand_list]
                            colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
@@ -1052,6 +1049,7 @@ def main():
                                     else:
                                        market_share_weighted = market_share_weighted
 
+                                    st.write(market_share_weighted)
                            
                            with left_column_1:    
                                     st.session_state.time_frame = st.radio('Choose  time frame:', time_period_options,key='test4')
