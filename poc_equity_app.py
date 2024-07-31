@@ -339,7 +339,7 @@ def equity_options(df,brand_mapping,categories_changed,framework_options_):
          
 #-----------------------------------------------------------------------------------------------------//-----------------------------------------------------------------------------------------
 # Equity_plot
-def Equity_plot(df,categories,time_frames,frameworks,sheet_name,framework_to_user):
+def Equity_plot(df,categories,time_frames,frameworks,sheet_name,framework_to_user,brand_color_mapping):
     if sheet_name == "Average Smoothening":
         name = "Average"
     if sheet_name == "Total Unsmoothening":
@@ -380,10 +380,10 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name,framework_to_use
     
     
     # color stuff
-    all_brands = [x for x in df["brand"].unique()]
-    colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
+    #all_brands = [x for x in df["brand"].unique()]
+    #colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
 
-    brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+    #brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
     
     fig = px.line(df_filtered, x="time", y=framework, color="brand", color_discrete_map=brand_color_mapping)
 
@@ -1147,6 +1147,7 @@ def main():
          
                            df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels,join_data_average,join_data_total,list_fix,order_list,rename_all)
                            # Comparing all the sheets
+                           
                            fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,categories_changed,general_equity_to_user)
                            st.plotly_chart(fig,use_container_width=True)
                            
@@ -1177,17 +1178,26 @@ def main():
 
                            if sheet_name =="Mkt Share Weighted":
                                     sheet_name = "Mkt Share Weighted"
+
+
+                           # color stuff
+                           all_brands = [x for x in brand_list]
+                           colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
+               
+                           brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+
+
                            
                            if sheet_name == "Average Smoothening":
-                                    fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
+                                    fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name,framework_to_user,brand_color_mapping)
                                     st.plotly_chart(fig,use_container_width=True)
                            
                            if sheet_name == "Total Unsmoothening":
-                                    fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
+                                    fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name,framework_to_user,brand_color_mapping)
                                     st.plotly_chart(fig,use_container_width=True)
                            
                            if sheet_name == "Mkt Share Weighted":
-                                    fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
+                                    fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name,framework_to_user,brand_color_mapping)
                                     st.plotly_chart(fig,use_container_width=True)
 
 
