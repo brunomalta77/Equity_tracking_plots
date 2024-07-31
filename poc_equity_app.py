@@ -31,7 +31,7 @@ framework_to_user={'Total_Equity':'Total Equity','Framework_Awareness':"Awarenes
        'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
        'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality','Quitting_Sov':'Quitting','Consideration_Sov':'Consideration','AS_Trial_Sov':'Trial'}
 
-categories_changed = {"vape": "Vape" , "thp":"THP}
+categories_changed = {"vape": "Vape" , "thp":"THP"}
 
 framework_options_ =["Total Equity","Awareness","Saliency","Affinity",'Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money']
 
