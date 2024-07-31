@@ -911,7 +911,7 @@ def main():
                            df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
                            
                            
-                           df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace(original_category,changed_category)
+                           df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace(categories_changed)
                            
                            
                            df_total_uns_copy.rename(columns=general_equity_to_user,inplace=True)
