@@ -945,6 +945,7 @@ def main():
                                     sheet_name = "Average Smoothening"
                                     sheet_name_download = 'average'
                                     df_for_weighted = df_copy
+                           
                            if sheet_name == "Absolute":
                                     sheet_name = "Total Unsmoothening"
                                     sheet_name_download = "total"
@@ -1056,6 +1057,7 @@ def main():
                            mask = market_share_weighted["eSoV"] == 0
                            market_share_weighted = market_share_weighted[~mask]
 
+                           st.write(market_share_weighted)
                            
                            # creating the columns for the app
                            right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
