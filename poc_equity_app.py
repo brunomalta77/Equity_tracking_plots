@@ -260,7 +260,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,u
     # Calculate the weighted Framework Affinity
     weighted_average_equity["weighted_Framework_Affinity"] = round(weighted_average_equity[affinity_columns].mean(axis=1), 2)
 
-   st.write(weighted_average_equity)
+    st.write(weighted_average_equity)
     
     # getting the new total equity
     weighted_average_equity["Total_Equity"] = round((weighted_average_equity["weighted_Framework_Affinity"] + weighted_average_equity["Framework_Awareness_average"] + weighted_average_equity["Framework_Saliency_average"])/3,2) 
