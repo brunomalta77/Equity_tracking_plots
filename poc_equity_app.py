@@ -221,8 +221,8 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,u
     df_total_uns.rename(columns=user_to_equity,inplace=True)
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # drop any nan values
-    df.dropna(inplace=True)
-    df_total_uns.dropna(inplace=True)
+    #df.dropna(inplace=True)
+    #df_total_uns.dropna(inplace=True)
 
     df_total_uns.brand = df_total_uns.brand.replace(brand_replacement)
 
