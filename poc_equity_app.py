@@ -31,8 +31,7 @@ framework_to_user={'Total_Equity':'Total Equity','Framework_Awareness':"Awarenes
        'AA_Brand_Breadth':'Brand Breadth', 'AS_Average_Engagement':'Average Engagement', 'AS_Usage_SoV':'Usage SoV',
        'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality','Quitting_Sov':'Quitting','Consideration_Sov':'Consideration','AS_Trial_Sov':'Trial'}
 
-original_category = "vape"
-changed_category = "Vape"
+categories_changed = {"vape": "Vape" , "thp":"THP}
 
 framework_options_ =["Total Equity","Awareness","Saliency","Affinity",'Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money']
 
@@ -719,7 +718,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
 
 
 
-def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_category,changed_category,brand_mapping,window,method= 'average'): 
+def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_category,categories_changed,brand_mapping,window,method= 'average'): 
     st.write(original_category)
     
     columns_to_multiply = [x for x in df.columns if "AA" in x  or "AS" in x  or "AF" in x ]
@@ -781,7 +780,7 @@ def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_c
 
     final_df_smoothened.rename(columns=framework_to_user,inplace=True)
        
-    final_df_smoothened["Category"] = final_df_smoothened["Category"].replace(original_category,changed_category)
+    final_df_smoothened["Category"] = final_df_smoothened["Category"].replace(categories_changed)
 
     final_df_smoothened["brand"]= final_df_smoothened["brand"].replace(brand_mapping)
 
