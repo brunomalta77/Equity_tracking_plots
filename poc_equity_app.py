@@ -726,7 +726,6 @@ def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_c
     # Aplicar isto desde o início. 
     df_weeks = df[df.time_period == "Weeks"]
     
-    st.write(df_weeks)
   
     for variable in variables:
         for brand in df.brand.unique():
