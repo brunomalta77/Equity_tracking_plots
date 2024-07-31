@@ -1059,7 +1059,7 @@ def main():
                            market_share_weighted = market_share_weighted[~mask]
 
                            
-                           
+                           st.write(market_share_weighted)
                            # creating the columns for the app
                            right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
                            
