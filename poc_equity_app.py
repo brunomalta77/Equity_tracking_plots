@@ -975,7 +975,7 @@ def main():
                                
                                workspace = join_brand_year[index]
                                year,brand = workspace[0],workspace[1]
-                               st.write(f"**{year}**")
+                               st.write(f"<b><u>{year}</u></b>", unsafe_allow_html=True)
                                # Assuming you want one column per key in brand_mapping
                                num_columns = len(brand_mapping.keys())
                                # Create the columns
