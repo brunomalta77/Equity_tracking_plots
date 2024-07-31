@@ -1143,6 +1143,9 @@ def main():
                            
                            df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels,join_data_average,join_data_total,list_fix,order_list,rename_all)
                            # Comparing all the sheets
+                           st.write(df.columns)
+                           st.write(df_total_uns.columns)
+                           st.write(df_weighted.columns)
                            fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,categories_changed,general_equity_to_user)
                            st.plotly_chart(fig,use_container_width=True)
                            
