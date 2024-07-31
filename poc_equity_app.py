@@ -720,6 +720,8 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
 
 
 def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_category,changed_category,brand_mapping,window,method= 'average'): 
+    st.write(original_category)
+    
     columns_to_multiply = [x for x in df.columns if "AA" in x  or "AS" in x  or "AF" in x ]
     
 
