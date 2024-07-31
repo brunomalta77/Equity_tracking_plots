@@ -1142,8 +1142,8 @@ def main():
                                     weighted_2_page = weighted_2_page/100
                            
 
-                           st.write(df.Category.value_counts())
-                           st.write(df_total_uns.Category.value_counts())
+                           st.write(df.brand.value_counts())
+                           st.write(df_total_uns.brand.value_counts())
 
 
                            
