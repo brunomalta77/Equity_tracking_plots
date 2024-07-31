@@ -221,8 +221,8 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,u
     df_total_uns.rename(columns=user_to_equity,inplace=True)
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # drop any nan values
-    #df.dropna(inplace=True)
-    #df_total_uns.dropna(inplace=True)
+    df.dropna(inplace=True)
+    df_total_uns.dropna(inplace=True)
 
     df_total_uns.brand = df_total_uns.brand.replace(brand_replacement)
 
@@ -259,6 +259,8 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,u
 
     # Calculate the weighted Framework Affinity
     weighted_average_equity["weighted_Framework_Affinity"] = round(weighted_average_equity[affinity_columns].mean(axis=1), 2)
+
+   st.write(weighted_average_equity)
     
     # getting the new total equity
     weighted_average_equity["Total_Equity"] = round((weighted_average_equity["weighted_Framework_Affinity"] + weighted_average_equity["Framework_Awareness_average"] + weighted_average_equity["Framework_Saliency_average"])/3,2) 
@@ -1141,12 +1143,7 @@ def main():
                                     weighted_1_page = weighted_1_page/100
                                     weighted_2_page = weighted_2_page/100
                            
-
-                           st.write(df.brand.value_counts())
-                           st.write(df_total_uns.brand.value_counts())
-
-
-                           
+         
                            df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels,join_data_average,join_data_total,list_fix,order_list,rename_all)
                            st.write(df_weighted)
                            # Comparing all the sheets
