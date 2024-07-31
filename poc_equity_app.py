@@ -1057,7 +1057,7 @@ def main():
                            mask = market_share_weighted["eSoV"] == 0
                            market_share_weighted = market_share_weighted[~mask]
 
-                           
+                           market_share_weighted["Category"] = market_share_weighted["Category"].replace("Baby milk", "Baby Milk")
                          
                            # creating the columns for the app
                            right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
