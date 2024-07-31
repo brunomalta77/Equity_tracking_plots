@@ -326,7 +326,7 @@ def equity_info(data,market_flag):
 def equity_options(df,brand_mapping,categories_changed,framework_options_):
          df.brand = df.brand.replace(brand_mapping)
 
-         st.write(df.Category.value_counts()
+         st.write(df.Category.value_counts())
          
          df["Category"] = df["Category"].replace(categories_changed)
          category_options = df["Category"].unique()
