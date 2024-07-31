@@ -1049,6 +1049,7 @@ def main():
                                     else:
                                        market_share_weighted = market_share_weighted
 
+                           
                            with left_column_1:    
                                     st.session_state.time_frame = st.radio('Choose  time frame:', time_period_options,key='test4')
                            
@@ -1140,6 +1141,11 @@ def main():
                                     weighted_1_page = weighted_1_page/100
                                     weighted_2_page = weighted_2_page/100
                            
+
+                           st.write(df.Category.value_counts())
+                           st.write(df_total_uns.Category.value_counts())
+
+
                            
                            df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels,join_data_average,join_data_total,list_fix,order_list,rename_all)
                            st.write(df_weighted)
