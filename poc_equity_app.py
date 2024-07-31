@@ -92,8 +92,7 @@ rename_all = {'AA_eSoV_average':'AA_eSoV', 'AA_Reach_average':'AA_Reach',
 
 
 smoothening_weeks_list = ['Total Equity','Awareness','Saliency','eSoV', 'Reach','Brand Breadth', 'Average Engagement',
-       'Usage SoV', 'Search Index','Affinity','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
-                                'Buying Experience','Preparing Milk','Baby Experience']
+       'Usage SoV', 'Search Index','Affinity','Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money']
 
 
 
