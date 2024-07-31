@@ -161,7 +161,8 @@ class AggregateMetrics:
         metrics = ['eSoV', 'Reach',
        'Brand Breadth', 'Average Engagement',
        'Usage SoV', 'Search Index',
-       'Brand Centrality','Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money',
+       'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+        'Buying Experience','Preparing Milk','Baby Experience',
         'Awareness',
        'Saliency','Affinity']
     
@@ -230,7 +231,8 @@ class AggregateMetrics:
         metrics = ['eSoV', 'Reach',
        'Brand Breadth', 'Average Engagement',
        'Usage SoV', 'Search Index',
-       'Brand Centrality','Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money',
+       'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+        'Buying Experience','Preparing Milk','Baby Experience',
         'Awareness',
        'Saliency','Affinity']
 
@@ -300,7 +302,8 @@ class AggregateMetrics:
         metrics =  ['eSoV', 'Reach',
        'Brand Breadth', 'Average Engagement',
        'Usage SoV', 'Search Index',
-       'Brand Centrality','Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money',
+       'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+        'Buying Experience','Preparing Milk','Baby Experience',
         'Awareness',
        'Saliency','Affinity']
     
@@ -385,7 +388,8 @@ class AggregateMetrics:
         metrics = ['eSoV', 'Reach',
        'Brand Breadth', 'Average Engagement',
        'Usage SoV', 'Search Index',
-       'Brand Centrality','Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money',
+       'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+        'Buying Experience','Preparing Milk','Baby Experience',
         'Awareness',
        'Saliency','Affinity']
         
@@ -439,7 +443,8 @@ class AggregateMetrics:
         metrics =  ['eSoV', 'Reach',
        'Brand Breadth', 'Average Engagement',
        'Usage SoV', 'Search Index',
-       'Brand Centrality','Brand Prestige & Love','Motivation for Change','Consumption Experience','Supporting Experience','Value For Money',
+       'Brand Centrality','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+        'Buying Experience','Preparing Milk','Baby Experience',
         'Awareness',
        'Saliency','Affinity']
     
