@@ -803,7 +803,6 @@ def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_c
     final_df_smoothened["Category"] = final_df_smoothened["Category"].replace(original_category,changed_category)
     final_df_smoothened["Category"] = final_df_smoothened["Category"].replace("Baby milk","Baby Milk")
     #-------------------------------------------------------------//----------------------------------------------------------------------
-    st.write(final_df_smoothened)
     return final_df_smoothened
 
 
