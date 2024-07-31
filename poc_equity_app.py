@@ -99,6 +99,12 @@ rename_all = {'AA_eSoV_average':'AA_eSoV', 'AA_Reach_average':'AA_Reach',
        'Framework_Saliency_average':'Framework_Saliency','weighted_Framework_Affinity':'Framework_Affinity','Category_average':'Category'}
 
 
+smoothening_weeks_list = ['Total Equity','Awareness','Saliency','eSoV', 'Reach','Brand Breadth', 'Average Engagement',
+       'Usage SoV', 'Search Index','Affinity','Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
+                                'Buying Experience','Preparing Milk','Baby Experience']
+
+
+
 
 
 #--------------------------------------------------------------------------------------// Aesthetic Global Variables // -------------------------------------------------------------------------
