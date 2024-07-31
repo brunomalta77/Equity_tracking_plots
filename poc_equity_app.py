@@ -18,6 +18,7 @@ from PIL import Image
 import msal
 import io
 import requests
+from metrics import AggregateMetrics
 #--------------------------------------------------------------------------------------// Aesthetic Global Variables // -------------------------------------------------------------------------
 
 user_to_equity = {'Entry points & Key Moments':'AF_Entry_point','Brand Prestige & Love':'AF_Brand_Love','Baby Milk':'AF_Baby_Milk','Adverts and Promotions':'AF_Adverts_Promo','Value For Money':'AF_Value_for_Money',
@@ -198,6 +199,28 @@ def reading_df(filepath,sheet_name):
     df = pd.read_excel(filepath,sheet_name=sheet_name)
     return df
 
+
+#Some info
+awareness_metrics =  ["eSoV", "Reach", "Brand_Breadth"]
+saliency_metrics = ["Average_Engagement","Usage_SoV","Trial_SoV","Quitting_SoV","Consideration_SoV","Search_Index","Brand_Centrality"]
+affinity_metrics = ["Brand","Change","Consumption","Supporting","VFM"]
+metrics_calc_method =  ["average_smoothened","total_smoothened","average_unsmoothened","total_unsmoothened","weighted_average"]
+smoothening_parameters = {"window_size": [12] }
+index_brand= {"vape": "elfbar"}
+weights = {
+"awareness": [0.5, 0.5, 0],
+"saliency": [0.2, 0.2, 0.2, 0,0, 0.2, 0.2],
+"affinity": [0.2, 0.2, 0.2, 0.2, 0.2],
+"weighted_avg":0.75,
+"weighted_total":0.25}
+
+#Instatiate necessary classes
+MetricsClass = AggregateMetrics(
+    smoothening_parameters=smoothening_parameters,
+    awareness_metrics=awareness_metrics,
+    saliency_metrics=saliency_metrics,
+    affinity_metrics=affinity_metrics,
+    weigths=weights)
 
 @st.cache_data()
 def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,user_to_equity,affinity_labels,join_data_average,join_data_total,list_fix,order_list,rename_all):
@@ -443,7 +466,7 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name,framework_to_use
 
 # Equity_plot for market share weighted average
 
-def Equity_plot_market_share_(df,category,time_frame,framework,ws,we):
+def Equity_plot_market_share_(df,category,time_frame,framework,ws,we,brand_color_mapping):
    
     #filtering
     df_filtered =  df[(df["Category"] == category) & (df["time_period"] == time_frame)]
@@ -453,10 +476,10 @@ def Equity_plot_market_share_(df,category,time_frame,framework,ws,we):
     
     
     # color stuff
-    all_brands = [x for x in df["brand"].unique()]
-    colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
+    #all_brands = [x for x in df["brand"].unique()]
+    #colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
 
-    brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+    #brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
     
     fig = px.line(df_filtered, x="time", y=framework, color="brand", color_discrete_map=brand_color_mapping)
 
@@ -705,6 +728,88 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
 
         return fig
 
+
+
+
+def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_category,changed_category,brand_mapping,window,method= 'average'): 
+    columns_to_multiply = [x for x in df.columns if "AA" in x  or "AS" in x  or "AF" in x ]
+    
+
+    # Aplicar isto desde o início. 
+    df_weeks = df[df.time_period == "Weeks"]
+    
+    
+  
+    for variable in variables:
+        for brand in df.brand.unique():
+            df_weeks.loc[df_weeks.brand == brand, variable] = (df_weeks[df_weeks.brand == brand][variable].rolling(window=window).mean())
+
+
+    final_week = df_weeks
+    final_week["Category"] = original_category
+    final_week['Total Equity'] = final_week[['Awareness', 'Saliency', 'Affinity']].mean(axis=1)
+
+    #calculate the montly
+    monthly_output = MetricsClass.calculate_monthly_metrics(final_week, method)
+    monthly_output["Category"] = original_category
+    monthly_output['Total Equity'] = monthly_output[['Awareness', 'Saliency', 'Affinity']].mean(axis=1)
+    monthly_output[columns_to_multiply] = monthly_output[columns_to_multiply].apply(lambda x: x*100)
+    monthly_output = monthly_output.applymap(lambda x: round(x, 2) if isinstance(x, (int, float)) else x)
+
+
+    #calculate the quarterly
+    quarterly_output = MetricsClass.calculate_quarterly_metrics(final_week, method)
+    quarterly_output["Category"] = original_category
+    quarterly_output['Total Equity'] = quarterly_output[['Awareness', 'Saliency', 'Affinity']].mean(axis=1)
+    quarterly_output[columns_to_multiply] = quarterly_output[columns_to_multiply].apply(lambda x: x*100)
+    quarterly_output = quarterly_output.applymap(lambda x: round(x, 2) if isinstance(x, (int, float)) else x)
+
+
+
+    #calculate the semiannual
+    semiannual_output = MetricsClass.calculate_halfyearly_metrics(final_week, method)
+    semiannual_output["Category"] = original_category
+    semiannual_output['Total Equity'] = semiannual_output[['Awareness', 'Saliency', 'Affinity']].mean(axis=1)
+    semiannual_output[columns_to_multiply] = semiannual_output[columns_to_multiply].apply(lambda x: x*100)
+    semiannual_output = semiannual_output.applymap(lambda x: round(x, 2) if isinstance(x, (int, float)) else x)
+
+
+    #calculate the yearly
+    yearly_output = MetricsClass.calculate_yearly_metrics(final_week, method)
+    yearly_output["Category"] = original_category
+    yearly_output['Total Equity'] = yearly_output[['Awareness', 'Saliency', 'Affinity']].mean(axis=1)
+    yearly_output[columns_to_multiply] = yearly_output[columns_to_multiply].apply(lambda x: x*100)
+    yearly_output = yearly_output.applymap(lambda x: round(x, 2) if isinstance(x, (int, float)) else x)
+
+
+
+    #getting the final smoothened data
+    final_df_smoothened = pd.concat([final_week,monthly_output,quarterly_output,semiannual_output,yearly_output],axis=0)
+
+    #-------------------------------------------------------------// --------------------------------------------------------------------
+    #doing some transformations
+    final_df_smoothened.rename(columns=affinity_to_user,inplace=True)
+
+    final_df_smoothened.rename(columns=framework_to_user,inplace=True)
+       
+    final_df_smoothened["Category"] = final_df_smoothened["Category"].replace(original_category,changed_category)
+
+    final_df_smoothened["brand"]= final_df_smoothened["brand"].replace(brand_mapping)
+
+    replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
+    final_df_smoothened["time_period"] = final_df_smoothened["time_period"].replace(replacements)
+
+
+    final_df_smoothened["Category"] = final_df_smoothened["Category"].replace(original_category,changed_category)
+    #-------------------------------------------------------------//----------------------------------------------------------------------
+
+    return final_df_smoothened
+
+
+
+
+
+
 #------------------------------------------------------------------------app---------------------------------------------------------------------------------------------------------------------#
 def main():   
          if 'button' not in st.session_state:
@@ -764,6 +869,8 @@ def main():
                                     weights_values_for_average_2022 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
                                     weights_values_for_average_2023 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
                                     weights_values_for_average_2024 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
+                                    brand_list = ["APTAMIL","COW & GATE","SMA","KENDAMIL","HIPP ORGANIC"]
+
                            
                            # getting our equity    
                            filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
@@ -824,10 +931,13 @@ def main():
                            tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Compare Average, Absolute and Market Share Weighted","📕 Final Equity plots"])
                   with tab2:
                             #chosing the sheet name 
-                           column_1,_,_,_ = st.columns(4)
+                           column_1,column_2,_,_ = st.columns(4)
                            with column_1:
                                     sheet_name = st.selectbox("Select sheet",["Average","Absolute"])
-                           
+                                    smoothening_type = st.selectbox("Smoothened/ Not Smoothened",["Not Smoothened","Smoothened"])
+                           with column_2:
+                             smoothening_parameters["window_size"] = st.number_input("Window size",value=12)
+                          
                            st.subheader(f"Equity Metrics Plot - Market Share Weighted {sheet_name}")
                   
                   
@@ -919,6 +1029,33 @@ def main():
                            
                            #creating the market_share_weighted
                            market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_joined,years_cols,value_columns,framework_to_user)
+
+
+                                          
+                           if smoothening_type == "Smoothened":
+                             market_share_weighted = smoothening_weeks(market_share_weighted,smoothening_weeks_list,affinity_to_user,framework_to_user,original_category,changed_category,brand_mapping,smoothening_parameters["window_size"],method= 'average')
+                             
+                           else:
+                             market_share_weighted = market_share_weighted
+
+
+                           # color stuff
+                           all_brands = [x for x in brand_list]
+                           colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
+              
+                           brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+
+
+                           #getting the min value
+                           try:
+                             market_share_weighted.drop(columns=["weights","Unnamed: 24","Unnamed: 25"],inplace=True)
+                           except:
+                             pass
+              
+                           market_share_weighted.dropna(inplace=True)
+                           mask = market_share_weighted["eSoV"] == 0
+                           market_share_weighted = market_share_weighted[~mask]
+
                            
                            # creating the columns for the app
                            right_column_1,right_column_2,left_column_1,left_column_2 = st.columns(4)
@@ -944,7 +1081,7 @@ def main():
                                              ws = start_date.strftime('%Y-%m-%d')
                                              we = end_date.strftime('%Y-%m-%d')
                                              
-                                             st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
+                                             st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we,brand_color_mapping)
                                              st.session_state.button = True
                            else:
                                     if st.button("Run!"):
@@ -952,7 +1089,7 @@ def main():
                                              ws = start_date.strftime('%Y-%m-%d')
                                              we = end_date.strftime('%Y-%m-%d')
                                              
-                                             st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we)
+                                             st.session_state.fig = Equity_plot_market_share_(market_share_weighted, st.session_state.category, st.session_state.time_frame,framework,ws,we,brand_color_mapping)
                                     
                            
                            
