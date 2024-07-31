@@ -533,7 +533,7 @@ def Equity_plot_market_share_(df,category,time_frame,framework,ws,we,brand_color
 
 
 #Used to comparing the Equity from different sheets
-def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks,brand_replacement,affinity_to_user,original_category,changed_category,general_equity_to_user):
+def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks,brand_replacement,affinity_to_user,categories_changed,general_equity_to_user):
     st.subheader(f"Compare Average, Absolute and Market Share Weighted")
     
     # ------------------------------------------------------------------------------------------------Aesthetic changes-------------------------------------------------------------------------
@@ -556,7 +556,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     df_total_uns["time_period"] = df_total_uns["time_period"].replace(replacements)
 
 
-    df_total_uns["Category"] = df_total_uns["Category"].replace("vape","Vape")
+    df_total_uns["Category"] = df_total_uns["Category"].replace(categories_changed)
 
     df_total_uns.rename(columns=general_equity_to_user,inplace=True)
 
@@ -1146,7 +1146,7 @@ def main():
                            
                            df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels,join_data_average,join_data_total,list_fix,order_list,rename_all)
                            # Comparing all the sheets
-                           fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,original_category,changed_category,general_equity_to_user)
+                           fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,categories_changed,general_equity_to_user)
                            st.plotly_chart(fig,use_container_width=True)
                            
                            buffer = io.BytesIO()
