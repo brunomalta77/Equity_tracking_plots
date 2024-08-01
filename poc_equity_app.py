@@ -392,10 +392,10 @@ def Equity_plot(df,categories,time_frames,frameworks,sheet_name,framework_to_use
     
     
     # color stuff
-    all_brands = [x for x in df["brand"].unique()]
-    colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
+    #all_brands = [x for x in df["brand"].unique()]
+    #colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
 
-    brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+    #brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
     
     fig = px.line(df_filtered, x="time", y=framework, color="brand", color_discrete_map=brand_color_mapping)
 
@@ -1196,17 +1196,25 @@ def main():
 
                            if sheet_name =="Mkt Share Weighted":
                                     sheet_name = "Market Share Weighted"
-                           
+
+
+                            # color stuff
+                            all_brands = [x for x in brand_list]
+                            colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
+                
+                            brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+                
+                                           
                            if sheet_name == "Average Smoothening":
-                                    fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
+                                    fig = Equity_plot(df,category_options,time_period_options,framework_options,sheet_name,framework_to_user,brand_color_mapping)
                                     st.plotly_chart(fig,use_container_width=True)
                            
                            if sheet_name == "Total Unsmoothening":
-                                    fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
+                                    fig = Equity_plot(df_total_uns,category_options,time_period_options,framework_options,sheet_name,framework_to_user,brand_color_mapping)
                                     st.plotly_chart(fig,use_container_width=True)
                            
                            if sheet_name == "Market Share Weighted":
-                                    fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name,framework_to_user)
+                                    fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name,framework_to_user,brand_color_mapping)
                                     st.plotly_chart(fig,use_container_width=True)
 
 
