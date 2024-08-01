@@ -924,8 +924,6 @@ def main():
                   with st.container():
                            tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Compare Average, Absolute and Market Share Weighted","📕 Final Equity plots"])
                   with tab2:
-                           st.warning("Be carefull! Chosing the category weighted type will influence the rest of the plots in the next tabs!")
-                           
                            #chosing the sheet name 
                            column_1,column_2,_,_ = st.columns(4)
                            with column_1:
