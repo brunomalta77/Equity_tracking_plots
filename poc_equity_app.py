@@ -862,11 +862,12 @@ def main():
                            df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
                            #df_significance = reading_df(filepath_equity,sheet_name="significance")
                            #df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
-                           
+
+                           st.write(df)
                            
                            #Equity options
                            category_options,time_period_options,framework_options = equity_options(df,brand_mapping,categories_changed,framework_options_)
-
+                           
                            with column_2:
                               category =  st.radio('Choose  category:', category_options,key='test7')
 
