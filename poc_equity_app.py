@@ -791,7 +791,7 @@ def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_c
 
     final_df_smoothened.rename(columns=framework_to_user,inplace=True)
        
-    final_df_smoothened["Category"] = final_df_smoothened["Category"].replace(original_category,changed_category)
+    final_df_smoothened["Category"] = final_df_smoothened["Category"].replace(categories_changed)
 
     final_df_smoothened["brand"]= final_df_smoothened["brand"].replace(brand_mapping)
 
