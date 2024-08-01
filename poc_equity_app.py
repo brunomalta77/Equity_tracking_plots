@@ -595,7 +595,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
         we = end_date.strftime('%Y-%m-%d')
     # getting the parameters
     with right_column_2:
-        category = st.radio('Choose category:', categories,key="test_3")
+        category = category
         
     with left_column_1:    
         time_frame = st.radio('Choose  time frame:', time_frames,key="test_4")
