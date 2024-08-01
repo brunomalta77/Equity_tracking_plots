@@ -888,6 +888,35 @@ def main():
                            with column_2:
                               category =  st.radio('Choose  category:', category_options,key='test7')
 
+                            
+                           if market =="germany":
+                                          slang = "MMM_GER_"
+                                          brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "stlth": "STLTH","vuse":"VUSE","blu":"BLU","glo":"GLO","iqos":"IQOS"}
+                                          
+                                          if category == "Vape":
+                                             weights_values_for_average_2021 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
+                                             weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
+                                             weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
+                                             weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}       
+                                             brand_list = ["ELF BAR","GEEK BAR","STLTH","VUSE","BLU","GLO","IQOS"]
+                                          
+                                          if category == "THP":
+                                             weights_values_for_average_2021 = {"GLO":0,"IQOS":0}
+                                             weights_values_for_average_2022 = {"GLO":0,"IQOS":0}
+                                             weights_values_for_average_2023 = {"GLO":0,"IQOS":0}
+                                             weights_values_for_average_2024 = {"GLO":0,"IQOS":0}       
+                                             brand_list = ["ELF BAR","GEEK BAR","STLTH","VUSE","BLU","GLO","IQOS"]
+                           
+                           if market == "canada":
+                                    slang ="MMM_CAN_"
+                                    brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE"}
+                                    weights_values_for_average_2021 =  {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
+                                    weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
+                                    weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
+                                    weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}     
+                                    brand_list = ["ELF BAR","GEEK BAR","JUUL", "STLTH", "VUSE"]
+
+                           
                            
                            #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
                            #creating a copy of our dataframes.
