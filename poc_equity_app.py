@@ -799,7 +799,7 @@ def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_c
     final_df_smoothened["time_period"] = final_df_smoothened["time_period"].replace(replacements)
 
 
-    final_df_smoothened["Category"] = final_df_smoothened["Category"].replace(original_category,changed_category)
+    final_df_smoothened["Category"] = final_df_smoothened["Category"].replace(categories_changed)
     final_df_smoothened["Category"] = final_df_smoothened["Category"].replace("Baby milk","Baby Milk")
     #-------------------------------------------------------------//----------------------------------------------------------------------
     return final_df_smoothened
