@@ -568,7 +568,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
     df_total_uns["time_period"] = df_total_uns["time_period"].replace(replacements)
 
 
-    df_total_uns["Category"] = df_total_uns["Category"].replace(original_category,changed_category)
+    df_total_uns["Category"] = df_total_uns["Category"].replace(categories_changed)
 
     df_total_uns.rename(columns=general_equity_to_user,inplace=True)
 
