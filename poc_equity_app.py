@@ -850,24 +850,6 @@ def main():
                            with column_1:
                                     market = st.selectbox('Markets', markets_available)
                                     market = market.lower()
-
-                           if market =="germany":
-                                          slang = "MMM_GER_"
-                                          brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "stlth": "STLTH","vuse":"VUSE","blu":"BLU","glo":"GLO","iqos":"IQOS"}
-                                          weights_values_for_average_2021 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
-                                          weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
-                                          weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
-                                          weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}       
-                                          brand_list = ["ELF BAR","GEEK BAR","STLTH","VUSE","BLU","GLO","IQOS"]
-                           
-                           if market == "canada":
-                                    slang ="MMM_CAN_"
-                                    brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE"}
-                                    weights_values_for_average_2021 =  {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
-                                    weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
-                                    weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}
-                                    weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0}     
-                                    brand_list = ["ELF BAR","GEEK BAR","JUUL", "STLTH", "VUSE"]
                            
                            # getting our equity    
                            filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
