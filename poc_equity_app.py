@@ -35,8 +35,7 @@ framework_to_user = {'Total_Equity':'Total Equity','Framework_Awareness':"Awaren
        'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality'}
 
 
-original_category = "baby_milk" 
-changed_category = "Baby Milk" 
+categories_changed = {"baby_milk":"Baby Milk"}" 
 
 
 framework_options_ = ["Total Equity","Awareness","Saliency","Affinity",'Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
@@ -335,11 +334,11 @@ def equity_info(data,market_flag):
     
     return filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity
 
-def equity_options(df,brand_mapping,original_category,changed_category,framework_options_):
+def equity_options(df,brand_mapping,categories_changed,framework_options_):
          df.brand = df.brand.replace(brand_mapping)
          
          
-         df["Category"] = df["Category"].replace(original_category,changed_category)
+         df["Category"] = df["Category"].replace(categories_changed)
          category_options = df["Category"].unique()
          
          replacements = {"weeks":"Weeks","months":"Months","quarters":"Quarters","semiannual":"Semiannual","years":"Years"}
@@ -546,7 +545,7 @@ def Equity_plot_market_share_(df,category,time_frame,framework,ws,we,brand_color
 
 
 #Used to comparing the Equity from different sheets
-def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks,brand_replacement,affinity_to_user,original_category,changed_category,general_equity_to_user):
+def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,frameworks,brand_replacement,affinity_to_user,categories_changed,general_equity_to_user):
     st.subheader(f"Compare Average, Absolute and Market Share Weighted")
     
     # ------------------------------------------------------------------------------------------------Aesthetic changes-------------------------------------------------------------------------
@@ -731,7 +730,7 @@ def Comparing_Equity(df,df_total_uns,weighted_df,categories,time_frames,framewor
 
 
 
-def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_category,changed_category,brand_mapping,window,method= 'average'): 
+def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_category,categories_changed,brand_mapping,window,method= 'average'): 
     columns_to_multiply = [x for x in df.columns if "AA" in x  or "AS" in x  or "AF" in x ]
     
 
@@ -886,7 +885,7 @@ def main():
                            
                            
                            #Equity options
-                           category_options,time_period_options,framework_options = equity_options(df,brand_mapping,original_category,changed_category,framework_options_)
+                           category_options,time_period_options,framework_options = equity_options(df,brand_mapping,categories_changed,framework_options_)
                            
                              #creating the market_share_weighted
                            value_columns  = value_columns_
@@ -917,7 +916,7 @@ def main():
                            df_total_uns_copy["time_period"] = df_total_uns_copy["time_period"].replace(replacements)
                            
                            
-                           df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace("baby_milk","Baby milk")
+                           df_total_uns_copy["Category"] = df_total_uns_copy["Category"].replace(categories_changed)
                            
                            
                            df_total_uns_copy.rename(columns=general_equity_to_user,inplace=True)
@@ -1031,15 +1030,6 @@ def main():
                            #creating the market_share_weighted
                            market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_joined,years_cols,value_columns,framework_to_user)
 
-
-                                          
-                           if smoothening_type == "Smoothened":
-                             market_share_weighted = smoothening_weeks(market_share_weighted,smoothening_weeks_list,affinity_to_user,framework_to_user,original_category,changed_category,brand_mapping,smoothening_parameters["window_size"],method= 'average')
-                             
-                           else:
-                             market_share_weighted = market_share_weighted
-
-
                            # color stuff
                            all_brands = [x for x in brand_list]
                            colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
@@ -1053,12 +1043,8 @@ def main():
                            except:
                              pass
               
-                           market_share_weighted.dropna(inplace=True)
-                           mask = market_share_weighted["eSoV"] == 0
-                           market_share_weighted = market_share_weighted[~mask]
-
-
-                           #Just for this case.
+                   
+                           #Just for this case!. 
                            market_share_weighted["Category"] = market_share_weighted["Category"].replace("Baby milk", "Baby Milk")
                          
                            # creating the columns for the app
@@ -1068,10 +1054,26 @@ def main():
                            #getting the date
                                     start_date = st.date_input("Select start date",value=datetime(2021, 2, 16),key='start_date')
                                     end_date =  st.date_input("Select end date",key='test1')
+                           
                            # getting the parameters
+                           
                            with right_column_2:
                                     st.session_state.category = st.radio('Choose  category:', category_options,key='test3')
+                                    
+                                    if smoothening_type == "Smoothened":
+                                      market_share_weighted = smoothening_weeks(market_share_weighted,smoothening_weeks_list,affinity_to_user,framework_to_user,st.session_state.category,categories_changed,brand_mapping,smoothening_parameters["window_size"],method= 'average')
+                                    else:
+                                      market_share_weighted = market_share_weighted
                            
+
+                                    market_share_weighted.dropna(inplace=True)
+                                    mask = market_share_weighted["eSoV"] == 0
+                                    market_share_weighted = market_share_weighted[~mask]
+
+
+                                     
+                           else:
+                             market_share_weighted = market_share_weighted
                            with left_column_1:    
                                     st.session_state.time_frame = st.radio('Choose  time frame:', time_period_options,key='test4')
                            
@@ -1168,7 +1170,7 @@ def main():
                            
                            df_weighted = get_weighted(sheet_1,sheet_2,weighted_1_page,weighted_2_page,brand_mapping,user_to_equity,affinity_labels,join_data_average,join_data_total,list_fix,order_list,rename_all)
                            # Comparing all the sheets
-                           fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,original_category,changed_category,general_equity_to_user)
+                           fig = Comparing_Equity(df,df_total_uns,df_weighted,category_options,time_period_options,framework_options,brand_mapping,affinity_to_user,categories_changed,general_equity_to_user)
                            st.plotly_chart(fig,use_container_width=True)
                            
                            buffer = io.BytesIO()
