@@ -35,7 +35,7 @@ framework_to_user = {'Total_Equity':'Total Equity','Framework_Awareness':"Awaren
        'AS_Search_Index':'Search Index', 'AS_Brand_Centrality':'Brand Centrality'}
 
 
-categories_changed = {"baby_milk":"Baby Milk"}" 
+categories_changed = {"baby_milk":"Baby Milk"}
 
 
 framework_options_ = ["Total Equity","Awareness","Saliency","Affinity",'Entry points & Key Moments','Brand Prestige & Love','Baby Milk','Adverts and Promotions','Value For Money',
