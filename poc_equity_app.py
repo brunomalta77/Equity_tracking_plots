@@ -1050,7 +1050,9 @@ def main():
                                     else:
                                        market_share_weighted = market_share_weighted
 
-
+                                    market_share_weighted.dropna(inplace=True)
+                                    mask = market_share_weighted["eSoV"] == 0
+                                    market_share_weighted = market_share_weighted[~mask]
                                     
                            
                            with left_column_1:    
