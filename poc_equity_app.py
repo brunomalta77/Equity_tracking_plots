@@ -933,12 +933,17 @@ def main():
                            tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Compare Average, Absolute and Market Share Weighted","📕 Final Equity plots"])
                   with tab2:
                             #chosing the sheet name 
-                           column_1,column_2,_,_ = st.columns(4)
+                           column_1,column_2,column_3,_ = st.columns(4)
                            with column_1:
-                                    sheet_name = st.selectbox("Select sheet",["Average","Absolute"])
-                                    smoothening_type = st.selectbox("Smoothened/ Not Smoothened",["Not Smoothened","Smoothened"])
+                             sheet_name = st.selectbox("Select sheet",["Average","Absolute"])
+                                    
                            with column_2:
-                             smoothening_parameters["window_size"] = st.number_input("Window size",value=12)
+                             smoothening_type = st.selectbox("Smoothened/ Not Smoothened",["Not Smoothened","Smoothened"])
+
+                           if smoothening_type == "Smoothened":
+                             with column_3:
+                               smoothening_parameters["window_size"] = st.number_input("Window size",value=12)
+
                           
                            st.subheader(f"Equity Metrics Plot - Market Share Weighted {sheet_name}")
                   
