@@ -1198,11 +1198,11 @@ def main():
                                     sheet_name = "Market Share Weighted"
 
 
-                            # color stuff
-                            all_brands = [x for x in brand_list]
-                            colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
-                
-                            brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
+                           # color stuff
+                           all_brands = [x for x in brand_list]
+                           colors = ["blue", "green", "red", "purple", "orange","lightgreen","black","lightgrey","yellow","olive","silver","darkviolet","grey"]
+              
+                           brand_color_mapping = {brand: color for brand, color in zip(all_brands, colors)}
                 
                                            
                            if sheet_name == "Average Smoothening":
