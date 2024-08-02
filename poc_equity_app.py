@@ -858,7 +858,7 @@ def main():
 
                            if market == "canada":
                               slang ="MMM_CAN_"
-                              brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE","smok":"SMOK","uwell":"UWELL","other":"OTHER"}
+                              brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE","smok":"SMOK","uwell":"UWELL","others":"OTHERS"}
 
                            
                            # getting our equity    
@@ -898,11 +898,11 @@ def main():
                                              brand_list = ["ELF BAR","GEEK BAR","STLTH","VUSE","BLU","GLO","IQOS"]
                            
                            if market == "canada":
-                                    weights_values_for_average_2021 =  {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHER":0}
-                                    weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHER":0}
-                                    weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHER":0}
-                                    weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHER":0}     
-                                    brand_list = ["ELF BAR","GEEK BAR","JUUL", "STLTH", "VUSE","SMOK","UWELL","OTHER"]
+                                    weights_values_for_average_2021 =  {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHERS":0}
+                                    weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHERS":0}
+                                    weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHERS":0}
+                                    weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHERS":0}     
+                                    brand_list = ["ELF BAR","GEEK BAR","JUUL", "STLTH", "VUSE","SMOK","UWELL","OTHERS"]
 
                            
                            
