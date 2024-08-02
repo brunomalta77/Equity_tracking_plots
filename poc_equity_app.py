@@ -858,7 +858,7 @@ def main():
 
                            if market == "canada":
                               slang ="MMM_CAN_"
-                              brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE","smok":"SMOK","uwell":"UWELL","other","OTHER"}
+                              brand_mapping = {"elfbar":"ELF BAR" , "geekbar": "GEEK BAR", "juul": "JUUL", "stlth": "STLTH","vuse":"VUSE","smok":"SMOK","uwell":"UWELL","other":"OTHER"}
 
                            
                            # getting our equity    
