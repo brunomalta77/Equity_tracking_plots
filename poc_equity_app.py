@@ -829,8 +829,6 @@ def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_c
 
 
 ## ----------------------------------------------------------------------   Equity Analysis -----------------------------------------------------------------------------------
-
-from scipy.stats import zscore
 import warnings
 warnings.filterwarnings("ignore")
 from scipy.stats import ttest_ind
