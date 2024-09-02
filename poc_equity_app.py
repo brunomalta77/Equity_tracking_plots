@@ -216,7 +216,7 @@ media_data = r"data/Media_invest_all.xlsx"
 @st.cache_data() 
 def reading_df(filepath,sheet_name):
     df = pd.read_excel(filepath,sheet_name=sheet_name)
-    return df
+    return
 
 
 #Some info
