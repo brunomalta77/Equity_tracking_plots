@@ -8,3 +8,4 @@ joblib
 plotly
 openpyxl
 msal
+scipy
