@@ -2101,7 +2101,7 @@ def main():
                                     weights_values_for_average_2023 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
                                     weights_values_for_average_2024 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
                                     brand_list = ["APTAMIL","COW & GATE","SMA","KENDAMIL","HIPP ORGANIC"]
-                                    master_parquet = pd.read_parquet(data/uk_data_tagged_2024_09_02_14_59_00.parquet)
+                                    master_parquet = pd.read_parquet(r"data/uk_data_tagged_2024_09_02_14_59_00.parquet")
                            
                            # getting our equity    
                            filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
