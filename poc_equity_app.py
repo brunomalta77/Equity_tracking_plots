@@ -215,7 +215,7 @@ media_data = r"data/Media_invest_all.xlsx"
 # equity file
 @st.cache_data() 
 def reading_df(filepath,sheet_name):
-    df = pd.read_excel(rfilepath,sheet_name=sheet_name)
+    df = pd.read_excel(filepath,sheet_name=sheet_name)
     return
 
 
@@ -2105,7 +2105,10 @@ def main():
                            
                            # getting our equity    
                            filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
-                           
+
+                           st.write(filepath_equity)
+
+                            
                            # reading the equity file
                            df = reading_df(filepath_equity,sheet_name="average_smoothened")
                            df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
