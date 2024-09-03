@@ -2116,6 +2116,10 @@ def main():
                            df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
                            df_significance = reading_df(filepath_equity,sheet_name="significance")
                            df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
+
+
+                             - data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx -
+                             -  
                            
                            #Equity options
                            category_options,time_period_options,framework_options = equity_options(df,brand_mapping,categories_changed,framework_options_)
