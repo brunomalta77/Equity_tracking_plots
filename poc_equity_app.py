@@ -2110,9 +2110,7 @@ def main():
 
                             
                            # reading the equity file
-                           #df = reading_df(filepath_equity,sheet_name="average_smoothened")
-                           df = pd.read_excel("data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="average_smoothened")
-                           st.write(df)
+                           df = reading_df(filepath_equity,sheet_name="average_smoothened")
                            df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
                            df_total_smooth = reading_df(filepath_equity,sheet_name="total_smoothened")
                            df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
