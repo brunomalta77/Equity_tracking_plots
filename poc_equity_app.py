@@ -2105,7 +2105,6 @@ def main():
                            
                            # getting our equity    
                            filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
-                           st.write(filepath_equity)
                            
                            # reading the equity file
                            df = reading_df(filepath_equity,sheet_name="average_smoothened")
@@ -2115,7 +2114,7 @@ def main():
                            df_significance = reading_df(filepath_equity,sheet_name="significance")
                            df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
                            
-                           
+                           st.write(df.head())
                            #Equity options
                            category_options,time_period_options,framework_options = equity_options(df,brand_mapping,categories_changed,framework_options_)
                            
