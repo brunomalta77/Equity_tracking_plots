@@ -344,7 +344,7 @@ def weighted_brand_calculation(df_original,weights_joined,years, value_columns,f
 
 def equity_info(data,market_flag):
     if market_flag == "uk":
-        market_flag = "danone_uk_equity_"
+        market_flag = "uk_equity_"
     for x in os.listdir(data):
         if market_flag in x:
             filepath_equity = os.path.join(data,x)
@@ -2116,10 +2116,7 @@ def main():
                            df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
                            df_significance = reading_df(filepath_equity,sheet_name="significance")
                            df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
-
-
-                             - data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx -
-                             -  
+                           
                            
                            #Equity options
                            category_options,time_period_options,framework_options = equity_options(df,brand_mapping,categories_changed,framework_options_)
