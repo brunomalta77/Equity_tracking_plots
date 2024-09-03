@@ -1525,7 +1525,10 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
         df_var = df[(df.created_time >= period_start) & (df.created_time <= period_end)]
         df_pre_var = df[(df.created_time >= period_pre) & (df.created_time <= period_start)]
         df_all = df[(df.created_time >= period_pre) & (df.created_time <= period_end)]
-                
+
+        
+        st.write(df_var.head())
+        
         df_awareness_channels = pd.DataFrame(columns=["Sub-pillars","t_statistic","p-value","channel"])
         df_awareness_channels_show = pd.DataFrame(columns=["Sub-pillars","t_statistic","p-value","channel"])
 
