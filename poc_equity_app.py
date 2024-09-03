@@ -2108,12 +2108,12 @@ def main():
 
                         
                                     # reading the equity file
-                                    df = reading_df("data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="average_smoothened")
-                                    df_total_uns = reading_df("data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="total_unsmoothened")
-                                    df_total_smooth = reading_df("data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="total_smoothened")
-                                    df_avg_unsmooth = reading_df("data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="average_unsmoothened")
-                                    df_significance = reading_df("data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="significance")
-                                    df_perc_changes = reading_df("data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="perc_changes")
+                                    df = reading_df(r"data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="average_smoothened")
+                                    df_total_uns = reading_df(r"data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="total_unsmoothened")
+                                    df_total_smooth = reading_df(r"data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="total_smoothened")
+                                    df_avg_unsmooth = reading_df(r"data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="average_unsmoothened")
+                                    df_significance = reading_df(r"data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="significance")
+                                    df_perc_changes = reading_df(r"data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="perc_changes")
                            
                            
                                     #Equity options
