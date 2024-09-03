@@ -2105,7 +2105,7 @@ def main():
                            
                            # getting our equity    
                            filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
-                           
+                           st.write(filepath_equity)
                            
                            # reading the equity file
                            df = reading_df(filepath_equity,sheet_name="average_smoothened")
