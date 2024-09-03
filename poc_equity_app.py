@@ -215,8 +215,6 @@ media_data = r"data/Media_invest_all.xlsx"
 # equity file
 @st.cache_data() 
 def reading_df(filepath,sheet_name):
-    st.write(filepath)
-    st.write(sheet_name)
     df = pd.read_excel(filepath,sheet_name=sheet_name)
     return
 
@@ -2116,7 +2114,7 @@ def main():
                            df_significance = reading_df(filepath_equity,sheet_name="significance")
                            df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
                            
-                           st.write(df.head())
+                           st.write(df_total_uns.head())
                            #Equity options
                            category_options,time_period_options,framework_options = equity_options(df,brand_mapping,categories_changed,framework_options_)
                            
