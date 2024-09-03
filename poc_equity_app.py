@@ -2111,14 +2111,14 @@ def main():
                             
                            # reading the equity file
                            #df = reading_df(filepath_equity,sheet_name="average_smoothened")
-                           df = pd.read_excel(filepath_equity,sheet_name="average_smoothened")
+                           df = pd.read_excel(data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx,sheet_name="average_smoothened")
+                           st.write(df)
                            df_total_uns = reading_df(filepath_equity,sheet_name="total_unsmoothened")
                            df_total_smooth = reading_df(filepath_equity,sheet_name="total_smoothened")
                            df_avg_unsmooth = reading_df(filepath_equity,sheet_name="average_unsmoothened")
                            df_significance = reading_df(filepath_equity,sheet_name="significance")
                            df_perc_changes = reading_df(filepath_equity,sheet_name="perc_changes")
                            
-                           st.write(df_total_uns.head())
                            #Equity options
                            category_options,time_period_options,framework_options = equity_options(df,brand_mapping,categories_changed,framework_options_)
                            
