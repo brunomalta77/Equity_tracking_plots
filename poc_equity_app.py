@@ -2102,23 +2102,24 @@ def main():
                                     weights_values_for_average_2024 = {"APTAMIL":0 , "COW & GATE": 0, "SMA": 0, "KENDAMIL": 0, "HIPP ORGANIC": 0}
                                     brand_list = ["APTAMIL","COW & GATE","SMA","KENDAMIL","HIPP ORGANIC"]
                                     master_parquet = pd.read_parquet(r"uk_data_tagged_2024_09_02_14_59_00.parquet")
-                                     
-                                    # getting our equity    
-                                    filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
 
-                        
-                                    # reading the equity file
-                                    df = pd.read_excel(filepath_equity,sheet_name="average_smoothened")                                    
-                                    df_total_uns = pd.read_excel(r"data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="total_unsmoothened")
-                                    df_total_smooth = pd.read_excel(r"data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="total_smoothened")
-                                    df_avg_unsmooth = pd.read_excel(r"data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="average_unsmoothened")
-                                    df_significance = pd.read_excel(r"data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="significance")
-                                    df_perc_changes = pd.read_excel(r"data/danone_uk_equity_all_2024_09_02_15_14_04.xlsx",sheet_name="perc_changes")
-                           
-                           
-                                    #Equity options
-                                    category_options,time_period_options,framework_options = equity_options(df,brand_mapping,categories_changed,framework_options_)
                                      
+                          # getting our equity    
+                           filepath_equity,year_equity,month_equity,day_equity,hour_equity,minute_equity,second_equity = equity_info(data,market)
+                            
+                            
+                          # reading the equity file
+                           df = pd.read_excel(filepath_equity,sheet_name="average_smoothened")                                    
+                           df_total_uns = pd.read_excel(filepath_equity,sheet_name="total_unsmoothened")
+                           df_total_smooth = pd.read_excel(filepath_equity,sheet_name="total_smoothened")
+                           df_avg_unsmooth = pd.read_excel(filepath_equity,sheet_name="average_unsmoothened")
+                           df_significance = pd.read_excel(filepath_equity,sheet_name="significance")
+                           df_perc_changes = pd.read_excel(filepath_equity,sheet_name="perc_changes")
+                            
+                            
+                           #Equity options
+                           category_options,time_period_options,framework_options = equity_options(df,brand_mapping,categories_changed,framework_options_)
+                             
                            #creating the market_share_weighted
                            value_columns  = value_columns_
 
