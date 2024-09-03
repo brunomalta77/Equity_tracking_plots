@@ -343,8 +343,8 @@ def weighted_brand_calculation(df_original,weights_joined,years, value_columns,f
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def equity_info(data,market_flag):
-    if market_flag == "UK":
-        market_flag = "UK_equity_"
+    if market_flag == "uk":
+        market_flag = "danone_uk_equity_"
     for x in os.listdir(data):
         if market_flag in x:
             filepath_equity = os.path.join(data,x)
