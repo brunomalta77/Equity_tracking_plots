@@ -851,7 +851,7 @@ def check_affinity_high_level(eq, df, brand,time_period, period_pre, period_star
         if x.name == 0:  # Highlight the row with index 2
             return ['background-color: blue'] * len(x)
         else:
-            return ['background-color: darkred'] * len(x)
+            return ['background-color: #FF9999'] * len(x)
 
     def change_format(x):
         x = f"{x:.1f}"
@@ -1024,7 +1024,7 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
         if x.name == 0:  # Highlight the row with index 2
             return ['background-color: blue'] * len(x)
         else:
-            return ['background-color: darkred'] * len(x)
+            return ['background-color: #FF9999'] * len(x)
 
 
     def change_format(x):
@@ -1760,7 +1760,7 @@ def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_star
         if x.name == 0:  # Highlight the row with index 2
             return ['background-color: blue'] * len(x)
         else:
-            return ['background-color: darkred'] * len(x)
+            return ['background-color: #FF9999'] * len(x)
 
 
 
