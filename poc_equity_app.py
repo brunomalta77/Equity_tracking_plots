@@ -2095,7 +2095,7 @@ def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_star
     
 
 
-def check_all(eq,df,brand,channel,time_period,period_pre,period_start,period_end,pre_year,post_year,aw_metrics,brand_mapping,metrics_to_see):
+def check_all(eq,df,brand,channel,time_period,period_pre,period_start,period_end,aw_metrics,brand_mapping,metrics_to_see):
     for x in metrics_to_see:
     
         if x == "Awareness":
