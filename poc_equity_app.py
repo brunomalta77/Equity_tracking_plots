@@ -1735,8 +1735,9 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
 
         
         st.write(f"\n*The channel that has changed the most is **'{most_changed_channel}'**.*")
+
         
-        df_var_show = df_var_show[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
+        df_var_show = df_var[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
         st.dataframe(df_var_show)
 
 
@@ -2085,9 +2086,8 @@ def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_star
         
         st.write(f"\n*The channel that has changed the most is **'{most_changed_channel}'**.*")
         
-        df_var_show = df_var_show[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
+        df_var_show = df_var[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
         st.dataframe(df_var_show)
-
     
 
 
