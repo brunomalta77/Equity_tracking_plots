@@ -839,7 +839,7 @@ from scipy.stats import ttest_ind
 
 
 def check_affinity_high_level(eq, df, brand,time_period, period_pre, period_start, period_end,aw_metrics):
-    st.header("High Level Affinity")
+    st.header("Affinity")
     
     def highlight_row_before(x):
         if x.name == 0:  # Highlight the row with index 2
@@ -1274,7 +1274,9 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
     st.write(f"\nThe channel that has changed the most is **'{most_changed_channel}'**")
 
 
-    st.dataframe(df_all[df_all.message_type == most_changed_channel],hide_index=True)
+
+    channel_var_data = channel_var_data[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
+    st.dataframe(channel_var_data,hide_index=True)
 
     
     # getting the mean of the metric in this case the followers, and comparing before and during the time. 
@@ -1734,11 +1736,6 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
         
         st.write(f"\n*The channel that has changed the most is **'{most_changed_channel}'**.*")
         
-
-        #filtered table. 
-        df_var_show = df_var[df_var.message_type == most_changed_channel]
-
-
         df_var_show = df_var_show[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
         st.dataframe(df_var_show)
 
@@ -2088,11 +2085,6 @@ def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_star
         
         st.write(f"\n*The channel that has changed the most is **'{most_changed_channel}'**.*")
         
-
-        #filtered table. 
-        df_var_show = df_var[df_var.message_type == most_changed_channel]
-
-
         df_var_show = df_var_show[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
         st.dataframe(df_var_show)
 
