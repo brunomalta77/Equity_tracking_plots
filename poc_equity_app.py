@@ -1525,8 +1525,9 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
     
     with column_1:
         new_data_before = new_data_before.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+        new_data_before = new_data_before[~"% diff"]
 
-        new_data_before["% diff"] = new_data_before["% diff"].apply(change_format)
+        #new_data_before["% diff"] = new_data_before["% diff"].apply(change_format)
 
         new_data_before = new_data_before.reset_index(drop=True)
         
@@ -2577,6 +2578,7 @@ def main():
         
                   #Equity analysis tab
                   with tab5:
+                      df.rename(columns=framework_to_user,inplace=True)
                       column_1,column_2,column_3 = st.columns([1,1,1])
                       
                       
