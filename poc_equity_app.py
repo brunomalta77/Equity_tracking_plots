@@ -2223,7 +2223,8 @@ def main():
                             
                             
                           # reading the equity file
-                           df = pd.read_excel(filepath_equity,sheet_name="average_smoothened")                                    
+                           df = pd.read_excel(filepath_equity,sheet_name="average_smoothened")
+                           df_for_analysis = pd.read_excel(filepath_equity,sheet_name="average_smoothened")             
                            df_total_uns = pd.read_excel(filepath_equity,sheet_name="total_unsmoothened")
                            df_total_smooth = pd.read_excel(filepath_equity,sheet_name="total_smoothened")
                            df_avg_unsmooth = pd.read_excel(filepath_equity,sheet_name="average_unsmoothened")
@@ -2577,7 +2578,6 @@ def main():
         
                   #Equity analysis tab
                   with tab5:
-                      df = pd.read_excel(filepath_equity,sheet_name="average_smoothened")        
                       column_1,column_2,column_3 = st.columns([1,1,1])
                       
                       
@@ -2613,7 +2613,7 @@ def main():
                           metrics_to_see = st.multiselect("Metric to analyse",["Awareness","Saliency","Affinity"])
           
           
-                      check_all(df,master_parquet,brand,channel_filter,time_period,period_pre,period_start,period_end,aw_metrics,brand_mapping,metrics_to_see)
+                      check_all(df_for_analysis,master_parquet,brand,channel_filter,time_period,period_pre,period_start,period_end,aw_metrics,brand_mapping,metrics_to_see)
 
 
 
