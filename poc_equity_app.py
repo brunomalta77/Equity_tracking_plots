@@ -2609,7 +2609,7 @@ def main():
                           metrics_to_see = st.multiselect("Metric to analyse",["Awareness","Saliency","Affinity"])
           
           
-                  check_all(df,master_parquet,brand,channel_filter,time_period,period_pre,period_start,period_end,aw_metrics,brand_mapping,metrics_to_see)
+                      check_all(df,master_parquet,brand,channel_filter,time_period,period_pre,period_start,period_end,aw_metrics,brand_mapping,metrics_to_see)
 
 
 
