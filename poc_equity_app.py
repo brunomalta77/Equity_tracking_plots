@@ -960,8 +960,9 @@ def check_affinity_high_level(eq, df, brand,time_period, period_pre, period_star
 
     with column_1:
         new_data_before = new_data_before.sort_values(by="% diff",ascending=False).reset_index(drop=True)
-
-        new_data_before["% diff"] = new_data_before["% diff"].apply(change_format)
+        new_data_before = new_data_before.drop(columns=["% diff"])
+        
+        #new_data_before["% diff"] = new_data_before["% diff"].apply(change_format)
 
         new_data_before = new_data_before.reset_index(drop=True)
         
@@ -1175,7 +1176,8 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
     with column_1:
         new_data_before = new_data_before.sort_values(by="% diff",ascending=False).reset_index(drop=True)
 
-        new_data_before["% diff"] = new_data_before["% diff"].apply(change_format)
+        new_data_before = new_data_before.drop(columns=["% diff"])
+        #new_data_before["% diff"] = new_data_before["% diff"].apply(change_format)
 
         new_data_before = new_data_before.reset_index(drop=True)
         most_changed_sub_metric = new_data_before["metric"].iloc[0]
@@ -1248,9 +1250,10 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
     with column_1:
         df_mean_before_channel = pd.DataFrame(rows_before)
         df_mean_before_channel = df_mean_before_channel.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+        df_mean_before_channel = df_mean_before_channel.drop(columns=["% diff"])
         #df_mean_before_channel["t-statistic"] = df_mean_before_channel["t-statistic"].apply(change_format)
         #df_mean_before_channel["p-value"] = df_mean_before_channel["p-value"].apply(change_format)
-        df_mean_before_channel["% diff"] = df_mean_before_channel["% diff"].apply(change_format)
+        #df_mean_before_channel["% diff"] = df_mean_before_channel["% diff"].apply(change_format)
         most_changed_channel = df_mean_before_channel.channel.iloc[0]
         #Aggregate
         df_mean_before_channel = df_mean_before_channel.style.apply(highlight_row_before,axis=1)
@@ -1707,9 +1710,8 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
         with column_1:
             df_mean_before_channel = pd.DataFrame(rows_before)
             df_mean_before_channel = df_mean_before_channel.sort_values(by="% diff",ascending=False).reset_index(drop=True)
-            #df_mean_before_channel["t-statistic"] = df_mean_before_channel["t-statistic"].apply(change_format)
-            #df_mean_before_channel["p-value"] = df_mean_before_channel["p-value"].apply(change_format)
-            df_mean_before_channel["% diff"] = df_mean_before_channel["% diff"].apply(change_format)
+            df_mean_before_channel = df_mean_before_channel.drop(columns=["% diff"])
+            #df_mean_before_channel["% diff"] = df_mean_before_channel["% diff"].apply(change_format)
             most_changed_channel = df_mean_before_channel.channel.iloc[0]
             #Aggregate
             df_mean_before_channel = df_mean_before_channel.style.apply(highlight_row_before,axis=1)
@@ -1869,8 +1871,8 @@ def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_star
     
     with column_1:
         new_data_before = new_data_before.sort_values(by="% diff",ascending=False).reset_index(drop=True)
-
-        new_data_before["% diff"] = new_data_before["% diff"].apply(change_format)
+        new_data_before = new_data_before.drop(columns=["% diff"])
+        #new_data_before["% diff"] = new_data_before["% diff"].apply(change_format)
 
         new_data_before = new_data_before.reset_index(drop=True)
         
@@ -2063,9 +2065,10 @@ def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_star
         with column_1:
             df_mean_before_channel = pd.DataFrame(rows_before)
             df_mean_before_channel = df_mean_before_channel.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+            df_mean_before_channel = df_mean_before_channel.drop(columns=["% diff"])
             #df_mean_before_channel["t-statistic"] = df_mean_before_channel["t-statistic"].apply(change_format)
             #df_mean_before_channel["p-value"] = df_mean_before_channel["p-value"].apply(change_format)
-            df_mean_before_channel["% diff"] = df_mean_before_channel["% diff"].apply(change_format)
+            #df_mean_before_channel["% diff"] = df_mean_before_channel["% diff"].apply(change_format)
             most_changed_channel = df_mean_before_channel.channel.iloc[0]
             #Aggregate
             df_mean_before_channel = df_mean_before_channel.style.apply(highlight_row_before,axis=1)
