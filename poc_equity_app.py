@@ -2134,7 +2134,7 @@ def check_all(eq,df,brand,channel,time_period,period_pre,period_start,period_end
 
 
                 st.write("\n")
-                check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, brand, channel,pre_year,post_year,brand_mapping)
+                check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, brand, channel,brand_mapping)
             
 
 
