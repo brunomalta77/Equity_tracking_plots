@@ -1275,8 +1275,8 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
 
 
 
-    channel_var_data = channel_var_data[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
-    st.dataframe(channel_var_data,hide_index=True)
+    df_var_show = df_var[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
+    st.dataframe(df_var_show,hide_index=True)
 
     
     # getting the mean of the metric in this case the followers, and comparing before and during the time. 
