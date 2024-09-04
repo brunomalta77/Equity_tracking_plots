@@ -277,10 +277,10 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,u
 
 # Market_share_weighted_average
 def weighted_brand_calculation(df_original,weights_joined,years, value_columns,framework_to_user,category):
-    df_original = df_original[df_original["Category"] == category]
+    df_original_test = df_original[df_original["Category"] == category]
     concat_data = []
     for year,weights in zip(years,weights_joined):
-       df = df_original[(df_original.time >= f"{year}-01-01") & (df_original.time <= f"{year}-12-31")]
+       df = df_original_test[(df_original_test.time >= f"{year}-01-01") & (df_original_test.time <= f"{year}-12-31")]
        df.rename(columns=framework_to_user,inplace=True)
      
        # Convert value columns to numeric, replacing non-numeric values with NaN
