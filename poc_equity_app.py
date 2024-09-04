@@ -2589,7 +2589,7 @@ def main():
                       with column_2:
                           
                           # Filter your dataframe
-                          test_ = df
+                          test_ = df.loc[df.eSoV > 0]
           
                           # User selects the start period
                           period_start = st.date_input("Select start period", value=datetime(2022, 2, 16), key="Equity_analysis")
@@ -2610,9 +2610,9 @@ def main():
                           
                       with column_3:
                           metrics_to_see = st.multiselect("Metric to analyse",["Awareness","Saliency","Affinity"])
-                          st.write(df.columns)
+                          st.write(df)
           
-                      check_all(df_for_analysis,master_parquet,brand,channel_filter,time_period,period_pre,period_start,period_end,aw_metrics,brand_mapping,metrics_to_see)
+                      check_all(df,master_parquet,brand,channel_filter,time_period,period_pre,period_start,period_end,aw_metrics,brand_mapping,metrics_to_see)
 
 
 
