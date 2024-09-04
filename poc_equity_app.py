@@ -276,7 +276,7 @@ def get_weighted(df,df_total_uns,weighted_avg,weighted_total,brand_replacement,u
 #---------------------------------------------------------------------------------------////--------------------------------------------------------------------------------------------------
 
 # Market_share_weighted_average
-def weighted_brand_calculation(df_original,weights_joined,years, value_columns,framework_to_user):
+def weighted_brand_calculation(df_original,weights_joined,years, value_columns,framework_to_user,category):
     df_original = df_original[df_original["Category"] == category].copy()
     concat_data = []
     for year,weights in zip(years,weights_joined):
@@ -1049,7 +1049,7 @@ def main():
 
                            
                            #creating the market_share_weighted
-                           market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_joined,years_cols,value_columns,framework_to_user)
+                           market_share_weighted =  weighted_brand_calculation(df_for_weighted, weights_joined,years_cols,value_columns,framework_to_user,category)
                                              
                            # color stuff
                            all_brands = [x for x in brand_list]
