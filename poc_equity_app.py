@@ -2590,7 +2590,7 @@ def main():
                       with column_2:
                           
                           # Filter your dataframe
-                          test_ = df.loc[df.eSoV > 0]
+                          test_ = df
           
                           # User selects the start period
                           period_start = st.date_input("Select start period", value=datetime(2022, 2, 16), key="Equity_analysis")
