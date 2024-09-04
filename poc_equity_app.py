@@ -19,6 +19,7 @@ import msal
 import io
 import requests
 from metrics import AggregateMetrics
+import math
 #--------------------------------------------------------------------------------------// Aesthetic Global Variables // -------------------------------------------------------------------------
 
 user_to_equity = {'Entry points & Key Moments':'AF_Entry_point','Brand Prestige & Love':'AF_Brand_Love','Baby Milk':'AF_Baby_Milk','Adverts and Promotions':'AF_Adverts_Promo','Value For Money':'AF_Value_for_Money',
