@@ -2605,7 +2605,9 @@ def main():
           
                           # Calculate the previous period using weeks
                           period_pre = period_start - timedelta(weeks=difference_in_weeks)
-          
+
+                          st.write(f"before period:{period_pre}")
+                          
                       with column_3:
                           metrics_to_see = st.multiselect("Metric to analyse",["Awareness","Saliency","Affinity"])
           
