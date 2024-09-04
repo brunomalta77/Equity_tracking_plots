@@ -2589,6 +2589,7 @@ def main():
                       with column_2:
                           
                           # Filter your dataframe
+                          df = pd.read_excel(filepath_equity,sheet_name="average_smoothened")        
                           test_ = df.loc[df.eSoV > 0]
           
                           # User selects the start period
