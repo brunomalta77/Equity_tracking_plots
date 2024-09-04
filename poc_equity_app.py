@@ -289,7 +289,7 @@ def weighted_brand_calculation(df_original,weights_joined,years, value_columns,f
        # Apply weights to each brand
        for brand, weight in weights.items():
            mask = (df['brand'] == brand)
-           df.loc[mask, value_columns] = df.loc[mask, value_columns].multiply(weight)
+           df.loc[mask, value_columns] = df.loc[mask, value_columns] * weight
        
        # Group by time_period and time, then normalize
        def normalize_group(group):
