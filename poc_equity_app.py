@@ -2577,6 +2577,7 @@ def main():
         
                   #Equity analysis tab
                   with tab5:
+                      df = pd.read_excel(filepath_equity,sheet_name="average_smoothened")        
                       column_1,column_2,column_3 = st.columns([1,1,1])
                       
                       
@@ -2589,7 +2590,6 @@ def main():
                       with column_2:
                           
                           # Filter your dataframe
-                          df = pd.read_excel(filepath_equity,sheet_name="average_smoothened")        
                           test_ = df.loc[df.eSoV > 0]
           
                           # User selects the start period
