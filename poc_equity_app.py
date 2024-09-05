@@ -1005,13 +1005,13 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
     
     def highlight_row_before(x):
         if x.name == 0:  # Highlight the row with index 2
-            return ['background-color: blue'] * len(x)
+            return ['background-color: #FFD580'] * len(x)
         else:
             return [''] * len(x)
 
     def highlight_row_during(x):
         if x.name == 0:  # Highlight the row with index 2
-            return ['background-color: blue'] * len(x)
+            return ['background-color: #FFD580'] * len(x)
         else:
             return ['background-color: darkred'] * len(x)
 
