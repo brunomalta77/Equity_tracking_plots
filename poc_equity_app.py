@@ -1258,7 +1258,7 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
     st.write(f"\nThe channel that has changed the most is **'{most_changed_channel}'**")
 
    
-    df_all_show = df_all[df_all.brand==brad]
+    df_all_show = df_all[df_all.brand==brand]
     st.dataframe(df_all_show[df_all_show.message_type == most_changed_channel],hide_index=True)
 
     
