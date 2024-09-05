@@ -2352,7 +2352,7 @@ def main():
                                st.write(f"{year}")
                                # Assuming you want one column per key in brand_mapping
                                num_columns = len(brand_mapping.keys())
-                               value = int(100/num_brand)
+                               value = int(100/len(brand_list))
                                # Create the columns
                                cols = st.columns(num_columns)
                                if year == "2021":
