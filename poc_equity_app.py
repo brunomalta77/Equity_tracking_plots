@@ -2348,7 +2348,7 @@ def main():
                                       for col, key in zip(cols, weights_values_for_average_2021.keys()):
                                                   year_key = f"{key}_{year}"
                                                   with col:
-                                                          number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                          number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=value,key=year_key)
                                                           weights_values_for_average_2021[key] = number / 100
                            
                                   if year == "2022":
@@ -2356,7 +2356,7 @@ def main():
                                       for col, key in zip(cols, weights_values_for_average_2022.keys()):
                                                   year_key = f"{key}_{year}"
                                                   with col:
-                                                          number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                          number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=value,key=year_key)
                                                           weights_values_for_average_2022[key] = number / 100
                            
                            
@@ -2365,7 +2365,7 @@ def main():
                                       for col, key in zip(cols, weights_values_for_average_2023.keys()):
                                                   year_key = f"{key}_{year}"
                                                   with col:
-                                                          number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                          number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=value,key=year_key)
                                                           weights_values_for_average_2023[key] = number / 100
                            
                            
@@ -2374,7 +2374,7 @@ def main():
                                       for col, key in zip(cols, weights_values_for_average_2024.keys()):
                                                   year_key = f"{key}_{year}"
                                                   with col:
-                                                          number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=10,key=year_key)
+                                                          number = st.number_input(f"Weight for {key}", min_value=0, max_value=100, value=value,key=year_key)
                                                           weights_values_for_average_2024[key] = number / 100
                            
                            
