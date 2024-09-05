@@ -825,17 +825,18 @@ def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_c
 def check_affinity_high_level(eq, df, brand,time_period, period_pre, period_start, period_end,aw_metrics):
     st.header("High Level Affinity")
     
+     
     def highlight_row_before(x):
         if x.name == 0:  # Highlight the row with index 2
-            return ['background-color: blue'] * len(x)
+            return ['background-color: #FFD580'] * len(x)
         else:
             return [''] * len(x)
 
     def highlight_row_during(x):
         if x.name == 0:  # Highlight the row with index 2
-            return ['background-color: blue'] * len(x)
+            return ['background-color: #FFD580'] * len(x)
         else:
-            return ['background-color: darkred'] * len(x)
+            return ['background-color:#FF9999'] * len(x)
 
     def change_format(x):
         x = f"{x:.1f}"
@@ -1000,9 +1001,7 @@ def check_affinity_high_level(eq, df, brand,time_period, period_pre, period_star
 
 def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, brand, channel,brand_mapping):
     st.subheader("Low level affinity")
-    
-
-    
+   
     def highlight_row_before(x):
         if x.name == 0:  # Highlight the row with index 2
             return ['background-color: #FFD580'] * len(x)
@@ -1013,8 +1012,7 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
         if x.name == 0:  # Highlight the row with index 2
             return ['background-color: #FFD580'] * len(x)
         else:
-            return ['background-color: darkred'] * len(x)
-
+            return ['background-color:#FF9999'] * len(x)
 
     def change_format(x):
         x = f"{x:.1f}"
@@ -1393,17 +1391,18 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
     st.subheader("Wich sub-metric changed the most in that period of time ?")
 
 
+    
     def highlight_row_before(x):
         if x.name == 0:  # Highlight the row with index 2
-            return ['background-color: blue'] * len(x)
+            return ['background-color: #FFD580'] * len(x)
         else:
             return [''] * len(x)
 
     def highlight_row_during(x):
         if x.name == 0:  # Highlight the row with index 2
-            return ['background-color: blue'] * len(x)
+            return ['background-color: #FFD580'] * len(x)
         else:
-            return ['background-color: darkred'] * len(x)
+            return ['background-color:#FF9999'] * len(x)
 
     def change_format(x):
         x = f"{x:.1f}"
@@ -1737,25 +1736,23 @@ def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_star
 
     st.subheader("Wich sub-metric changed the most in that period of time ?")
 
+ 
+    
     def highlight_row_before(x):
         if x.name == 0:  # Highlight the row with index 2
-            return ['background-color: blue'] * len(x)
+            return ['background-color: #FFD580'] * len(x)
         else:
             return [''] * len(x)
 
     def highlight_row_during(x):
         if x.name == 0:  # Highlight the row with index 2
-            return ['background-color: blue'] * len(x)
+            return ['background-color: #FFD580'] * len(x)
         else:
-            return ['background-color: darkred'] * len(x)
-
-
+            return ['background-color:#FF9999'] * len(x)
 
     def change_format(x):
         x = f"{x:.1f}"
         return x 
-
-   
     
     
     # Check if the metric is in awareness metrics
