@@ -1721,9 +1721,8 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
         
 
         #filtered table. 
-        st.write(df_var.columns)
         df_var_show = df_var[df_var.brand==brand]
-        df_var_show = df_var_show[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
+        df_var_show = df_var_show[["message_type","permalink","earned_engagements","conversation_stream","created_time","followers","sender_screen_name","brand","review_source"]]
         st.dataframe(df_var_show)
 
 
