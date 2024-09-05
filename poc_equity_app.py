@@ -1564,7 +1564,7 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
 
         #rows=[]
         #rows_show = []
-        #channels = df['message_type'].unique()
+        channels = df['message_type'].unique()
         #for channel in channels:
             #channel_pre_var_data = df_pre_var[df_pre_var['message_type'] == channel]
             #channel_var_data = df_var[df_var['message_type'] == channel]
