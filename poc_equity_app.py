@@ -19,6 +19,7 @@ import msal
 import io
 import requests
 from metrics import AggregateMetrics
+import math
 #--------------------------------------------------------------------------------------// Aesthetic Global Variables // -------------------------------------------------------------------------
 user_to_equity = {'Brand Prestige & Love':'AF_Brand_Love','Motivation for Change':'AF_Motivation_for_Change','Consumption Experience':'AF_Consumption_Experience','Supporting Experience':'AF_Supporting_Experience','Value For Money':'AF_Value_for_Money',
    'Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
@@ -2229,27 +2230,29 @@ def main():
 
                             
                            if market =="germany":
-                                          if category == "Vape":
-                                             weights_values_for_average_2021 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
-                                             weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
-                                             weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
-                                             weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}       
-                                             brand_list = ["ELF BAR","GEEK BAR","STLTH","VUSE","BLU","GLO","IQOS"]
+                                        if category == "Vape":
+                                            weights_values_for_average_2021 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
+                                            weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
+                                            weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
+                                            weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}       
+                                            brand_list = ["ELF BAR","GEEK BAR","STLTH","VUSE","BLU","GLO","IQOS"]
                                           
-                                          if category == "THP":
-                                             weights_values_for_average_2021 = {"GLO":0,"IQOS":0}
-                                             weights_values_for_average_2022 = {"GLO":0,"IQOS":0}
-                                             weights_values_for_average_2023 = {"GLO":0,"IQOS":0}
-                                             weights_values_for_average_2024 = {"GLO":0,"IQOS":0}       
-                                             brand_list = ["ELF BAR","GEEK BAR","STLTH","VUSE","BLU","GLO","IQOS"]
-                           
+                                        if category == "THP":
+                                            weights_values_for_average_2021 = {"GLO":0,"IQOS":0}
+                                            weights_values_for_average_2022 = {"GLO":0,"IQOS":0}
+                                            weights_values_for_average_2023 = {"GLO":0,"IQOS":0}
+                                            weights_values_for_average_2024 = {"GLO":0,"IQOS":0}       
+                                            brand_list = ["ELF BAR","GEEK BAR","STLTH","VUSE","BLU","GLO","IQOS"]
+                                        master_parquet = pd.read_parquet(r"germany_data_tagged_2024_08_22_10_14_58_AM.parquet")
+                                        
+
                            if market == "canada":
                                     weights_values_for_average_2021 =  {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHERS":0}
                                     weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHERS":0}
                                     weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHERS":0}
                                     weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHERS":0}     
                                     brand_list = ["ELF BAR","GEEK BAR","JUUL", "STLTH", "VUSE","SMOK","UWELL","OTHERS"]
-
+                                    master_parquet = pd.read_parquet(r"canada_data_tagged_2024_08_02_15_42_00_PM.parquet")
                            
                            
                            #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
