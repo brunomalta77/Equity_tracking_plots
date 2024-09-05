@@ -2289,7 +2289,9 @@ def main():
 #--------------------------------------------------------------------------------------// Market Share Weighted----------------------------------------------------------------------------------
                   
                   with st.container():
-                           tab2,tab3,tab4 = st.tabs(["📈 Market Share Weighted","🔍Compare Average, Absolute and Market Share Weighted","📕 Final Equity plots"])
+                     tab2,tab3,tab4,tab5 = st.tabs(["📈 Market Share Weighted","🔍Average, absolute and market share weighted","📕 Final Equity plot","🎲 Equity Analysis"])
+
+
                   with tab2:
                            #chosing the sheet name 
                            column_1,column_2,column_3,_ = st.columns(4)
