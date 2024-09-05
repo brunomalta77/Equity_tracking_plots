@@ -1559,59 +1559,59 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
         df_pre_var = df[(df.created_time >= period_pre) & (df.created_time <= period_start)]
         df_all = df[(df.created_time >= period_pre) & (df.created_time <= period_end)]
                 
-        df_awareness_channels = pd.DataFrame(columns=["Sub-pillars","t_statistic","p-value","channel"])
-        df_awareness_channels_show = pd.DataFrame(columns=["Sub-pillars","t_statistic","p-value","channel"])
+        #df_awareness_channels = pd.DataFrame(columns=["Sub-pillars","t_statistic","p-value","channel"])
+        #df_awareness_channels_show = pd.DataFrame(columns=["Sub-pillars","t_statistic","p-value","channel"])
 
-        rows=[]
-        rows_show = []
-        channels = df['message_type'].unique()
-        for channel in channels:
-            channel_pre_var_data = df_pre_var[df_pre_var['message_type'] == channel]
-            channel_var_data = df_var[df_var['message_type'] == channel]
+        #rows=[]
+        #rows_show = []
+        #channels = df['message_type'].unique()
+        #for channel in channels:
+            #channel_pre_var_data = df_pre_var[df_pre_var['message_type'] == channel]
+            #channel_var_data = df_var[df_var['message_type'] == channel]
 
-            channel_t_stats = {}
-            for metric in sub_pillars_awareness:
-                if not channel_pre_var_data[metric].empty and not channel_var_data[metric].empty:
-                    if metric == "mentions":
+            #channel_t_stats = {}
+            #for metric in sub_pillars_awareness:
+                #if not channel_pre_var_data[metric].empty and not channel_var_data[metric].empty:
+                    #if metric == "mentions":
                         
-                        channel_pre_var_data =   (channel_pre_var_data.groupby(['Week Commencing', 'brand'])['mentions'].sum()/channel_pre_var_data.groupby(['Week Commencing'])['mentions'].sum()).reset_index().rename(columns={'mentions': 'eSoV'})
-                        channel_var_data = (channel_var_data.groupby(['Week Commencing', 'brand'])['mentions'].sum()/channel_var_data.groupby(['Week Commencing'])['mentions'].sum()).reset_index().rename(columns={'mentions': 'eSoV'}) 
+                        #channel_pre_var_data =   (channel_pre_var_data.groupby(['Week Commencing', 'brand'])['mentions'].sum()/channel_pre_var_data.groupby(['Week Commencing'])['mentions'].sum()).reset_index().rename(columns={'mentions': 'eSoV'})
+                        #channel_var_data = (channel_var_data.groupby(['Week Commencing', 'brand'])['mentions'].sum()/channel_var_data.groupby(['Week Commencing'])['mentions'].sum()).reset_index().rename(columns={'mentions': 'eSoV'}) 
                         
 
-                        mean_before = channel_pre_var_data.eSoV.mean()
-                        mean_during = channel_var_data.eSoV.mean()
+                        #mean_before = channel_pre_var_data.eSoV.mean()
+                        #mean_during = channel_var_data.eSoV.mean()
 
-                        difference_of_means = ((mean_during - mean_before) / mean_before) * 100
+                        #difference_of_means = ((mean_during - mean_before) / mean_before) * 100
 
 
 
-                    else:
+                    #else:
                         #st.write(channel_pre_var_data)
                         
-                        mean_before = channel_pre_var_data[metric].mean()
-                        mean_during = channel_var_data[metric].mean()
+                        #mean_before = channel_pre_var_data[metric].mean()
+                        #mean_during = channel_var_data[metric].mean()
 
-                        difference_of_means = ((mean_during - mean_before) / mean_before) * 100
+                        #difference_of_means = ((mean_during - mean_before) / mean_before) * 100
 
 
-                    t_statistic = 0
-                    if str(t_statistic) == "nan" or str(t_statistic) == "inf":
-                        pass
-                    else:
-                        channel_t_stats[metric] = (t_statistic, p_value)
-                        row = {"Sub-pillars":metric,"t_statistic":t_statistic,"p-value":p_value,"channel":channel,"difference of means":difference_of_means}
-                        row_show = {"Sub-pillars":metric,"t_statistic":t_statistic,"p-value":p_value,"channel":channel,"difference of means":difference_of_means} 
-                        rows.append(row)
-                        rows_show.append(row_show)
+                    #t_statistic = 0
+                    #if str(t_statistic) == "nan" or str(t_statistic) == "inf":
+                        #pass
+                    #else:
+                        #channel_t_stats[metric] = (t_statistic, p_value)
+                        #row = {"Sub-pillars":metric,"t_statistic":t_statistic,"p-value":p_value,"channel":channel,"difference of means":difference_of_means}
+                        #row_show = {"Sub-pillars":metric,"t_statistic":t_statistic,"p-value":p_value,"channel":channel,"difference of means":difference_of_means} 
+                        #rows.append(row)
+                        #rows_show.append(row_show)
                         
         
-        new_data = pd.DataFrame(rows)
-        new_data_show = pd.DataFrame(rows_show)
-        df_awareness_channels = pd.concat([df_awareness_channels,new_data],ignore_index=True)
-        df_awareness_channels_show = pd.concat([df_awareness_channels_show,new_data_show],ignore_index=True)
+        #new_data = pd.DataFrame(rows)
+        #new_data_show = pd.DataFrame(rows_show)
+        #df_awareness_channels = pd.concat([df_awareness_channels,new_data],ignore_index=True)
+        #df_awareness_channels_show = pd.concat([df_awareness_channels_show,new_data_show],ignore_index=True)
 
     
-        df_awareness_channels_show = df_awareness_channels_show.sort_values(by="difference of means",ascending=False).reset_index(drop=True)
+        #df_awareness_channels_show = df_awareness_channels_show.sort_values(by="difference of means",ascending=False).reset_index(drop=True)
 
         #df_awareness_channels_show["t_statistic"] = df_awareness_channels_show["t_statistic"].apply(change_format)
         #df_awareness_channels_show["p-value"] = df_awareness_channels_show["p-value"].apply(change_format)
