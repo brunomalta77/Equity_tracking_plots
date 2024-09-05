@@ -1275,8 +1275,10 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
 
 
 
-    df_var_show = df_var[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
-    st.dataframe(df_var_show,hide_index=True)
+    df_all_show = df_all[df_all.brand==brand]
+    st.dataframe(df_all_show[["message_type","permalink","earned_engagements","conversation_stream","created_time","followers","sender_screen_name","brand","review_source"]],hide_index=True)
+
+    
 
     
     # getting the mean of the metric in this case the followers, and comparing before and during the time. 
@@ -1737,7 +1739,9 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
         st.write(f"\n*The channel that has changed the most is **'{most_changed_channel}'**.*")
 
         
-        df_var_show = df_var[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
+        #filtered table. 
+        df_var_show = df_var[df_var.brand==brand]
+        df_var_show = df_var_show[["message_type","permalink","earned_engagements","conversation_stream","created_time","followers","sender_screen_name","brand","review_source"]]
         st.dataframe(df_var_show)
 
 
@@ -2086,7 +2090,8 @@ def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_star
         
         st.write(f"\n*The channel that has changed the most is **'{most_changed_channel}'**.*")
         
-        df_var_show = df_var[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
+        df_var_show = df_var[df_var.brand==brand]
+        df_var_show = df_var_show[["message_type","permalink","earned_engagements","conversation_stream","created_time","followers","sender_screen_name","brand","review_source"]]
         st.dataframe(df_var_show)
     
 
@@ -2334,6 +2339,8 @@ def main():
                                   st.write(year)
                                   # Assuming you want one column per key in brand_mapping
                                   num_columns = len(brand_mapping.keys())
+                                  value = int(100/len(brand_list))
+
                                   # Create the columns
                                   cols = st.columns(num_columns)
                                   if year == "2021":
