@@ -1257,8 +1257,9 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
     
     st.write(f"\nThe channel that has changed the most is **'{most_changed_channel}'**")
 
-
-    st.dataframe(df_all[df_all.message_type == most_changed_channel],hide_index=True)
+   
+    df_all_show = df_all[df_all.brand==brad]
+    st.dataframe(df_all_show[df_all_show.message_type == most_changed_channel],hide_index=True)
 
     
     # getting the mean of the metric in this case the followers, and comparing before and during the time. 
@@ -1720,9 +1721,7 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
         
 
         #filtered table. 
-        df_var_show = df_var[df_var.message_type == most_changed_channel]
-
-
+        df_var_show = df_var[df_var.brand==brand]
         df_var_show = df_var_show[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
         st.dataframe(df_var_show)
 
@@ -2071,7 +2070,7 @@ def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_star
         
 
         #filtered table. 
-        df_var_show = df_var[df_var.message_type == most_changed_channel]
+        df_var_show = df_var[df_var.brand==brand]
 
 
         df_var_show = df_var_show[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
@@ -2609,7 +2608,9 @@ def main():
          
                          # Calculate the previous period using weeks
                          period_pre = period_start - timedelta(weeks=difference_in_weeks)
-         
+
+                         st.write(f"before period:  {period_pre.date()}")
+
                      with column_3:
                          
                          metrics_to_see = st.multiselect("Metric to analyse",["Awareness","Saliency","Affinity"])
