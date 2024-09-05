@@ -1419,9 +1419,9 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
 
     def highlight_row_during(x):
         if x.name == 0:  # Highlight the row with index 2
-            return ['background-color: blue'] * len(x)
+            return ['background-color: #FFD580'] * len(x)
         else:
-            return ['background-color:#FFD580'] * len(x)
+            return ['background-color:#FF9999'] * len(x)
 
     def change_format(x):
         x = f"{x:.1f}"
