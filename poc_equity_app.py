@@ -2227,11 +2227,11 @@ def main():
                             
                            if market =="germany":
                                         if category == "Vape":
-                                            weights_values_for_average_2021 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
-                                            weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
-                                            weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}
-                                            weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0,"GLO":0,"IQOS":0}       
-                                            brand_list = ["ELF BAR","GEEK BAR","STLTH","VUSE","BLU","GLO","IQOS"]
+                                            weights_values_for_average_2021 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0}
+                                            weights_values_for_average_2022 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0}
+                                            weights_values_for_average_2023 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0}
+                                            weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0,"STLTH": 0, "VUSE": 0,"BLU":0}       
+                                            brand_list = ["ELF BAR","GEEK BAR","STLTH","VUSE","BLU"]
                                           
                                         if category == "THP":
                                             weights_values_for_average_2021 = {"GLO":0,"IQOS":0}
