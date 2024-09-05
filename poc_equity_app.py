@@ -1884,7 +1884,7 @@ def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_star
 
 
 # _______________________________________________________ Not being used ______________________________________________________
-    if most_changed_metric == "AS_Search_Index" or most_changed_metric == "AS_Brand_Centrality":
+    if most_changed_metric == "AS Search Index" or most_changed_metric == "AS Brand Centrality":
         pass
     else:
         sub_pillars_options = {'AS Average Engagement':['earned_engagements'], 'AS Usage SoV':['Usage'],'AS Trial Sov':['Trial or Experimentation']}
