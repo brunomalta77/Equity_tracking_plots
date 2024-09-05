@@ -1476,8 +1476,8 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
         mean_before =  str(round(data_brand_pre_var[inv_metric].mean(),2))
         mean_after = str(round(data_brand_var[inv_metric].mean(),2))
         
-        t_statistic, p_value = ttest_ind(data_brand_pre_var[inv_metric], data_brand_var[inv_metric])
-        t_stats[inv_metric] = (t_statistic, p_value)
+        #t_statistic, p_value = ttest_ind(data_brand_pre_var[inv_metric], data_brand_var[inv_metric])
+        #t_stats[inv_metric] = (t_statistic, p_value)
         
         test_len_before = len(data_brand_pre_var)
         test_len_during = len(data_brand_var)
@@ -1820,8 +1820,8 @@ def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_star
         mean_before =  str(round(data_brand_pre_var[inv_metric].mean(),2))
         mean_after = str(round(data_brand_var[inv_metric].mean(),2))
         
-        t_statistic, p_value = ttest_ind(data_brand_pre_var[inv_metric], data_brand_var[inv_metric])
-        t_stats[inv_metric] = (t_statistic, p_value)
+        #t_statistic, p_value = ttest_ind(data_brand_pre_var[inv_metric], data_brand_var[inv_metric])
+        #t_stats[inv_metric] = (t_statistic, p_value)
         
         test_len_before = len(data_brand_pre_var)
         test_len_during = len(data_brand_var)
