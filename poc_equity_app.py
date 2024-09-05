@@ -2238,7 +2238,7 @@ def main():
                                             weights_values_for_average_2022 = {"GLO":0,"IQOS":0}
                                             weights_values_for_average_2023 = {"GLO":0,"IQOS":0}
                                             weights_values_for_average_2024 = {"GLO":0,"IQOS":0}       
-                                            brand_list = ["ELF BAR","GEEK BAR","STLTH","VUSE","BLU","GLO","IQOS"]
+                                            brand_list = ["GLO","IQOS"]
                                         master_parquet = pd.read_parquet(r"germany_data_tagged_2024_08_22_10_14_58_AM.parquet")
                                         master_parquet["brand"] = master_parquet.brand.replace(brand_mapping)
                                         master_parquet['Week Commencing'] = master_parquet['created_time'].apply(lambda x: (x - timedelta(days=x.weekday())).replace(hour=0, minute=0, second=0, microsecond=0))
