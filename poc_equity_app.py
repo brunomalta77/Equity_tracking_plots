@@ -95,6 +95,30 @@ smoothening_weeks_list = ['Total Equity','Awareness','Saliency','eSoV', 'Reach',
 
 
 
+#Equity Analysis
+aff_metrics_analysis = ['brand_prest_lov_brand_love', 'brand_prest_lov_quality',
+       'brand_prest_lov_design_innovation', 'brand_prest_lov_customisation',
+       'motivation_change_less_harm_health',
+       'motivation_change_health_performance',
+       'motivation_change_smell_around_me',
+       'motivation_change_greater_freedom',
+       'cons_exp_taste_flavor', 'cons_exp_smell',
+       'cons_exp_nicotine_satisfaction', 'cons_exp_consumption_duration',
+       'cons_exp_relaxation', 'cons_exp_feeling_cool',
+       'cons_exp_shared_moments', 'supp_exp_availability',
+       'supp_exp_buying_experience', 'supp_exp_customer_service',
+       'supp_exp_battery_life', 'supp_exp_convenience', 'vfm_consumable_vfm',
+       'vfm_device_vfm', 'vfm_promo', 'brand_prestige_love_all',
+       'motivation_change_all', 'jour_ngp_brands_all',
+       'consumption_experience_all', 'supporting_experience_all', 'vfm_all',
+       'affinity_all']
+
+
+aff_metrics_pillars_analysis = ['brand_prest_lov','motivation_change','cons_exp','supp_exp','vfm']
+
+aw_metrics = ['AF_Brand_Love','AF_Motivation_for_Change','AF_Consumption_Experience','AF_Supporting_Experience','AF_Value_for_Money']
+
+
 #--------------------------------------------------------------------------------------// Aesthetic Global Variables // -------------------------------------------------------------------------
 
 #page config
@@ -797,6 +821,1327 @@ def smoothening_weeks(df,variables,affinity_to_user,framework_to_user,original_c
 
 
 
+def check_affinity_high_level(eq, df, brand,time_period, period_pre, period_start, period_end,aw_metrics):
+    st.header("High Level Affinity")
+    
+    def highlight_row_before(x):
+        if x.name == 0:  # Highlight the row with index 2
+            return ['background-color: blue'] * len(x)
+        else:
+            return [''] * len(x)
+
+    def highlight_row_during(x):
+        if x.name == 0:  # Highlight the row with index 2
+            return ['background-color: blue'] * len(x)
+        else:
+            return ['background-color: darkred'] * len(x)
+
+    def change_format(x):
+        x = f"{x:.1f}"
+        return x 
+
+
+    #creating brands
+    brands = [x for x in eq.brand.unique()]
+
+    eq = eq[eq.time_period==time_period]
+
+    
+    eq = eq.rename(columns=user_to_equity)
+    
+
+    # Check if the metric is in awareness metrics
+    aw_metrics = aw_metrics
+
+    
+    # Filter data accordingly with the data time periods
+    df_var = eq[(eq.time >= period_start) & (eq.time <= period_end)]
+    df_pre_var = eq[(eq.time >= period_pre) & (eq.time <= period_start)]
+    df_all = eq[(eq.time >= period_pre) & (eq.time <= period_end)]
+ 
+    # Initialize Plotly figure
+    fig = go.Figure()
+
+    # Plot each brand's metric over time
+    max_values = []
+    df_all_time = df_all[df_all.time_period == time_period]
+    #df_brand = df_all_time[df_all_time['brand'] == brand]
+    
+    # sorted by time
+    df_all_time = df_all_time.sort_values(by="time")
+    df_all_time = df_all_time[df_all_time.brand ==brand]
+    
+    
+    df_brand = df_all_time
+    for inv_metric in aw_metrics:
+        max_values.append(df_brand[inv_metric].max())
+        fig.add_trace(go.Scatter(x=df_brand["time"], y=df_brand[inv_metric], mode='lines', name=inv_metric))
+
+    # Add vertical lines for spike start and end
+    #fig.add_shape(type="line", x0=period_start, y0=0, x1=period_start, y1=max(max_values) + 5, line=dict(color="red", width=2, dash="dash"), name='Spike Start')
+    #fig.add_shape(type="line", x0=period_end, y0=0, x1=period_end, y1=max(max_values) + 5, line=dict(color="green", width=2, dash="dash"), name='Spike End')
+
+    # shaded version
+    # Adding a shaded region (shadow) to represent the spike period
+    fig.add_shape(type="rect",
+              x0=period_start, x1=period_end,
+              y0=0, y1=max(max_values) + 5,
+              fillcolor="rgba(255, 0, 0, 0.2)",  # Red color with transparency
+              line=dict(color="rgba(255, 0, 0, 0.0)"))  # No border
+    
+    # Update layout
+    fig.update_layout(
+        title=f'{brand} - Affinity ',
+        xaxis_title='Time Period',
+        yaxis_title='Scores',
+        hovermode='x unified'
+    )
+
+    # Show plot
+    st.plotly_chart(fig)
+    st.subheader("Wich high level affinity pillar changed the most")
+
+    #doing the t-test for each brand
+    rows_before=[]
+    rows_during = []
+    t_stats = {}
+    count=0
+    for inv_metric in aw_metrics:
+        data_brand_pre_var = df_pre_var[df_pre_var['brand'] == brand]
+        data_brand_var = df_var[df_var['brand'] == brand]
+
+        mean_before =  str(round(data_brand_pre_var[inv_metric].mean(),2))
+        mean_after = str(round(data_brand_var[inv_metric].mean(),2))
+        
+        t_statistic, p_value = ttest_ind(data_brand_pre_var[inv_metric], data_brand_var[inv_metric])
+        t_stats[inv_metric] = (t_statistic, p_value)
+        
+        test_len_before = len(data_brand_pre_var)
+        test_len_during = len(data_brand_var)
+
+        mean_before_int = round(data_brand_pre_var[inv_metric].mean(),2)
+        mean_after_int = round(data_brand_var[inv_metric].mean(),2)
+
+        difference_of_means = round(abs(((mean_after_int - mean_before_int) / mean_before_int) * 100),1)
+
+        if math.isinf(difference_of_means):
+            difference_of_means = 1
+
+        #st.write(f"{inv_metric}: t-statistic = {t_statistic}, p-value = {p_value}")
+        row_before = {"time period":"Before","metric":inv_metric,"mean":mean_before,"Size":test_len_before,"% diff":difference_of_means}
+        row_during = {"time period":"During","metric":inv_metric,"mean":mean_after,"Size":test_len_during,"% diff":difference_of_means}
+
+
+        rows_before.append(row_before)
+        rows_during.append(row_during)
+
+
+    column_1,column_2 = st.columns(2)
+    new_data_before = pd.DataFrame(rows_before)
+    new_data_during = pd.DataFrame(rows_during)
+
+
+    with column_1:
+        new_data_before = new_data_before.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+
+        new_data_before["% diff"] = new_data_before["% diff"].apply(change_format)
+
+        new_data_before = new_data_before.reset_index(drop=True)
+        
+        most_changed_metric = new_data_before["metric"].iloc[0]
+
+        new_data_before = new_data_before.style.apply(highlight_row_before, axis=1)
+
+        st.dataframe(new_data_before,hide_index=True)
+    
+    with column_2:
+        new_data_during = new_data_during.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+        
+        new_data_during["% diff"] = new_data_during["% diff"].apply(change_format)
+        #new_data_during["p-value"] = new_data_during["p-value"].apply(change_format)
+        #new_data_during["t-statistic"] = new_data_during["t-statistic"].apply(change_format)
+
+        new_data_during = new_data_during.reset_index(drop=True)
+
+        new_data_during = new_data_during.style.apply(highlight_row_during, axis=1)
+
+        st.dataframe(new_data_during,hide_index=True)
+
+
+    
+
+    st.write(f"\n*The metric that has changed the most is **'{most_changed_metric}'**.*")
+
+   
+
+    most_changed_metric = st.selectbox("Metric to study",[mt for mt in aw_metrics])
+    
+    if most_changed_metric == "AF_Brand_Love":
+        most_changed_metric = "AF_Brand_Prest_Lov"
+
+    if most_changed_metric == "AF_Motivation_for_Change":
+        most_changed_metric = "AF_motivation_change"
+
+    if most_changed_metric == "AF_Consumption_Experience":
+        most_changed_metric = "AF_cons_exp"
+
+    if most_changed_metric == "AF_Supporting_Experience":
+        most_changed_metric = "AF_supp_exp"
+
+    if most_changed_metric == "AF_Value_for_Money":
+        most_changed_metric = "AF_vfm"
+
+    return most_changed_metric
+
+
+#Affinity low level
+
+
+def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, brand, channel,brand_mapping):
+    st.subheader("Low level affinity")
+    
+
+    
+    def highlight_row_before(x):
+        if x.name == 0:  # Highlight the row with index 2
+            return ['background-color: blue'] * len(x)
+        else:
+            return [''] * len(x)
+
+    def highlight_row_during(x):
+        if x.name == 0:  # Highlight the row with index 2
+            return ['background-color: blue'] * len(x)
+        else:
+            return ['background-color: darkred'] * len(x)
+
+
+    def change_format(x):
+        x = f"{x:.1f}"
+        return x 
+
+
+    # Creating 'Week Commencing' column
+    df['Week Commencing'] = df['created_time'].apply(lambda x: (x - timedelta(days=x.weekday())).replace(hour=0, minute=0, second=0, microsecond=0))
+
+  
+
+    aff_metrics = aff_metrics_analysis
+
+    aff_metric_pillars = aff_metrics_pillars_analysis
+    
+    inv_metric = metric
+   
+    df["brand"] = df["brand"].replace(brand_mapping)
+
+    inv_brand = brand
+    if channel != None:
+        channel_filter = [channel]
+    else:
+        channel_filter =  ["None"]
+
+    period_pre = period_pre
+    period_start = period_start
+    period_end = period_end
+
+    if inv_metric in aff_metric_pillars:
+        inv_sub_metrics = [mt for mt in aff_metrics if inv_metric in mt]
+    elif inv_metric == 'framework_affinity':
+        inv_sub_metrics = aff_metrics
+
+    df_var = df[(df.brand == inv_brand) & (df.created_time >= period_start) & (df.created_time <= period_end)
+                & (~df.message_type.isin(channel_filter))]
+    df_pre_var = df[(df.brand == inv_brand) & (df.created_time >= period_pre) & (df.created_time <= period_start)
+                    & (~df.message_type.isin(channel_filter))]
+    df_all = df[(df.brand == inv_brand) & (df.created_time >= period_pre) & (df.created_time <= period_end)
+                & (~df.message_type.isin(channel_filter))]
+
+
+    
+    # Plotting sub-metrics over time
+    subm_df = pd.DataFrame(df_all.groupby(['Week Commencing'])[inv_sub_metrics].sum()).reset_index()
+
+    fig = go.Figure()
+    for mt in inv_sub_metrics:
+        fig.add_trace(go.Scatter(x=subm_df['Week Commencing'], y=subm_df[mt], mode='lines', name=mt))
+    
+    
+    # Add a shaded area between period_start and period_end
+    fig.add_shape(type="rect",
+              x0=period_start, x1=period_end,
+              y0=0, y1=1,  # The y-axis range should cover the whole plot; 'yref' will be 'paper' to cover the full height
+              xref="x", yref="paper",  # 'xref' set to "x" means the x-coordinates are in data space, 'yref' set to "paper" means y is relative to the plot (0 to 1)
+              fillcolor="rgba(255, 0, 0, 0.2)",  # Red color with transparency for the shaded area
+              line=dict(color="rgba(255, 0, 0, 0.0)"))  # No border line
+
+    # Update layout and show the plot
+    fig.update_layout(title='Sub-metrics Over Time (Positive sentiment)', 
+                  xaxis_title='Week Commencing', 
+                  yaxis_title='Scores', 
+                  legend_title='Metrics')
+
+       
+    st.plotly_chart(fig)
+    
+    
+
+    # Sentiment normalised score
+    plus_benefits_scores = df_all[df_all['sentiment'].isin(['Positive', "Neutral"])].groupby(['Week Commencing'])[inv_sub_metrics].apply(lambda x: x.astype(int).sum())
+    for column in plus_benefits_scores:
+        new_name = "Plus_" + str(column)
+        plus_benefits_scores = plus_benefits_scores.rename(columns={column: new_name})
+    minus_benefits_scores = df_all[df_all['sentiment'].isin(['Negative'])].groupby(['Week Commencing'])[inv_sub_metrics].apply(lambda x: x.astype(int).sum())
+    for column in minus_benefits_scores:
+        new_name = "Minus_" + str(column)
+        minus_benefits_scores = minus_benefits_scores.rename(columns={column: new_name})
+    benefits_scores = pd.concat([plus_benefits_scores, minus_benefits_scores], axis=1).fillna(0)
+    for benefit in inv_sub_metrics:
+        benefits_scores["Net_" + str(benefit)] = benefits_scores["Plus_" + str(benefit)] - benefits_scores["Minus_" + str(benefit)]
+
+    benefits_scores = benefits_scores[[x for x in benefits_scores if "Net_" in x]]
+
+    fig = go.Figure()
+    for mt in benefits_scores.columns:
+        fig.add_trace(go.Scatter(x=benefits_scores.index, y=benefits_scores[mt], mode='lines', name=mt))
+    #fig.add_vline(x=datetime.strptime(period_start, '%Y-%m-%d'), line=dict(color='red', dash='dash'), name='Spike Start')
+    #fig.add_vline(x=datetime.strptime(period_end, '%Y-%m-%d'), line=dict(color='green', dash='dash'), name='Spike End')
+    #fig.update_layout(title='Sentiment Normalised Sub-metrics Over Time', xaxis_title='Week Commencing', yaxis_title='Scores', legend_title='Metrics')
+    #fig.show()
+    
+     # Add a shaded area between period_start and period_end
+    fig.add_shape(type="rect",
+              x0=period_start, x1=period_end,
+              y0=0, y1=1,  # The y-axis range should cover the whole plot; 'yref' will be 'paper' to cover the full height
+              xref="x", yref="paper",  # 'xref' set to "x" means the x-coordinates are in data space, 'yref' set to "paper" means y is relative to the plot (0 to 1)
+              fillcolor="rgba(255, 0, 0, 0.2)",  # Red color with transparency for the shaded area
+              line=dict(color="rgba(255, 0, 0, 0.0)"))  # No border line
+
+    # Update layout and show the plot
+    fig.update_layout(title='Sentiment Normalised Sub-metrics Over Time ( (Positive + Neutral) - negative', 
+                  xaxis_title='Time Commencing', 
+                  yaxis_title='Scores', 
+                  legend_title='Metrics')
+    st.plotly_chart(fig)
+
+
+
+    # Identify the sub-metric that has changed the most
+    st.subheader("Wich sub-metric changed the most")
+    rows_before=[]
+    rows_during = []
+    t_stats = {}
+
+    for metric in inv_sub_metrics:
+        data_brand_pre_var = df_pre_var[df_pre_var['brand'] == brand]
+        data_brand_var = df_var[df_var['brand'] == brand]
+
+        mean_before =  str(round(data_brand_pre_var[metric].mean(),2))
+        mean_after = str(round(data_brand_var[metric].mean(),2))
+        
+        test_len_before = len(data_brand_pre_var)
+        test_len_during = len(data_brand_var)
+
+        mean_before_int = round(data_brand_pre_var[metric].mean(),2)
+        mean_after_int = round(data_brand_var[metric].mean(),2)
+
+        difference_of_means = round(abs(((mean_after_int - mean_before_int) / mean_before_int) * 100),1)
+
+
+        row_before = {"time period":"before","metric":metric,"size":test_len_before,"% diff":difference_of_means}
+        row_during = {"time period":"during","metric":metric,"size":test_len_during,"% diff":difference_of_means}
+
+
+        rows_before.append(row_before)
+        rows_during.append(row_during)
+
+
+    column_1,column_2 = st.columns(2)
+    
+    #Before column
+    new_data_before = pd.DataFrame(rows_before)
+    new_data_during = pd.DataFrame(rows_during)
+    
+    with column_1:
+        new_data_before = new_data_before.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+
+        new_data_before["% diff"] = new_data_before["% diff"].apply(change_format)
+
+        new_data_before = new_data_before.reset_index(drop=True)
+        most_changed_sub_metric = new_data_before["metric"].iloc[0]
+        new_data_before = new_data_before.style.apply(highlight_row_before, axis=1)
+
+        st.dataframe(new_data_before,hide_index=True)
+    
+    with column_2:
+
+        new_data_during = new_data_during.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+
+        
+        new_data_during["% diff"] = new_data_during["% diff"].apply(change_format)
+
+
+        new_data_during = new_data_during.reset_index(drop=True)
+
+        new_data_during = new_data_during.style.apply(highlight_row_during, axis=1)
+
+        st.dataframe(new_data_during,hide_index=True)
+
+    
+    st.write(f"\nThe sub-metric that has changed the most is **'{most_changed_sub_metric}'** ")
+
+    most_changed_sub_metric = st.selectbox("Metric to study",[mt for mt in inv_sub_metrics])
+
+    # Analyzing which channel is causing the spike
+
+    st.subheader("Wich channel has seen the highest change")
+
+    rows_before=[]
+    rows_during = []
+
+    channels = df['message_type'].unique()
+    for channel in channels:
+        channel_pre_var_data = df_pre_var[df_pre_var['message_type'] == channel]
+        channel_var_data = df_var[df_var['message_type'] == channel]
+
+
+        #for metric in inv_sub_metrics:
+        metric = most_changed_sub_metric
+        data_brand_pre_var = channel_pre_var_data[channel_pre_var_data['brand'] == brand]
+        data_brand_var = channel_var_data[channel_var_data['brand'] == brand]
+
+        
+        len_before = len(channel_pre_var_data)
+        len_during = len(channel_var_data)
+
+    
+        mean_before_int = round(data_brand_pre_var[metric].mean(),2)
+        mean_after_int = round(data_brand_var[metric].mean(),2)
+
+
+        difference_of_means = round(abs(((mean_after_int - mean_before_int) / mean_before_int) * 100),1)
+        
+
+        if math.isinf(difference_of_means):
+            difference_of_means = 1
+
+    
+        row_before = {"time period":"before","channel":channel,"number of mentions":len_before,"% diff":difference_of_means}
+        row_during =  {"time period":"during","channel":channel,"number of mentions":len_during,"% diff":difference_of_means}
+
+        rows_before.append(row_before)
+        rows_during.append(row_during)
+
+    column_1,column_2 = st.columns(2)
+
+
+    with column_1:
+        df_mean_before_channel = pd.DataFrame(rows_before)
+        df_mean_before_channel = df_mean_before_channel.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+        #df_mean_before_channel["t-statistic"] = df_mean_before_channel["t-statistic"].apply(change_format)
+        #df_mean_before_channel["p-value"] = df_mean_before_channel["p-value"].apply(change_format)
+        df_mean_before_channel["% diff"] = df_mean_before_channel["% diff"].apply(change_format)
+        most_changed_channel = df_mean_before_channel.channel.iloc[0]
+        #Aggregate
+        df_mean_before_channel = df_mean_before_channel.style.apply(highlight_row_before,axis=1)
+        st.dataframe(df_mean_before_channel,hide_index=True)
+
+    with column_2:
+        df_mean_during_channel = pd.DataFrame(rows_during)
+        df_mean_during_channel = df_mean_during_channel.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+        #df_mean_during_channel["t-statistic"] = df_mean_during_channel["t-statistic"].apply(change_format)
+        #df_mean_during_channel["p-value"] = df_mean_during_channel["p-value"].apply(change_format)
+        df_mean_during_channel["% diff"] = df_mean_during_channel["% diff"].apply(change_format)
+
+        #Aggregate
+        df_mean_during_channel = df_mean_during_channel.style.apply(highlight_row_during,axis=1)
+        st.dataframe(df_mean_during_channel,hide_index=True)
+
+    
+    st.write(f"\nThe channel that has changed the most is **'{most_changed_channel}'**")
+
+
+    st.dataframe(df_all[df_all.message_type == most_changed_channel],hide_index=True)
+
+    
+    # getting the mean of the metric in this case the followers, and comparing before and during the time. 
+    
+    st.header("Sentiment Analysis")
+
+    st.subheader(f"How has sentiment impacted the affinity metric")
+     
+
+    x_metric = most_changed_sub_metric
+    try:
+        x_metric = st.selectbox("select sub-metric",[mt for mt in inv_sub_metrics])
+        st.write(f"Analysing for **{x_metric}**")
+
+        #Positive + Neutral
+        rows_before_pos= []
+        rows_during_pos = []
+
+        rows_before_neu= []
+        rows_during_neu = []
+
+        rows_before_neg= []
+        rows_during_neg= []
+        
+        #Positive
+        df_counting_pre_positive = df_pre_var[(df_pre_var[x_metric] == 1)  &  (df_pre_var.sentiment == "Positive") ]
+        df_counting_during_positive = df_var[(df_var[x_metric] == 1)  & (df_var.sentiment == "Positive")]
+        
+        len_positive_pre = len(df_counting_pre_positive)
+        len_positive_pos= len(df_counting_during_positive)
+
+        mean_positive_pre = round(len_positive_pre / len(df_pre_var),2)
+        mean_positive_during = round(len_positive_pos / len(df_var),2)
+
+        t_statistic, p_value = ttest_ind(mean_positive_pre, mean_positive_during)
+
+
+        row_before = {"time period":"before","sub metric":x_metric,"sentiment":"positive","number of mentions":len_positive_pre}
+        row_during = {"time period":"during","sub metric":x_metric,"sentiment":"positive","number of mentions":len_positive_pos}
+
+
+        rows_before_pos.append(row_before)
+        rows_during_pos.append(row_during)
+
+
+        #Neutral 
+        df_counting_pre_neutral = df_pre_var[(df_pre_var[x_metric] == 1)  &  (df_pre_var.sentiment == "Neutral") ]
+        df_counting_during_neutral = df_var[(df_var[x_metric] == 1)  & (df_var.sentiment == "Neutral")]
+        
+        len_neutral_pre = len(df_counting_pre_neutral)
+        len_neutral_pos= len(df_counting_during_neutral)
+
+        mean_neutral_pre = round(len_neutral_pre / len(df_pre_var),2)
+        mean_neutral_during = round(len_neutral_pos / len(df_var),2)
+
+        t_statistic, p_value = ttest_ind(mean_neutral_pre, mean_neutral_during)
+
+
+        row_before = {"time period":"before","sub metric":x_metric,"sentiment":"neutral","number of mentions":len_neutral_pre}
+        row_during = {"time period":"during","sub metric":x_metric,"sentiment":"neutral","number of mentions":len_neutral_pos}
+
+        rows_before_neu.append(row_before)
+        rows_during_neu.append(row_during)
+
+        #Negative
+        df_counting_pre_negative = df_pre_var[(df_pre_var[x_metric] == 1)  &  (df_pre_var.sentiment == "Negative") ]
+        df_counting_during_negative = df_var[(df_var[x_metric] == 1)  & (df_var.sentiment == "Negative")]
+        
+
+        len_negative_pre = len(df_counting_pre_negative)
+        len_negative_pos= len(df_counting_during_negative)
+
+
+        mean_negative_pre = round(len_negative_pre / len(df_pre_var),2)
+        mean_negative_during = round(len_negative_pos / len(df_var),2)
+
+        t_statistic, p_value = ttest_ind(mean_negative_pre, mean_negative_during)
+
+        row_before = {"time period":"before","sub metric":x_metric,"sentiment":"negative","number of mentions":len_negative_pre}
+        row_during = {"time period":"during","sub metric":x_metric,"sentiment":"negative","number of mentions":len_negative_pos}
+
+        rows_before_neg.append(row_before)
+        rows_during_neg.append(row_during)
+        
+
+    except:
+        st.warning("Not able to calculate the sentiment analysis, maybe due to several reasons - bad choice of the periods, not enough data... - ")
+    
+
+    df_all = pd.DataFrame(columns=["time period","sub metric","sentiment","number of mentions"])
+
+
+
+
+    column_1,column_2 = st.columns(2)
+
+
+    #Before column
+
+    new_data_before_positive = pd.DataFrame(rows_before_pos)
+    new_data_during_positive = pd.DataFrame(rows_during_pos)
+    
+    new_data_before_neutral = pd.DataFrame(rows_before_neu)
+    new_data_during_neutral = pd.DataFrame(rows_during_neu)
+    
+    new_data_before_negative = pd.DataFrame(rows_before_neg)
+    new_data_during_negative = pd.DataFrame(rows_during_neg)
+
+
+    df_before_all = pd.concat([df_all,new_data_before_positive,new_data_before_neutral,new_data_before_negative],axis=0)
+    df_during_all = pd.concat([df_all,new_data_during_positive,new_data_during_neutral,new_data_during_negative],axis=0)
+
+
+    with column_1:
+        st.dataframe(df_before_all,hide_index=True)
+    with column_2:
+        st.dataframe(df_during_all,hide_index=True)
+
+
+
+# Awareness
+def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_start, period_end):
+    st.header("Awareness")
+
+
+    eq = eq[eq.time_period==time_period]
+
+
+
+    st.subheader("Wich sub-metric changed the most in that period of time ?")
+
+
+    def highlight_row_before(x):
+        if x.name == 0:  # Highlight the row with index 2
+            return ['background-color: blue'] * len(x)
+        else:
+            return [''] * len(x)
+
+    def highlight_row_during(x):
+        if x.name == 0:  # Highlight the row with index 2
+            return ['background-color: blue'] * len(x)
+        else:
+            return ['background-color: darkred'] * len(x)
+
+    def change_format(x):
+        x = f"{x:.1f}"
+        return x 
+
+    #creating brands
+    brands = [x for x in eq.brand.unique()]
+    
+    
+    # Check if the metric is in awareness metrics
+    aw_metrics = ['AA eSoV', 'AA Reach', 'AA Brand Breadth']
+
+    aw_renaming = {"eSoV" : "AA eSoV", "Reach":"AA Reach","Brand Breadth":"AA Brand Breadth"}
+
+    eq.rename(columns=aw_renaming,inplace=True)
+
+    # Filter data according to time periods
+    df_var = eq[(eq.time >= period_start) & (eq.time < period_end)]
+    df_pre_var = eq[(eq.time >= period_pre) & (eq.time < period_start)]
+    df_all = eq[(eq.time >= period_pre) & (eq.time <= period_end)]
+
+    # Initialize Plotly figure
+    fig = go.Figure()
+
+    # Plot each brand's metric over time
+    max_values = []
+    df_all_time = df_all[df_all.time_period == time_period]
+    df_brand = df_all_time[df_all_time['brand'] == brand]
+    
+    
+    for inv_metric in aw_metrics:
+        max_values.append(df_brand[inv_metric].max())
+        fig.add_trace(go.Scatter(x=df_brand["time"], y=df_brand[inv_metric], mode='lines', name=inv_metric))
+
+
+    fig.add_shape(
+    type="rect",
+    x0=period_start,
+    y0=0,
+    x1=period_end,
+    y1=max(max_values) + 5,
+    fillcolor="red",  # You can choose any color you like
+    opacity=0.3,  # Adjust the opacity as needed
+    line=dict(width=0),  # No border line for the shaded area
+    layer="below"  # Place the shaded area below other shapes/lines
+    )
+
+
+
+    # Update layout
+    fig.update_layout(
+        title=f'{brand} Awareness ',
+        xaxis_title='Time Period',
+        yaxis_title='Scores',
+        hovermode='x unified'
+    )
+
+
+    # Show plot
+    st.plotly_chart(fig)
+
+    
+    #doing the t-test for each metric
+    rows_before=[]
+    rows_during = []
+    t_stats = {}
+    for inv_metric in aw_metrics:
+        data_brand_pre_var = df_pre_var[df_pre_var['brand'] == brand]
+        data_brand_var = df_var[df_var['brand'] == brand]
+
+        mean_before =  str(round(data_brand_pre_var[inv_metric].mean(),2))
+        mean_after = str(round(data_brand_var[inv_metric].mean(),2))
+        
+        t_statistic, p_value = ttest_ind(data_brand_pre_var[inv_metric], data_brand_var[inv_metric])
+        t_stats[inv_metric] = (t_statistic, p_value)
+        
+        test_len_before = len(data_brand_pre_var)
+        test_len_during = len(data_brand_var)
+
+        mean_before_int = round(data_brand_pre_var[inv_metric].mean(),2)
+        mean_after_int = round(data_brand_var[inv_metric].mean(),2)
+
+        difference_of_means = round(abs(((mean_after_int - mean_before_int) / mean_before_int) * 100),1)
+
+        if math.isinf(difference_of_means):
+            difference_of_means = 1
+
+
+        #st.write(f"{inv_metric}: t-statistic = {t_statistic}, p-value = {p_value}")
+        row_before = {"time period":"Before","metric":inv_metric,"mean":mean_before,"Size":test_len_before,"% diff":difference_of_means}
+        row_during = {"time period":"During","metric":inv_metric,"mean":mean_after,"Size":test_len_during,"% diff":difference_of_means}
+
+
+        rows_before.append(row_before)
+        rows_during.append(row_during)
+
+
+
+    column_1,column_2 = st.columns(2)
+
+
+    #Before column
+
+    new_data_before = pd.DataFrame(rows_before)
+    new_data_during = pd.DataFrame(rows_during)
+    
+    with column_1:
+        new_data_before = new_data_before.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+
+        new_data_before["% diff"] = new_data_before["% diff"].apply(change_format)
+
+        new_data_before = new_data_before.reset_index(drop=True)
+        
+        most_changed_metric = new_data_before["metric"].iloc[0]
+
+        new_data_before = new_data_before.style.apply(highlight_row_before, axis=1)
+
+        st.dataframe(new_data_before,hide_index=True)
+    
+    with column_2:
+        new_data_during = new_data_during.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+        
+        new_data_during["% diff"] = new_data_during["% diff"].apply(change_format)
+        #new_data_during["p-value"] = new_data_during["p-value"].apply(change_format)
+        #new_data_during["t-statistic"] = new_data_during["t-statistic"].apply(change_format)
+
+        new_data_during = new_data_during.reset_index(drop=True)
+
+        new_data_during = new_data_during.style.apply(highlight_row_during, axis=1)
+
+        st.dataframe(new_data_during,hide_index=True)
+
+
+    
+
+    st.write(f"\n*The metric that has changed the most is **'{most_changed_metric}'**.*")
+
+  
+    # _____________________________________________________ Not being used ________________________________________________
+
+    # Analyzing which channel is causing the spike
+
+    sub_pillars_options = {'AA eSoV':['mentions'], 'AA Reach':['followers']}
+    
+    if most_changed_metric == "AA Brand Breadth":
+        pass
+    else:
+        sub_pillars_awareness = sub_pillars_options[most_changed_metric]
+               
+
+        df = df
+        # Filter data according to time periods
+        df_var = df[(df.created_time >= period_start) & (df.created_time <= period_end)]
+        df_pre_var = df[(df.created_time >= period_pre) & (df.created_time <= period_start)]
+        df_all = df[(df.created_time >= period_pre) & (df.created_time <= period_end)]
+                
+        df_awareness_channels = pd.DataFrame(columns=["Sub-pillars","t_statistic","p-value","channel"])
+        df_awareness_channels_show = pd.DataFrame(columns=["Sub-pillars","t_statistic","p-value","channel"])
+
+        rows=[]
+        rows_show = []
+        channels = df['message_type'].unique()
+        for channel in channels:
+            channel_pre_var_data = df_pre_var[df_pre_var['message_type'] == channel]
+            channel_var_data = df_var[df_var['message_type'] == channel]
+
+            channel_t_stats = {}
+            for metric in sub_pillars_awareness:
+                if not channel_pre_var_data[metric].empty and not channel_var_data[metric].empty:
+                    if metric == "mentions":
+                        
+                        channel_pre_var_data =   (channel_pre_var_data.groupby(['Week Commencing', 'brand'])['mentions'].sum()/channel_pre_var_data.groupby(['Week Commencing'])['mentions'].sum()).reset_index().rename(columns={'mentions': 'eSoV'})
+                        channel_var_data = (channel_var_data.groupby(['Week Commencing', 'brand'])['mentions'].sum()/channel_var_data.groupby(['Week Commencing'])['mentions'].sum()).reset_index().rename(columns={'mentions': 'eSoV'}) 
+                        
+
+                        mean_before = channel_pre_var_data.eSoV.mean()
+                        mean_during = channel_var_data.eSoV.mean()
+
+                        difference_of_means = ((mean_during - mean_before) / mean_before) * 100
+
+
+
+                    else:
+                        #st.write(channel_pre_var_data)
+                        
+                        mean_before = channel_pre_var_data[metric].mean()
+                        mean_during = channel_var_data[metric].mean()
+
+                        difference_of_means = ((mean_during - mean_before) / mean_before) * 100
+
+
+                    if str(t_statistic) == "nan" or str(t_statistic) == "inf":
+                        pass
+                    else:
+                        channel_t_stats[metric] = (t_statistic, p_value)
+                        row = {"Sub-pillars":metric,"t_statistic":t_statistic,"p-value":p_value,"channel":channel,"difference of means":difference_of_means}
+                        row_show = {"Sub-pillars":metric,"t_statistic":t_statistic,"p-value":p_value,"channel":channel,"difference of means":difference_of_means} 
+                        rows.append(row)
+                        rows_show.append(row_show)
+                        
+        
+        new_data = pd.DataFrame(rows)
+        new_data_show = pd.DataFrame(rows_show)
+        df_awareness_channels = pd.concat([df_awareness_channels,new_data],ignore_index=True)
+        df_awareness_channels_show = pd.concat([df_awareness_channels_show,new_data_show],ignore_index=True)
+
+    
+        df_awareness_channels_show = df_awareness_channels_show.sort_values(by="difference of means",ascending=False).reset_index(drop=True)
+
+        #df_awareness_channels_show["t_statistic"] = df_awareness_channels_show["t_statistic"].apply(change_format)
+        #df_awareness_channels_show["p-value"] = df_awareness_channels_show["p-value"].apply(change_format)
+
+        # st.write(df_awareness_channels_show)
+        # _____________________________________________________ Not being used ________________________________________________
+
+
+        st.subheader("Wich channel has seen the highest change?")
+
+
+        # getting the absolute values
+        df_awareness_channels["t_statistic"] = abs(df_awareness_channels["t_statistic"])
+  
+        if most_changed_metric == "AA eSoV":
+            column_name = "mentions"
+        else:
+            column_name = "followers"
+        
+
+        rows_before = []
+        rows_during = []
+        for channel in channels:
+            df_pre_var_channel = df_pre_var[df_pre_var["message_type"] == channel ]
+            df_var_channel = df_var[df_var["message_type"] == channel ]
+            
+            if sub_pillars_awareness[0] == "mentions":
+
+                df_pre_var_channel = (df_pre_var_channel.groupby(['Week Commencing', 'brand'])['mentions'].sum()/df_pre_var_channel.groupby(['Week Commencing'])['mentions'].sum()).reset_index().rename(columns={'mentions': 'eSoV'})
+                df_var_channel = (df_var_channel.groupby(['Week Commencing', 'brand'])['mentions'].sum()/df_var_channel.groupby(['Week Commencing'])['mentions'].sum()).reset_index().rename(columns={'mentions': 'eSoV'}) 
+        
+
+                len_before = len(df_pre_var_channel)
+                len_during = len(df_var_channel)
+
+                main_metric_before = int(df_pre_var_channel.eSoV.sum())
+                main_metric_during = int(df_var_channel.eSoV.sum())
+
+                mean_before = str(round(df_pre_var_channel.eSoV.mean(),1))
+                mean_after = str(round(df_var_channel.eSoV.mean(),1))
+
+                mean_before_int = round(df_pre_var_channel.eSoV.mean(),1)
+                mean_after_int = round(df_var_channel.eSoV.mean(),1)
+
+
+                difference_of_means = round(abs(((mean_after_int - mean_before_int) / mean_before_int) * 100),1)
+                if math.isinf(difference_of_means):
+                    difference_of_means = 1
+
+
+            else:
+
+                len_before = len(df_pre_var_channel)
+                len_during = len(df_var_channel)
+
+                main_metric_before = int(df_pre_var_channel[sub_pillars_awareness[0]].sum())
+                main_metric_during = int(df_var_channel[sub_pillars_awareness[0]].sum())
+
+
+                mean_before_int = round(df_pre_var_channel[sub_pillars_awareness[0]].mean(),2)
+                mean_after_int = round(df_var_channel[sub_pillars_awareness[0]].mean(),2)
+
+             
+                difference_of_means = round(abs(((mean_after_int - mean_before_int) / mean_before_int) * 100),1)
+                if math.isinf(difference_of_means):
+                    difference_of_means = 1
+            
+
+            row_before = {"time period":"before","channel":channel,"number of mentions":len_before,column_name:main_metric_before,"% diff":difference_of_means}
+            row_during = {"time period":"during","channel":channel,"number of mentions":len_during,column_name:main_metric_during,"% diff":difference_of_means}
+
+            rows_before.append(row_before)
+            rows_during.append(row_during)
+
+
+        column_1,column_2 = st.columns(2)
+
+
+        with column_1:
+            df_mean_before_channel = pd.DataFrame(rows_before)
+            df_mean_before_channel = df_mean_before_channel.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+            #df_mean_before_channel["t-statistic"] = df_mean_before_channel["t-statistic"].apply(change_format)
+            #df_mean_before_channel["p-value"] = df_mean_before_channel["p-value"].apply(change_format)
+            df_mean_before_channel["% diff"] = df_mean_before_channel["% diff"].apply(change_format)
+            most_changed_channel = df_mean_before_channel.channel.iloc[0]
+            #Aggregate
+            df_mean_before_channel = df_mean_before_channel.style.apply(highlight_row_before,axis=1)
+
+
+
+
+            st.dataframe(df_mean_before_channel,hide_index=True)
+
+        with column_2:
+            df_mean_during_channel = pd.DataFrame(rows_during)
+            df_mean_during_channel = df_mean_during_channel.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+            #df_mean_during_channel["t-statistic"] = df_mean_during_channel["t-statistic"].apply(change_format)
+            #df_mean_during_channel["p-value"] = df_mean_during_channel["p-value"].apply(change_format)
+            df_mean_during_channel["% diff"] = df_mean_during_channel["% diff"].apply(change_format)
+            #Aggregate
+            df_mean_during_channel = df_mean_during_channel.style.apply(highlight_row_during,axis=1)
+            st.dataframe(df_mean_during_channel,hide_index=True)
+
+        
+        st.write(f"\n*The channel that has changed the most is **'{most_changed_channel}'**.*")
+        
+
+        #filtered table. 
+        df_var_show = df_var[df_var.message_type == most_changed_channel]
+
+
+        df_var_show = df_var_show[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
+        st.dataframe(df_var_show)
+
+
+#Saliency 
+def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_start, period_end):
+    st.subheader("Saliency")
+
+
+    eq = eq[eq.time_period==time_period]
+
+
+    st.subheader("Wich sub-metric changed the most in that period of time ?")
+
+    def highlight_row_before(x):
+        if x.name == 0:  # Highlight the row with index 2
+            return ['background-color: blue'] * len(x)
+        else:
+            return [''] * len(x)
+
+    def highlight_row_during(x):
+        if x.name == 0:  # Highlight the row with index 2
+            return ['background-color: blue'] * len(x)
+        else:
+            return ['background-color: darkred'] * len(x)
+
+
+
+    def change_format(x):
+        x = f"{x:.1f}"
+        return x 
+
+   
+    
+    
+    # Check if the metric is in awareness metrics
+    as_metrics =  ['AS Average Engagement', 'AS Usage SoV','AS Search Index','AS Brand Centrality']
+
+    as_renaming = {"Average Engagement" :"AS Average Engagement","Usage SoV":"AS Usage SoV","Trial":"AS Trial Sov","Search Index":"AS Search Index","Brand Centrality":"AS Brand Centrality"}
+
+    eq.rename(columns=as_renaming,inplace=True)
+
+
+    
+    # Filter data according to time periods
+    df_var = eq[(eq.time >= period_start) & (eq.time < period_end)]
+    df_pre_var = eq[(eq.time >= period_pre) & (eq.time < period_start)]
+    df_all = eq[(eq.time >= period_pre) & (eq.time <= period_end)]
+
+    # Initialize Plotly figure
+    fig = go.Figure()
+
+    # Plot each brand's metric over time
+    max_values = []
+    df_all_time = df_all[df_all.time_period == time_period]
+    df_brand = df_all_time[df_all_time['brand'] == brand]
+        
+    for inv_metric in as_metrics:
+        max_values.append(df_brand[inv_metric].max())
+        fig.add_trace(go.Scatter(x=df_brand["time"], y=df_brand[inv_metric], mode='lines', name=inv_metric))
+
+
+    fig.add_shape(
+    type="rect",
+    x0=period_start,
+    y0=0,
+    x1=period_end,
+    y1=max(max_values) + 5,
+    fillcolor="red",  # You can choose any color you like
+    opacity=0.3,  # Adjust the opacity as needed
+    line=dict(width=0),  # No border line for the shaded area
+    layer="below"  # Place the shaded area below other shapes/lines
+    )
+
+
+
+    # Update layout
+    fig.update_layout(
+        title=f'{brand}  Saliency ',
+        xaxis_title='Time Period',
+        yaxis_title='Scores',
+        hovermode='x unified'
+    )
+
+
+    # Show plot
+    st.plotly_chart(fig)
+
+    
+    #doing the t-test for each metric
+    rows_before=[]
+    rows_during = []
+    t_stats = {}
+    for inv_metric in as_metrics:
+        data_brand_pre_var = df_pre_var[df_pre_var['brand'] == brand]
+        data_brand_var = df_var[df_var['brand'] == brand]
+
+        mean_before =  str(round(data_brand_pre_var[inv_metric].mean(),2))
+        mean_after = str(round(data_brand_var[inv_metric].mean(),2))
+        
+        t_statistic, p_value = ttest_ind(data_brand_pre_var[inv_metric], data_brand_var[inv_metric])
+        t_stats[inv_metric] = (t_statistic, p_value)
+        
+        test_len_before = len(data_brand_pre_var)
+        test_len_during = len(data_brand_var)
+
+        mean_before_int = round(data_brand_pre_var[inv_metric].mean(),2)
+        mean_after_int = round(data_brand_var[inv_metric].mean(),2)
+
+        difference_of_means = round(abs(((mean_after_int - mean_before_int) / mean_before_int) * 100),1)
+
+        if math.isinf(difference_of_means):
+            difference_of_means = 1
+
+        #st.write(f"{inv_metric}: t-statistic = {t_statistic}, p-value = {p_value}")
+        row_before = {"time period":"before","metric":inv_metric,"mean":mean_before,"Size":test_len_before,"% diff":difference_of_means}
+        row_during = {"time period":"during","metric":inv_metric,"mean":mean_after,"Size":test_len_during,"% diff":difference_of_means}
+
+
+        rows_before.append(row_before)
+        rows_during.append(row_during)
+
+
+    column_1,column_2 = st.columns(2)
+
+    #Before column
+
+    new_data_before = pd.DataFrame(rows_before)
+    new_data_during = pd.DataFrame(rows_during)
+    
+    with column_1:
+        new_data_before = new_data_before.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+
+        new_data_before["% diff"] = new_data_before["% diff"].apply(change_format)
+
+        new_data_before = new_data_before.reset_index(drop=True)
+        
+        most_changed_metric = new_data_before["metric"].iloc[0]
+
+        new_data_before = new_data_before.style.apply(highlight_row_before, axis=1)
+
+        st.dataframe(new_data_before,hide_index=True)
+    
+    with column_2:
+        new_data_during = new_data_during.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+        
+        new_data_during["% diff"] = new_data_during["% diff"].apply(change_format)
+        #new_data_during["p-value"] = new_data_during["p-value"].apply(change_format)
+        #new_data_during["t-statistic"] = new_data_during["t-statistic"].apply(change_format)
+
+        new_data_during = new_data_during.reset_index(drop=True)
+
+        new_data_during = new_data_during.style.apply(highlight_row_during, axis=1)
+
+        st.dataframe(new_data_during,hide_index=True)
+    
+
+    st.write(f"\n*The metric that has changed the most is **'{most_changed_metric}'**.*")
+
+
+
+
+# _______________________________________________________ Not being used ______________________________________________________
+    if most_changed_metric == "AS_Search_Index" or most_changed_metric == "AS_Brand_Centrality":
+        pass
+    else:
+        sub_pillars_options = {'AS Average Engagement':['earned_engagements'], 'AS Usage SoV':['Usage'],'AS Trial Sov':['Trial or Experimentation']}
+        sub_pillars_saliency = sub_pillars_options[most_changed_metric]
+        
+        df = df
+        # Filter data according to time periods
+        df_var = df[(df.created_time >= period_start) & (df.created_time <= period_end)]
+        df_pre_var = df[(df.created_time >= period_pre) & (df.created_time <= period_start)]
+        df_all = df[(df.created_time >= period_pre) & (df.created_time <= period_end)]
+        
+
+        df_saliency_channels = pd.DataFrame(columns=["Sub-pillars","t_statistic","p-value","channel"])
+        channels = df['message_type'].unique()
+        
+        # rows=[]
+        # rows_show = []
+        #channels = df['message_type'].unique()
+        # for channel in channels:
+        #     channel_pre_var_data = df_pre_var[df_pre_var['message_type'] == channel]
+        #     channel_var_data = df_var[df_var['message_type'] == channel]
+
+        #     channel_t_stats = {}
+        #     for metric in sub_pillars_saliency:
+        #         if not channel_pre_var_data[metric].empty and not channel_var_data[metric].empty:
+        #             t_statistic, p_value = ttest_ind(channel_pre_var_data[metric], channel_var_data[metric])
+        #             if str(t_statistic) == "nan" or str(t_statistic) == "inf":
+        #                 pass
+        #             else:
+        #                 channel_t_stats[metric] = (t_statistic, p_value)
+        #                 row = {"Sub-pillars":metric,"t_statistic":t_statistic,"p-value":p_value,"channel":channel}
+        #                 row_show = {"Sub-pillars":metric,"t_statistic":t_statistic,"p-value":p_value,"channel":channel} 
+        #                 rows.append(row)
+        #                 rows_show.append(row_show)
+                        
+        
+        # new_data = pd.DataFrame(rows)
+        # new_data_show = pd.DataFrame(rows_show)
+        # df_saliency_channels = pd.concat([df_saliency_channels,new_data],ignore_index=True)
+        # df_saliency_channels_show = pd.concat([df_saliency_channels_show,new_data_show],ignore_index=True)
+
+    
+        # df_saliency_channels_show = df_saliency_channels_show.sort_values(by="t_statistic",ascending=False).reset_index(drop=True)
+
+        # df_saliency_channels_show["t_statistic"] = df_saliency_channels_show["t_statistic"].apply(change_format)
+        # df_saliency_channels_show["p-value"] = df_saliency_channels_show["p-value"].apply(change_format)
+
+        #df_saliency_channels_show = df_saliency_channels_show.style.apply(highlight_row, axis=1)
+
+        #st.write(df_saliency_channels_show)
+
+    # _______________________________________________________ Not being used ______________________________________________________
+
+
+        st.subheader("Wich channel has seen the highest change?")
+
+
+        # getting the absolute values
+        df_saliency_channels["t_statistic"] = abs(df_saliency_channels["t_statistic"])
+
+    
+        if most_changed_metric == "AS Average Engagement":
+            column_name = "earned_engagements"
+        elif most_changed_metric == "AS Usage SoV":
+            column_name = "Usage"
+        elif most_changed_metric == "AS Trial Sov":
+            column_name ="Trial/Experimentation"
+
+
+        
+        rows_before = []
+        rows_during = []
+        for channel in channels:
+            df_pre_var_channel = df_pre_var[df_pre_var["message_type"] == channel ]
+            df_var_channel = df_var[df_var["message_type"] == channel ]
+            
+            for metric in sub_pillars_saliency:
+                if sub_pillars_saliency[0] == "Usage":
+
+                    df_pre_var_channel = (df_pre_var_channel[df_pre_var_channel['journey_predictions'].isin(["Usage"])].groupby(['Week Commencing', 'brand'])['mentions'].sum()/df_pre_var_channel[df_pre_var_channel['journey_predictions'].isin(["Usage"])].groupby(['Week Commencing'])['mentions'].sum()).reset_index().rename(columns={'mentions': 'Usage_SoV'})
+                    df_var_channel = (df_var_channel[df_var_channel['journey_predictions'].isin(["Usage"])].groupby(['Week Commencing', 'brand'])['mentions'].sum()/df_var_channel[df_var_channel['journey_predictions'].isin(["Usage"])].groupby(['Week Commencing'])['mentions'].sum()).reset_index().rename(columns={'mentions': 'Usage_SoV'})
+
+                    len_before = len(df_pre_var_channel)
+                    len_during = len(df_var_channel)
+
+                    mean_before = str(round(df_pre_var_channel.Usage_SoV.mean(),2))
+                    mean_after = str(round(df_var_channel.Usage_SoV.mean(),2))
+
+                    main_metric_before = int(df_pre_var_channel.Usage_SoV.sum())
+                    main_metric_during = int(df_var_channel.Usage_SoV.sum())
+
+
+                    mean_before_int = round(df_pre_var_channel.Usage_SoV.mean(),1)
+                    mean_after_int = round(df_var_channel.Usage_SoV.mean(),1)
+
+
+                    difference_of_means = round(abs(((mean_after_int - mean_before_int) / mean_before_int) * 100),1)
+                    if math.isinf(difference_of_means):
+                        difference_of_means = 1
+
+                   
+                elif sub_pillars_saliency[0] == "Trial or Experimentation":
+                    
+                    df_pre_var_channel = (df_pre_var_channel[df_pre_var_channel['journey_predictions'].isin(["Trial or Experimentation"])].groupby(['Week Commencing', 'brand'])['mentions'].sum()/df_pre_var_channel[df_pre_var_channel['journey_predictions'].isin(["Trial or Experimentation"])].groupby(['Week Commencing'])['mentions'].sum()).reset_index().rename(columns={'mentions': 'Trial_SoV'})
+                    df_var_channel =(df_var_channel[df_var_channel['journey_predictions'].isin(["Trial or Experimentation"])].groupby(['Week Commencing', 'brand'])['mentions'].sum()/df_var_channel[df_var_channel['journey_predictions'].isin(["Trial or Experimentation"])].groupby(['Week Commencing'])['mentions'].sum()).reset_index().rename(columns={'mentions': 'Trial_SoV'})
+
+                    len_before = len(df_pre_var_channel)
+                    len_during = len(df_var_channel)
+
+                    mean_before = str(round(df_pre_var_channel.Trial_SoV.mean(),2))
+                    mean_after = str(round(df_var_channel.Trial_SoV.mean(),2))
+
+                   
+                    main_metric_before = int(df_pre_var_channel.Trial_SoV.sum())
+                    main_metric_during = int(df_var_channel.Trial_SoV.sum())
+
+                    
+                    mean_before_int = round(df_pre_var_channel.Trial_SoV.mean(),1)
+                    mean_after_int = round(df_var_channel.Trial_SoV.mean(),1)
+
+
+                    difference_of_means = round(abs(((mean_after_int - mean_before_int) / mean_before_int) * 100),1)
+                    if math.isinf(difference_of_means):
+                        difference_of_means = 1
+
+                 
+                    
+                else:
+                    len_before = len(df_pre_var_channel)
+                    len_during = len(df_var_channel)
+
+                    mean_before = str(round(df_pre_var_channel[sub_pillars_saliency[0]].mean(),2))
+                    mean_after = str(round(df_var_channel[sub_pillars_saliency[0]].mean(),2))
+
+                    sum_before = str(round(df_pre_var_channel[sub_pillars_saliency[0]].sum(),2))
+                    sum_after = str(round(df_var_channel[sub_pillars_saliency[0]].sum(),2))
+                    
+                    main_metric_before = int(df_pre_var_channel[sub_pillars_saliency[0]].sum())
+                    main_metric_during = int(df_var_channel[sub_pillars_saliency[0]].sum())
+
+                    mean_before_int = round(df_pre_var_channel[sub_pillars_saliency[0]].mean(),1)
+                    mean_after_int = round(df_var_channel[sub_pillars_saliency[0]].mean(),1)
+
+
+                    difference_of_means = round(abs(((mean_after_int - mean_before_int) / mean_before_int) * 100),1)
+                    if math.isinf(difference_of_means):
+                        difference_of_means = 1
+
+                
+                row_before = {"time period":"before","channel":channel,"number of mentions":len_before,column_name:main_metric_before,"% diff":difference_of_means}
+                row_during = {"time period":"during","channel":channel,"number of mentions":len_during,column_name:main_metric_during,"% diff":difference_of_means}
+
+                rows_before.append(row_before)
+                rows_during.append(row_during)
+
+        
+        
+        column_1,column_2 = st.columns(2)
+
+        with column_1:
+            df_mean_before_channel = pd.DataFrame(rows_before)
+            df_mean_before_channel = df_mean_before_channel.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+            #df_mean_before_channel["t-statistic"] = df_mean_before_channel["t-statistic"].apply(change_format)
+            #df_mean_before_channel["p-value"] = df_mean_before_channel["p-value"].apply(change_format)
+            df_mean_before_channel["% diff"] = df_mean_before_channel["% diff"].apply(change_format)
+            most_changed_channel = df_mean_before_channel.channel.iloc[0]
+            #Aggregate
+            df_mean_before_channel = df_mean_before_channel.style.apply(highlight_row_before,axis=1)
+
+            st.dataframe(df_mean_before_channel,hide_index=True)
+
+        with column_2:
+            df_mean_during_channel = pd.DataFrame(rows_during)
+            df_mean_during_channel = df_mean_during_channel.sort_values(by="% diff",ascending=False).reset_index(drop=True)
+            #df_mean_during_channel["t-statistic"] = df_mean_during_channel["t-statistic"].apply(change_format)
+            #df_mean_during_channel["p-value"] = df_mean_during_channel["p-value"].apply(change_format)
+            df_mean_during_channel["% diff"] = df_mean_during_channel["% diff"].apply(change_format)
+            #Aggregate
+            df_mean_during_channel = df_mean_during_channel.style.apply(highlight_row_during,axis=1)
+            st.dataframe(df_mean_during_channel,hide_index=True)
+
+        
+        st.write(f"\n*The channel that has changed the most is **'{most_changed_channel}'**.*")
+        
+
+        #filtered table. 
+        df_var_show = df_var[df_var.message_type == most_changed_channel]
+
+
+        df_var_show = df_var_show[["message_type","permalink","earned_engagements","conversation_stream","Week Commencing","followers","sender_screen_name","brand","review_source"]]
+        st.dataframe(df_var_show)
+
+
+
+
+    
+
+
+def check_all(eq,df,brand,channel,time_period,period_pre,period_start,period_end,aw_metrics,brand_mapping,metrics_to_see):
+    for x in metrics_to_see:
+    
+        if x == "Awareness":
+
+            #check Awareness
+            check_awareness_high_level(eq,df,brand,time_period,period_pre,period_start,period_end)
+
+        if x == "Saliency":
+
+            #Checking Saliency 
+            check_saliency_high_level(eq,df,brand,time_period,period_pre,period_start,period_end)
+
+        if x =="Affinity":
+
+            #Checking affinity
+            most_changed_metric_high_level= check_affinity_high_level(eq, df, brand,time_period, period_pre, period_start, period_end,aw_metrics)
+            st.write("\n")
+            #print(most_changed_metric_high_level)
+            most_changed_metric_high_level = most_changed_metric_high_level.lower()
+            
+
+            # Regular expression to match any string starting with "A" followed by any character, and capturing the rest
+            pattern = r"a._(.+)"
+
+            # Use re.search to find the pattern in the string
+            metric = re.search(pattern,most_changed_metric_high_level).group(1)
+            st.write(f"Analysing the sub-pillars for {metric}  . . . . . ")
+            
+
+
+            if metric:
+                st.write("\n")
+                #print(f"{brand} low level affinity analysis")
+                # Print statement with bold text
+                st.write(f" **{brand}** low level affinity analysis . . .")
+
+
+                st.write("\n")
+                check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, brand, channel,brand_mapping)
+            
+
+
+
+
+#-------------------------------------------------------------------Equity Analysis-----------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1225,6 +2570,48 @@ def main():
                            if sheet_name == "Mkt Share Weighted":
                                     fig = Equity_plot(market_share_weighted,category_options,time_period_options,framework_options,sheet_name,framework_to_user,brand_color_mapping,category)
                                     st.plotly_chart(fig,use_container_width=True)
+
+
+
+                  #Equity analysis tab
+                  with tab5:
+                     df.rename(columns=framework_to_user,inplace=True)
+                     column_1,column_2,column_3 = st.columns([1,1,1])
+                     
+                     
+                     with column_1:
+                         brand = st.selectbox("Brand",brand_list)
+         
+                         channel_filter = "News"
+         
+                         time_period = "Weeks"
+                     with column_2:
+                         
+                         # Filter your dataframe
+                         test_ = df.loc[df.eSoV > 0]
+         
+                         # User selects the start period
+                         period_start = st.date_input("Select start period", value=datetime(2022, 2, 16), key="Equity_analysis")
+                         period_start = pd.to_datetime(period_start)
+         
+                         # User selects the end period
+                         period_end = st.date_input("Select end period", key="Equity_analysis_2", value=test_["time"].iloc[-1])
+                         period_end = pd.to_datetime(period_end)
+         
+                         # Calculate the difference in time
+                         difference_of_time = period_end - period_start
+                         difference_in_weeks = difference_of_time.days / 7  # Calculate difference in weeks
+         
+                         # Calculate the previous period using weeks
+                         period_pre = period_start - timedelta(weeks=difference_in_weeks)
+         
+                     with column_3:
+                         
+                         metrics_to_see = st.multiselect("Metric to analyse",["Awareness","Saliency","Affinity"])
+         
+         
+                     check_all(df,master_parquet,brand,channel_filter,time_period,period_pre,period_start,period_end,aw_metrics,brand_mapping,metrics_to_see)
+
 
 
          
