@@ -2242,7 +2242,8 @@ def main():
                                             weights_values_for_average_2024 = {"GLO":0,"IQOS":0}       
                                             brand_list = ["ELF BAR","GEEK BAR","STLTH","VUSE","BLU","GLO","IQOS"]
                                         master_parquet = pd.read_parquet(r"germany_data_tagged_2024_08_22_10_14_58_AM.parquet")
-                                        
+                                        master_parquet['Week Commencing'] = master_parquet['created_time'].apply(lambda x: (x - timedelta(days=x.weekday())).replace(hour=0, minute=0, second=0, microsecond=0))
+
 
                            if market == "canada":
                                     weights_values_for_average_2021 =  {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHERS":0}
@@ -2251,7 +2252,8 @@ def main():
                                     weights_values_for_average_2024 = {"ELF BAR":0 , "GEEK BAR": 0, "JUUL": 0, "STLTH": 0, "VUSE": 0,"SMOK":0,"UWELL":0,"OTHERS":0}     
                                     brand_list = ["ELF BAR","GEEK BAR","JUUL", "STLTH", "VUSE","SMOK","UWELL","OTHERS"]
                                     master_parquet = pd.read_parquet(r"canada_data_tagged_2024_08_02_15_42_00_PM.parquet")
-                           
+                                    master_parquet['Week Commencing'] = master_parquet['created_time'].apply(lambda x: (x - timedelta(days=x.weekday())).replace(hour=0, minute=0, second=0, microsecond=0))
+
                            
                            #--------------------------------------------------------------------------------------// transformations ----------------------------------------------------------------------------------
                            #creating a copy of our dataframes.
