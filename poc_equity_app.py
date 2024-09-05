@@ -1594,6 +1594,7 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
                         difference_of_means = ((mean_during - mean_before) / mean_before) * 100
 
 
+                    t_statistic = 0
                     if str(t_statistic) == "nan" or str(t_statistic) == "inf":
                         pass
                     else:
@@ -1623,7 +1624,7 @@ def check_awareness_high_level(eq, df, brand,time_period, period_pre, period_sta
 
 
         # getting the absolute values
-        df_awareness_channels["t_statistic"] = abs(df_awareness_channels["t_statistic"])
+        #df_awareness_channels["t_statistic"] = abs(df_awareness_channels["t_statistic"])
   
         if most_changed_metric == "AA eSoV":
             column_name = "mentions"
@@ -1942,7 +1943,7 @@ def check_saliency_high_level(eq, df, brand,time_period, period_pre, period_star
 
 
         # getting the absolute values
-        df_saliency_channels["t_statistic"] = abs(df_saliency_channels["t_statistic"])
+        #df_saliency_channels["t_statistic"] = abs(df_saliency_channels["t_statistic"])
 
     
         if most_changed_metric == "AS Average Engagement":
