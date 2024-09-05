@@ -20,7 +20,6 @@ import io
 import requests
 from metrics import AggregateMetrics
 import math
-from scipy.stats import ttest_ind
 #--------------------------------------------------------------------------------------// Aesthetic Global Variables // -------------------------------------------------------------------------
 user_to_equity = {'Brand Prestige & Love':'AF_Brand_Love','Motivation for Change':'AF_Motivation_for_Change','Consumption Experience':'AF_Consumption_Experience','Supporting Experience':'AF_Supporting_Experience','Value For Money':'AF_Value_for_Money',
    'Total Equity':'Total_Equity',"Awareness":'Framework_Awareness','Saliency':'Framework_Saliency','Affinity':'Framework_Affinity','eSoV':'AA_eSoV', 'Reach':'AA_Reach',
@@ -916,8 +915,8 @@ def check_affinity_high_level(eq, df, brand,time_period, period_pre, period_star
         mean_before =  str(round(data_brand_pre_var[inv_metric].mean(),2))
         mean_after = str(round(data_brand_var[inv_metric].mean(),2))
         
-        t_statistic, p_value = ttest_ind(data_brand_pre_var[inv_metric], data_brand_var[inv_metric])
-        t_stats[inv_metric] = (t_statistic, p_value)
+        #t_statistic, p_value = ttest_ind(data_brand_pre_var[inv_metric], data_brand_var[inv_metric])
+        #t_stats[inv_metric] = (t_statistic, p_value)
         
         test_len_before = len(data_brand_pre_var)
         test_len_during = len(data_brand_var)
@@ -1294,7 +1293,7 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
         mean_positive_pre = round(len_positive_pre / len(df_pre_var),2)
         mean_positive_during = round(len_positive_pos / len(df_var),2)
 
-        t_statistic, p_value = ttest_ind(mean_positive_pre, mean_positive_during)
+        #t_statistic, p_value = ttest_ind(mean_positive_pre, mean_positive_during)
 
 
         row_before = {"time period":"before","sub metric":x_metric,"sentiment":"positive","number of mentions":len_positive_pre}
@@ -1315,7 +1314,7 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
         mean_neutral_pre = round(len_neutral_pre / len(df_pre_var),2)
         mean_neutral_during = round(len_neutral_pos / len(df_var),2)
 
-        t_statistic, p_value = ttest_ind(mean_neutral_pre, mean_neutral_during)
+        #t_statistic, p_value = ttest_ind(mean_neutral_pre, mean_neutral_during)
 
 
         row_before = {"time period":"before","sub metric":x_metric,"sentiment":"neutral","number of mentions":len_neutral_pre}
@@ -1336,7 +1335,7 @@ def check_affinity_low_level(df, eq, period_pre,period_start,period_end,metric, 
         mean_negative_pre = round(len_negative_pre / len(df_pre_var),2)
         mean_negative_during = round(len_negative_pos / len(df_var),2)
 
-        t_statistic, p_value = ttest_ind(mean_negative_pre, mean_negative_during)
+        #t_statistic, p_value = ttest_ind(mean_negative_pre, mean_negative_during)
 
         row_before = {"time period":"before","sub metric":x_metric,"sentiment":"negative","number of mentions":len_negative_pre}
         row_during = {"time period":"during","sub metric":x_metric,"sentiment":"negative","number of mentions":len_negative_pos}
