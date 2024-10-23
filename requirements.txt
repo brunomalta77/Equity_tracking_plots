@@ -1,8 +1,8 @@
-pandas==3.1.0
+pandas==2.2.2
 numpy 
 seaborn 
 streamlit 
 joblib
 plotly
-openpyxl==3.0.10
+openpyxl==3.1.5
 #dateutil.relativedelta==1.21.6
